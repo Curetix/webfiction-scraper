@@ -1,0 +1,75 @@
+# This is an example config file for 'The Wandering Inn' by pirateaba
+# https://wanderinginn.com
+
+#####################################################################
+
+# URL of the first chapter (or prologue) of the webfiction
+startUrl: https://wanderinginn.com/2016/07/27/1-00/
+# OPTIONAL: URL of the last chapter. For example, you might want to split a fiction into different volumes.
+endUrl: https://wanderinginn.com/2017/03/04/1-45/
+
+# EPUB metadata
+metadata:
+  title: The Wandering Inn - Volume 1
+  author: pirateaba
+  description: |
+    "No killing Goblins."
+
+    So reads the sign outside of the Wandering Inn, a small building run by a young woman named Erin Solstice. She serves pasta with sausage, blue fruit juice, and dead acid flies on request. And she comes from another world. Ours.
+    
+    It's a bad day when Erin finds herself transported to a fantastical world and nearly gets eaten by a dragon. She doesn't belong in a place where monster attacks are a fact of life, and where humans are one species among many. But she must adapt to her new life. Or die.
+    
+    In a dangerous world where magic is real and people can level up and gain classes, Erin Solstice must battle somewhat evil goblins, deadly rock crabs, and hungry [necromancers]. She is no warrior, no mage. Erin Solstice runs an inn.
+    
+    She's an [Innkeeper].
+  # OPTIONAL: Default metadata fields, can be changed if required.
+  language: en
+  publisher: Scrapy eBooks
+  # The book UUID will be generated based on the author (creator) and title (here: pirateaba-thewanderinginn) if none is provided.
+  identifier: 938ed288-8a8c-55bb-a3b2-9cae45e3c6e1
+  # You can also include your own custom metdata tags, e.g.:
+  date: 2016-07-26
+
+# Specify file locations.
+files:
+  # By default, all files will be created in the folder in which the script is run located. Default here would be:
+  workingFolder: ./The Wandering Inn Volume 1
+  # You could change it to something like this:
+  # workingFolder: ~/.webfiction/Wandering_Inn_Vol_1
+  ### If the following locations aren't absolute (starting with /), they'll be relative to the workingFolder
+  # You can provide the path to a PNG/JPEG/GIF file or a URL. If nothing is provided, a generic cover will be generated.
+  coverFile: cover.jpg
+  # The output EPUB file. Default here would be:
+  epubFile: The Wandering Inn - Volume 1.epub
+  # Downloaded chapters will be saved here. Default is:
+  cacheFolder: cache/
+  # The final EPUB structure is saved here, before it's zipped into a file.
+  bookFolder: book/
+
+
+# Element selectors. You can use both CSS and XPATH selectors. For more information see the Scrapy Selectors documentation.
+selectors:
+  titleElement: .entry-title
+  contentElement: .entry-content
+  nextChapterElement: .entry-content p a:last-of-type
+
+# Substitutions which will be applied to all chapters
+# By default, all empty elements, e.g. paragraphs, are removed. This can be disabled by including the following:
+# removeEmptyElements: false
+# You can use simple strings, css selectors or regular expressions.
+# For chapter-specific substitutions, include the chapter URL
+substitutions:
+  # This would be applied to all chapters
+  # - regex: ...
+  #   replace: ...
+  # These will only be applied to the specified chapter
+  - chapterUrl: https://wanderinginn.com/2018/07/28/5-07
+    css: p:first-of-type
+    # If replaceWith is empty or emitted, the selected element(s) will be removed
+    replaceWith:
+  - chapterUrl: https://wanderinginn.com/2018/07/31/5-08
+    css: p:first-of-type
+    replaceWith:
+  - chapterUrl: https://wanderinginn.com/2018/08/04/interlude-flos
+    css: p:first-of-type
+  # ...

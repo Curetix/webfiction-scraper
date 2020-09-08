@@ -1,0 +1,8 @@
+ebooklib
+pyyaml
+click
+schema
+requests
+beautifulsoup4
+lxml
+python-box[all]>=5.0,<6.0

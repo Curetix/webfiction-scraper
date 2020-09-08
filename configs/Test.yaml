@@ -1,0 +1,19 @@
+# This is an example of an absolute minimum config file Volume 1 of 'The Wandering Inn' by pirateaba
+# https://wanderinginn.com
+
+#####################################################################
+
+# URL of the first chapter (or prologue) of the webfiction
+startUrl: https://wanderinginn.com/2016/07/27/1-00/
+endUrl: https://wanderinginn.wordpress.com/2016/08/13/1-05/
+
+# EPUB metadata
+metadata:
+  title: The Wandering Inn - Volume 1
+  creator: pirateaba
+
+# Element selectors. You can use both CSS and XPATH selectors. For more information see the Scrapy Selectors documentation.
+selectors:
+  titleElement: h1.entry-title
+  contentElement: .entry-content
+  nextChapterElement: .entry-content p a:last-child
