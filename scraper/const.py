@@ -27,6 +27,7 @@ CONFIG_SCHEMA = {
         "titleElement": str,
         "contentElement": str,
         "nextChapterElement": str,
+        Optional("nextChapterElementText", default=None): str,
     },
     Optional("removeEmptyElements", default=True): bool,
     Optional("substitutions", default=[]): [

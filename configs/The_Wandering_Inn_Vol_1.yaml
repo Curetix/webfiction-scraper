@@ -45,7 +45,8 @@ files:
 selectors:
   titleElement: .entry-title
   contentElement: .entry-content
-  nextChapterElement: .entry-content p a:last-of-type
+  nextChapterElement: .entry-content p a:last-child
+  nextChapterElementText: Next Chapter
 
 # Substitutions which will be applied to all chapters
 # By default, all empty elements, e.g. paragraphs, are removed. This can be disabled by including the following:

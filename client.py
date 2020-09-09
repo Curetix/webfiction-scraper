@@ -10,6 +10,7 @@ from click import echo
 from schema import Schema, SchemaError
 
 from scraper.const import CONFIG_SCHEMA
+from scraper.crawler import Crawler
 from scraper.utils import normalize_string, lowercase_clean
 
 SCRIPT_PATH = os.path.realpath(__file__)
@@ -51,7 +52,8 @@ def run(**kwargs):
         echo("Invalid file extension, only .json and .yaml/.yml are supported!")
         return
 
-    print(config)
+    crawler = Crawler(config)
+    crawler.download()
 
 
 def get_validated_config(config: Box):
