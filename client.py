@@ -1,8 +1,10 @@
+import json
 import os
 import sys
 import uuid
 
 import click
+import yaml
 from box import Box
 from click import echo
 from schema import Schema, SchemaError
@@ -40,71 +42,79 @@ def run(**kwargs):
         sys.exit(1)
 
     if path.endswith(".json"):
-        config = Box.from_json(filename=path)
+        with open(path, "r") as file:
+            config = get_validated_config(json.load(file))
     elif path.endswith(".yaml") or path.endswith(".yml"):
-        config = Box.from_yaml(filename=path)
+        with open(path, "r") as file:
+            config = get_validated_config(yaml.load(file, Loader=yaml.FullLoader))
     else:
         echo("Invalid file extension, only .json and .yaml/.yml are supported!")
-        sys.exit(1)
+        return
 
-    config = get_validated_config(config)
-
-    print(config.startUrl)
+    print(config)
 
 
 def get_validated_config(config: Box):
-    validated = Schema(CONFIG_SCHEMA).validate(config)
-    files = validated.get("files")
-    metadata = validated.get("metadata")
-    title = normalize_string(metadata.get("title"))
+    validated = Box(Schema(CONFIG_SCHEMA).validate(config), camel_killer_box=True)
+    files = validated.files
+    metadata = validated.metadata
+    title = normalize_string(metadata.title)
 
     if not metadata.get("identifier"):
         ident_string = "%s-%s" % (
             lowercase_clean(metadata.get("author")),
             lowercase_clean(metadata.get("title")),
         )
-        validated["metadata"]["identifier"] = uuid.uuid5(
+        validated.metadata.identifier = str(uuid.uuid5(
             uuid.NAMESPACE_DNS, ident_string
-        )
-
-    if not files.get("workingFolder"):
-        files["workingFolder"] = os.path.join(SCRIPT_FOLDER, title)
-
-    if not files.get("epubFile"):
-        files["epubFile"] = title + ".epub"
-
-    if not files.get("cacheFolder"):
-        files["cacheFolder"] = "cache/"
-
-    if not files.get("bookFolder"):
-        files["bookFolder"] = "book/"
-
-    if not os.path.isdir(files["workingFolder"]):
-        os.mkdir(files["workingFolder"])
-
-    cache_folder = files.get("cacheFolder")
-    cache_folder_path = (
-        cache_folder
-        if os.path.isabs(cache_folder)
-        else os.path.join(files.get("workingFolder"), cache_folder)
-    )
-    if not os.path.isdir(cache_folder_path):
-        os.mkdir(cache_folder_path)
-
-    book_folder = files.get("bookFolder")
-    book_folder_path = (
-        book_folder
-        if os.path.isabs(book_folder)
-        else os.path.join(files.get("workingFolder"), book_folder)
-    )
-    if not os.path.isdir(book_folder_path):
-        os.mkdir(book_folder_path)
+        ))
 
     for s in validated.get("substitutions"):
         if not s.get("css") and not s.get("regex") and not s.get("text"):
             raise SchemaError("Invalid substitution %s, no selector specified." % s)
 
-    validated["files"] = files
+    working_folder = files.get("working_folder")
+
+    if not working_folder:
+        working_folder = os.path.join(SCRIPT_FOLDER, "data", title)
+    elif working_folder and not os.path.isabs(working_folder):
+        working_folder = os.path.join(SCRIPT_FOLDER, "data", working_folder)
+
+    cache_folder = os.path.join(working_folder, "cache")
+    book_folder = os.path.join(working_folder, "book")
+    manifest_file = os.path.join(working_folder, "manifest.json")
+
+    epub_file = files.get("epub_file")
+    cover_file = files.get("cover_file")
+
+    if not epub_file:
+        epub_file = os.path.join(working_folder, title + ".epub")
+    elif epub_file and not os.path.isabs(epub_file):
+        epub_file = os.path.join(working_folder, epub_file)
+
+    # TODO: if file is a URL, download it. If it isn't specified, generate one.
+    if not cover_file:
+        cover_file = os.path.join(working_folder, "cover.jpg")
+    elif cover_file and not os.path.isabs(cover_file):
+        cover_file = os.path.join(working_folder, cover_file)
+
+    validated.files = Box(
+        working_folder=working_folder,
+        cache_folder=cache_folder,
+        book_folder=book_folder,
+        epub_file=epub_file,
+        cover_file=cover_file,
+        manifest_file=manifest_file
+    )
+
+    if not os.path.isdir(working_folder):
+        os.mkdir(working_folder)
+
+    if not os.path.isdir(cache_folder):
+        os.mkdir(cache_folder)
+
+    if not os.path.isdir(book_folder):
+        os.mkdir(book_folder)
 
     return validated
 

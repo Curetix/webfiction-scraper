@@ -3,33 +3,26 @@ import urllib.parse
 import json
 
 import requests
+from box import Box
 from bs4 import BeautifulSoup
-
-from scraper.binder import Binder
-from scraper.converter import Converter
 
 
 class Crawler:
-    def __init__(self, config):
-        self.start_url = config.get("startUrl")
-        self.end_url = config.get("endUrl")
-        self.files = config.get("files")
-        cache_folder = self.files.get("cacheFolder")
-        self.cache_path = (
-            cache_folder
-            if os.path.isabs(cache_folder)
-            else os.path.join(self.files.get("workingFolder"), cache_folder)
-        )
-        self.selectors = config.get("selectors")
-        self.converter = Converter(config)
-        self.binder = Binder(config)
+    def __init__(self, config: Box):
+        self.start_url = config.start_url
+        self.end_url = config.end_url
+        self.selectors = config.selectors
+        self.files = config.files
         self.manifest = self.load_manifest()
 
-    def download(self, url, index=0, convert_after_dl=True):
+    def download(self):
+        url = self.manifest[len(self.manifest) - 1] if len(self.manifest) > 0 else self.start_url
+        index = len(self.manifest)
+
         r = requests.get(url)
         file_name = self.save_chapter(r.content, index)
         soup = BeautifulSoup(r.content, "html.parser")
-        title_el = soup.select_one(self.selectors.get("titleElement"))
+        title_el = soup.select_one(self.selectors.title_element)
         print(title_el.get_text())
         manifest_entry = {
             "title": title_el.get_text(),
@@ -37,16 +30,13 @@ class Crawler:
             "converted": False,
             "url": url,
         }
-        if index < len(self.manifest):
-            self.manifest[index] = manifest_entry
-        else:
-            self.manifest.append(manifest_entry)
-        self.save_manifest(self.manifest)
+        self.manifest.append(manifest_entry)
+        self.save_manifest()
 
         if url == self.end_url:
             return True
 
-        next_chapter_el = soup.select_one(self.selectors.get("nextChapterElement"))
+        next_chapter_el = soup.select_one(self.selectors.next_chapter_element)
 
         if next_chapter_el:
             next_url = next_chapter_el["href"]
@@ -60,7 +50,7 @@ class Crawler:
                 )
 
             print(next_url)
-            return self.download(next_url, index + 1)
+            return self.download()
         else:
             return True
 
@@ -70,47 +60,23 @@ class Crawler:
             "0" if index < 10 else "",
             index,
         )
-        chapter_path = os.path.join(self.cache_path, chapter_file)
-        with open(chapter_path, "wb") as file:
+        with open(os.path.join(self.files.cache_folder, chapter_file), "wb") as file:
             file.write(content)
         return chapter_file
 
     def load_manifest(self):
-        if os.path.isfile(
-            os.path.join(self.files.get("workingFolder"), "manifest.json")
-        ):
-            with open(
-                os.path.join(self.files.get("workingFolder"), "manifest.json"), "r"
-            ) as file:
+        if os.path.isfile(self.files.manifest_file):
+            with open(os.path.join(self.files.manifest_file), "r") as file:
                 return json.load(file)
         else:
             return []
 
-    def save_manifest(self, manifest):
-        with open(
-            os.path.join(self.files.get("workingFolder"), "manifest.json"), "w"
-        ) as file:
-            json.dump(manifest, file, indent=2),
+    def save_manifest(self):
+        with open(os.path.join(self.files.manifest_file), "w") as file:
+            json.dump(self.manifest, file, indent=2)
 
-    def run(
-        self,
-        download=True,
-        download_new=False,
-        convert=True,
-        convert_new=False,
-        bind=True,
-    ):
-        if download:
-            if download_new or len(self.manifest) == 0:
-                self.manifest = []
-                self.save_manifest(self.manifest)
-                os.rmdir(self.cache_path)
-                os.mkdir(self.cache_path)
-                download_result = self.download(
-                    self.start_url, convert_after_dl=convert
-                )
-            else:
-                index = len(self.manifest) - 1
-                download_result = self.download(
-                    self.manifest[index].get("url"), index, convert
-                )
+    def clean(self):
+        self.manifest = []
+        self.save_manifest()
+        os.rmdir(self.files.cache_folder)
+        os.mkdir(self.files.cache_folder)

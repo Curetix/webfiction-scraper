@@ -10,7 +10,7 @@ endUrl: https://wanderinginn.wordpress.com/2016/08/13/1-05/
 # EPUB metadata
 metadata:
   title: The Wandering Inn - Volume 1
-  creator: pirateaba
+  author: pirateaba
 
 # Element selectors. You can use both CSS and XPATH selectors. For more information see the Scrapy Selectors documentation.
 selectors:
