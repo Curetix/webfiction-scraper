@@ -2,17 +2,23 @@ import os
 
 from bs4 import BeautifulSoup
 
+from scraper.manifest import Manifest
+
 
 class Converter:
     def __init__(self, config):
-        self.selectors = config.get("selectors")
-        self.substitutions = config.get("substitutions")
-        self.remove_empty_elements = config.get("removeEmptyElements")
+        self.files = config.files
+        self.selectors = config.selectors
+        self.substitutions = config.substitutions
+        self.remove_empty_elements = config.remove_empty_elements
+        self.manifest = Manifest(config.files.manifest_file)
 
     def convert(self, html, url):
         return self.convert_soup(BeautifulSoup(html, "lxml"), url)
 
     def convert_soup(self, soup, url):
+        # TODO: create base HTML doc, set content_el as body
+
         content_el = soup.select_one(self.selectors.get("contentElement"))
 
         if not content_el:
@@ -57,3 +63,21 @@ class Converter:
                 file.write(str(self.convert(content, url)))
         else:
             raise FileNotFoundError()
+
+    def convert_all(self):
+        for (i, f) in enumerate(self.manifest):
+            if not f.get("converted"):
+                self.convert_file(
+                    os.path.join(self.files.cache_folder, f.get("file")),
+                    os.path.join(self.files.book_folder, f.get("file")),
+                    f.get("url")
+                )
+                self.manifest[i].update({"converted": True})
+
+    def clean(self):
+        import shutil
+        shutil.rmtree(self.files.book_folder)
+        os.mkdir(self.files.book_folder)
+
+        for (i, e) in self.manifest:
+            self.manifest[i].update({"converted": False})

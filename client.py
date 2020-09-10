@@ -10,6 +10,7 @@ from click import echo
 from schema import Schema, SchemaError
 
 from scraper.const import CONFIG_SCHEMA
+from scraper.converter import Converter
 from scraper.crawler import Crawler
 from scraper.utils import normalize_string, lowercase_clean
 
@@ -24,6 +25,8 @@ def cli():
 
 @cli.command()
 @click.argument("config")
+@click.option("--clean-download", type=bool)
+@click.option("--clean-convert", type=bool)
 def run(**kwargs):
     """Run the scraper with the provided CONFIG.
 
@@ -44,19 +47,30 @@ def run(**kwargs):
 
     if path.endswith(".json"):
         with open(path, "r") as file:
-            config = get_validated_config(json.load(file))
+            config = json.load(file)
     elif path.endswith(".yaml") or path.endswith(".yml"):
         with open(path, "r") as file:
-            config = get_validated_config(yaml.load(file, Loader=yaml.FullLoader))
+            config = yaml.load(file, Loader=yaml.FullLoader)
     else:
         echo("Invalid file extension, only .json and .yaml/.yml are supported!")
         return
 
+    config = get_validated_config(config_name, config)
+
     crawler = Crawler(config)
+    converter = Converter(config)
+
+    if kwargs.get("clean_download"):
+        crawler.clean()
+        converter.clean()
+
+    if kwargs.get("clean_convert"):
+        converter.clean()
+
     crawler.download()
 
 
-def get_validated_config(config: Box):
+def get_validated_config(config_name: str, config: Box):
     validated = Box(Schema(CONFIG_SCHEMA).validate(config), camel_killer_box=True)
     files = validated.files
     metadata = validated.metadata
@@ -78,7 +92,7 @@ def get_validated_config(config: Box):
     working_folder = files.get("working_folder")
 
     if not working_folder:
-        working_folder = os.path.join(SCRIPT_FOLDER, "data", title)
+        working_folder = os.path.join(SCRIPT_FOLDER, "data", os.path.basename(config_name))
     elif working_folder and not os.path.isabs(working_folder):
         working_folder = os.path.join(SCRIPT_FOLDER, "data", working_folder)
 

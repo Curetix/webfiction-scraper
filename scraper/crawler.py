@@ -1,10 +1,11 @@
 import os
 import urllib.parse
-import json
 
-import requests
+from requests import get
 from box import Box
 from bs4 import BeautifulSoup
+
+from scraper.manifest import Manifest
 
 
 class Crawler:
@@ -13,8 +14,7 @@ class Crawler:
         self.end_url = config.end_url
         self.selectors = config.selectors
         self.files = config.files
-        self.manifest = []
-        self.load_manifest()
+        self.manifest = Manifest(config.files.manifest_file)
 
         if len(self.manifest) > 0:
             self.start_url = self.manifest[len(self.manifest) - 1].get("url")
@@ -23,7 +23,7 @@ class Crawler:
         url = url if url else self.start_url
         index = len(self.manifest)
 
-        r = requests.get(url)
+        r = get(url)
         url = r.url  # In case of redirect, update our URL
         file_name = self.save_chapter(r.content, index)
         soup = BeautifulSoup(r.content, "html.parser")
@@ -35,8 +35,7 @@ class Crawler:
             "converted": False,
             "url": url,
         }
-        self.manifest.append(manifest_entry)
-        self.save_manifest()
+        self.manifest.append(manifest_entry, True)
 
         if url == self.end_url:
             return True
@@ -81,19 +80,9 @@ class Crawler:
             file.write(content)
         return chapter_file
 
-    def load_manifest(self):
-        if os.path.isfile(self.files.manifest_file):
-            with open(os.path.join(self.files.manifest_file), "r") as file:
-                self.manifest = json.load(file)
-        else:
-            return []
-
-    def save_manifest(self):
-        with open(os.path.join(self.files.manifest_file), "w") as file:
-            json.dump(self.manifest, file, indent=2)
-
     def clean(self):
-        self.manifest = []
-        self.save_manifest()
-        os.rmdir(self.files.cache_folder)
+        import shutil
+        shutil.rmtree(self.files.cache_folder)
         os.mkdir(self.files.cache_folder)
+
+        self.manifest.clear()
