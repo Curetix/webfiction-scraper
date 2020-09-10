@@ -59,17 +59,20 @@ def run(config, clean_download, clean_convert):
 
     config = get_validated_config(config_name, config)
 
-    crawler = Crawler(config)
+    # crawler = Crawler(config)
+    # if clean_download:
+    #     crawler.clean()
+    # crawler.download()
+
     converter = Converter(config)
-
-    if clean_download:
-        crawler.clean()
-        converter.clean()
-
     if clean_convert:
         converter.clean()
+    converter.convert_all()
 
-    crawler.download()
+    # import code
+    # variables = variables = {**globals(), **locals()}
+    # shell = code.InteractiveConsole(variables)
+    # shell.interact()
 
 
 @cli.command()
@@ -135,9 +138,9 @@ def get_validated_config(config_name: str, config: Box):
             uuid.NAMESPACE_DNS, ident_string
         ))
 
-    for s in validated.get("substitutions"):
-        if not s.get("css") and not s.get("regex") and not s.get("text"):
-            raise SchemaError("Invalid substitution %s, no selector specified." % s)
+    # for s in validated.get("substitutions"):
+    #     if not s.get("css") and not s.get("regex") and not s.get("text"):
+    #         raise SchemaError("Invalid substitution %s, no selector specified." % s)
 
     working_folder = files.get("working_folder")
 

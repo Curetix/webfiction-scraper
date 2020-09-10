@@ -59,12 +59,14 @@ substitutions:
   #   replace: ...
   # These will only be applied to the specified chapter
   - chapterUrl: https://wanderinginn.com/2018/07/28/5-07
-    css: p:first-of-type
+    selectorType: css
+    selector: p:first-of-type
     # If replaceWith is empty or emitted, the selected element(s) will be removed
     replaceWith:
   - chapterUrl: https://wanderinginn.com/2018/07/31/5-08
-    css: p:first-of-type
-    replaceWith:
+    selectorType: css
+    selector: p:first-of-type
   - chapterUrl: https://wanderinginn.com/2018/08/04/interlude-flos
-    css: p:first-of-type
+    selectorType: css
+    selector: p:first-of-type
   # ...
