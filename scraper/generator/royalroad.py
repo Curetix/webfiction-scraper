@@ -13,6 +13,7 @@ CHAPTER_PATTERN = re.compile(r"(?:http[s]://)?www\.royalroad\.com/fiction/\d+/.+
 class RoyalRoadConfigGenerator(ConfigGenerator):
     def __init__(self, start_url, end_url=None):
         super().__init__(start_url, end_url)
+        self.cover_file_url = None
 
     def get_selectors(self):
         return Box(
@@ -43,6 +44,7 @@ class RoyalRoadConfigGenerator(ConfigGenerator):
         else:
             raise InvalidPageException()
 
+        self.config.files = Box(coverFile=soup.select_one(".fic-header img").get("src"))
         self.config.startUrl = start_url
         metadata = Box(
             title=soup.select_one(".fic-header h1").get_text(),
