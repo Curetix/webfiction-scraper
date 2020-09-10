@@ -1,6 +1,7 @@
 import json
 import os
 import sys
+import urllib.parse
 import uuid
 
 import click
@@ -13,6 +14,7 @@ from scraper.const import CONFIG_SCHEMA
 from scraper.converter import Converter
 from scraper.crawler import Crawler
 from scraper.utils import normalize_string, lowercase_clean
+from scraper.generator import RoyalRoadConfigGenerator
 
 SCRIPT_PATH = os.path.realpath(__file__)
 SCRIPT_FOLDER = os.path.dirname(SCRIPT_PATH)
@@ -27,14 +29,14 @@ def cli():
 @click.argument("config")
 @click.option("--clean-download", type=bool)
 @click.option("--clean-convert", type=bool)
-def run(**kwargs):
+def run(config, clean_download, clean_convert):
     """Run the scraper with the provided CONFIG.
 
     CONFIG can be a path to a valid JSON or YAML config file,
     or the name of a built-in config. To list all available
     default configs, use the command LIST-CONFIGS.
     """
-    config_name = kwargs["config"]
+    config_name = config
 
     if config_name in get_builtin_configs():
         path = os.path.join(SCRIPT_FOLDER, "configs", "%s.yaml" % config_name)
@@ -60,18 +62,66 @@ def run(**kwargs):
     crawler = Crawler(config)
     converter = Converter(config)
 
-    if kwargs.get("clean_download"):
+    if clean_download:
         crawler.clean()
         converter.clean()
 
-    if kwargs.get("clean_convert"):
+    if clean_convert:
         converter.clean()
 
     crawler.download()
 
 
+@cli.command()
+def list_configs():
+    """List all available built-in configs."""
+    echo("Available built-in configs:")
+    for c in get_builtin_configs():
+        echo(c)
+
+
+@cli.command()
+@click.argument("url")
+@click.option("--name", type=str)
+def generate_config(url, name):
+    if not url.startswith("http"):
+        url = "https://" + url
+
+    parsed = urllib.parse.urlparse(url)
+    domain = parsed.netloc
+
+    if domain == "royalroad.com" or domain == "www.royalroad.com":
+        echo("Detected Royal Road URL!")
+        generator = RoyalRoadConfigGenerator(url)
+    else:
+        echo("Invalid URL or site not supported!")
+        return
+
+    config = generator.get_config()
+    if not name:
+        name = config.metadata.title
+
+    try:
+        Schema(CONFIG_SCHEMA).validate(config)
+    except SchemaError as e:
+        echo(e)
+        if not click.confirm("Couldn't validate newly generated config, save anyways?"):
+            return
+
+    config.to_yaml(filename="configs/%s.yaml" % name)
+
+    echo("Config for \"%s\" successfully generated, validated and saved!" % config.metadata.title)
+    echo("It can now be used with \"client.py run %s\"!" % name)
+
+
 def get_validated_config(config_name: str, config: Box):
-    validated = Box(Schema(CONFIG_SCHEMA).validate(config), camel_killer_box=True)
+    try:
+        validated = Schema(CONFIG_SCHEMA).validate(config)
+    except SchemaError as e:
+        echo(e)
+        sys.exit(1)
+
+    validated = Box(validated, camel_killer_box=True)
     files = validated.files
     metadata = validated.metadata
     title = normalize_string(metadata.title)
@@ -141,14 +191,6 @@ def get_builtin_configs():
         if file.endswith(".json") or file.endswith(".yaml"):
             configs.append(file.replace(".json", "").replace(".yaml", ""))
     return configs
-
-
-@cli.command()
-def list_configs(**kwargs):
-    """List all available built-in configs."""
-    echo("Available built-in configs:")
-    for c in get_builtin_configs():
-        echo(c)
 
 
 if __name__ == "__main__":

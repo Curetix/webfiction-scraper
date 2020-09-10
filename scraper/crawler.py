@@ -28,7 +28,8 @@ class Crawler:
         file_name = self.save_chapter(r.content, index)
         soup = BeautifulSoup(r.content, "html.parser")
         title_el = soup.select_one(self.selectors.title_element)
-        print(title_el.get_text())
+        print("Current chapter: " + title_el.get_text())
+        print("Current URL: " + url)
         manifest_entry = {
             "title": title_el.get_text(),
             "file": file_name,
@@ -53,7 +54,7 @@ class Crawler:
             next_chapter_el = soup.select_one(self.selectors.next_chapter_element)
 
         if next_chapter_el:
-            next_url = next_chapter_el["href"]
+            next_url = next_chapter_el.get("href")
             if not next_url.startswith("http"):
                 # If URLs are relative, we add the scheme and hostname from the current url
                 url_parsed = urllib.parse.urlparse(url)
@@ -62,8 +63,6 @@ class Crawler:
                     url_parsed.hostname,
                     next_url if next_url.startswith("/") else "/%s" % next_url,
                 )
-
-            print(next_url)
 
             return self.download(next_url)
         else:
