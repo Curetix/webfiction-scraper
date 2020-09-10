@@ -16,20 +16,18 @@ class Converter:
         self.manifest = Manifest(config.files.manifest_file)
 
     def convert(self, soup, url, title):
-        doc = BeautifulSoup(CHAPTER_DOC, "lxml")
-        doc.head.append(doc.new_tag("title"))
-        doc.head.title.append(title)
-
         content_el = soup.select_one(self.selectors.content_element)
-        content_el.name = "body"
-        del content_el["class"]
-        content_el.insert(0, soup.new_tag("h1"))
-        content_el.h1.append(title)
 
         if not content_el:
             raise ElementNotFoundException("Content element not found")
 
-        last_p_el = content_el.select_one("p:last-of-type")
+        if s := self.selectors.get("cut_off_element"):
+            last_p_el = content_el.select_one(s)
+            if not last_p_el:
+                raise ElementNotFoundException()
+            last_p_el = last_p_el.find_previous_sibling()
+        else:
+            last_p_el = content_el.select_one("p:last-of-type")
 
         # Delete everything after the last paragraph
         while last_p_el.find_next_sibling():
@@ -48,6 +46,14 @@ class Converter:
         #         for el in els:
         #             pass
 
+        content_el.name = "body"
+        del content_el["class"]
+        content_el.insert(0, soup.new_tag("h1"))
+        content_el.h1.append(title)
+
+        doc = BeautifulSoup(CHAPTER_DOC, "lxml")
+        doc.head.append(doc.new_tag("title"))
+        doc.head.title.append(title)
         doc.body.replace_with(content_el)
 
         return doc

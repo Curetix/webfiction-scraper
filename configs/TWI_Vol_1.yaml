@@ -45,8 +45,10 @@ files:
 selectors:
   titleElement: .entry-title
   contentElement: .entry-content
-  nextChapterElement: .entry-content p a:last-child
-  nextChapterElementText: Next Chapter
+  # This selects a link inside .entry-content that contains the text "Next Chapter"
+  nextChapterElement: .entry-content p a:contains("Next Chapter")
+  # This selects the paragraph that contains the nextChapterElement, this and everything after it will be removed
+  cutOffElement: p:has(a:contains("Next Chapter"))
 
 # Substitutions which will be applied to all chapters
 # By default, all empty elements, e.g. paragraphs, are removed. This can be disabled by including the following:

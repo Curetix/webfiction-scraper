@@ -27,15 +27,15 @@ CONFIG_SCHEMA = {
         "titleElement": str,
         "contentElement": str,
         "nextChapterElement": str,
-        Optional("nextChapterElementText", default=None): str,
+        Optional("cutOffElement", default=None): str,
     },
     Optional("removeEmptyElements", default=True): bool,
     Optional("substitutions", default=[]): [
         {
-            "selectorType": str,
+            "selectorType": lambda s: s == "css" or s == "regex" or s == "text",
             "selector": str,
-            Optional("chapterUrl"): str,
-            Optional("replaceWith"): lambda s: s is None or s is str,
+            Optional("chapterUrl", default=None): str,
+            Optional("replaceWith", default=None): lambda s: s is None or s is str,
         }
     ],
 }

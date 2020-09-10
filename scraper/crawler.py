@@ -41,17 +41,7 @@ class Crawler:
         if url == self.end_url:
             return True
 
-        next_chapter_el = None
-
-        if self.selectors.next_chapter_element_text:
-            next_chapter_elements = soup.select(self.selectors.next_chapter_element)
-
-            for el in next_chapter_elements:
-                if el.get_text().strip() == self.selectors.next_chapter_element_text:
-                    next_chapter_el = el
-                    break
-        else:
-            next_chapter_el = soup.select_one(self.selectors.next_chapter_element)
+        next_chapter_el = soup.select_one(self.selectors.next_chapter_element)
 
         if next_chapter_el:
             next_url = next_chapter_el.get("href")
