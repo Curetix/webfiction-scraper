@@ -1,6 +1,7 @@
 import os
 import urllib.parse
 
+from click import echo
 from requests import get
 from box import Box
 from bs4 import BeautifulSoup
@@ -16,27 +17,38 @@ class Crawler:
         self.files = config.files
         self.manifest = Manifest(config.files.manifest_file)
 
+        self.continue_from_url = None
         if len(self.manifest) > 0:
-            self.start_url = self.manifest[len(self.manifest) - 1].get("url")
+            self.continue_from_url = self.manifest[-1].get("url")
 
     def download(self, url=None):
-        url = url if url else self.start_url
+        url = url if url else self.continue_from_url if self.continue_from_url else self.start_url
         index = len(self.manifest)
 
         r = get(url)
         url = r.url  # In case of redirect, update our URL
+
+        if len(self.manifest) > 0 and url == self.manifest[-1].get("url"):
+            index = len(self.manifest) - 1
+
         file_name = self.save_chapter(r.content, index)
         soup = BeautifulSoup(r.content, "html.parser")
         title_el = soup.select_one(self.selectors.title_element)
-        print("Current chapter: " + title_el.get_text())
-        print("Current URL: " + url)
         manifest_entry = {
             "title": title_el.get_text(),
             "file": file_name,
             "converted": False,
             "url": url,
         }
-        self.manifest.append(manifest_entry, True)
+
+        if len(self.manifest) - 1 == index:
+            self.manifest[index] = manifest_entry
+        else:
+            self.manifest.append(manifest_entry)
+
+        self.manifest.save()
+
+        echo("Downloaded chapter %s from %s" % (title_el.get_text(), url))
 
         if url == self.end_url:
             return True
@@ -56,7 +68,7 @@ class Crawler:
 
             return self.download(next_url)
         else:
-            print("next_chapter_el not found")
+            echo("next_chapter_el not found")
             return True
 
     def save_chapter(self, content, index=0):
@@ -75,3 +87,5 @@ class Crawler:
         os.mkdir(self.files.cache_folder)
 
         self.manifest.clear()
+        self.manifest.save()
+        self.continue_from_url = None

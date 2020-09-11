@@ -27,8 +27,8 @@ def cli():
 
 @cli.command()
 @click.argument("config")
-@click.option("--clean-download", type=bool)
-@click.option("--clean-convert", type=bool)
+@click.option("--clean-download", is_flag=True)
+@click.option("--clean-convert", is_flag=True)
 def run(config, clean_download, clean_convert):
     """Run the scraper with the provided CONFIG.
 
@@ -59,10 +59,10 @@ def run(config, clean_download, clean_convert):
 
     config = get_validated_config(config_name, config)
 
-    # crawler = Crawler(config)
-    # if clean_download:
-    #     crawler.clean()
-    # crawler.download()
+    crawler = Crawler(config)
+    if clean_download:
+        crawler.clean()
+    crawler.download()
 
     converter = Converter(config)
     if clean_convert:
@@ -137,10 +137,6 @@ def get_validated_config(config_name: str, config: Box):
         validated.metadata.identifier = str(uuid.uuid5(
             uuid.NAMESPACE_DNS, ident_string
         ))
-
-    # for s in validated.get("substitutions"):
-    #     if not s.get("css") and not s.get("regex") and not s.get("text"):
-    #         raise SchemaError("Invalid substitution %s, no selector specified." % s)
 
     working_folder = files.get("working_folder")
 

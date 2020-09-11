@@ -18,8 +18,3 @@ class Manifest(list):
     def save(self):
         with open(os.path.join(self.path), "w") as file:
             json.dump(self, file, indent=2)
-
-    def append(self, item, save=False):
-        super().append(item)
-        if save:
-            self.save()

@@ -19,9 +19,7 @@ CONFIG_SCHEMA = {
     Optional("files", default={}): {
         Optional("workingFolder"): str,
         Optional("coverFile"): str,
-        Optional("epubFile"): str,
-        Optional("cacheFolder", default="cache/"): str,
-        Optional("bookFolder", default="book/"): str,
+        Optional("epubFile"): str
     },
     "selectors": {
         "titleElement": str,
@@ -34,8 +32,8 @@ CONFIG_SCHEMA = {
         {
             "selectorType": lambda s: s == "css" or s == "regex" or s == "text",
             "selector": str,
-            Optional("chapterUrl", default=None): str,
-            Optional("replaceWith", default=None): lambda s: s is None or s is str,
+            Optional("chapterUrl", default=""): str,
+            Optional("replaceWith", default=""): str,
         }
     ],
 }
