@@ -1,7 +1,6 @@
-import multiprocessing
 import os
 import re
-from multiprocessing import Pool
+from multiprocessing import Pool, cpu_count
 
 from bs4 import BeautifulSoup
 from click import echo
@@ -19,7 +18,8 @@ class Converter:
         self.remove_empty_elements = config.remove_empty_elements
         self.manifest = Manifest(config.files.manifest_file)
 
-    def convert(self, doc, url, title):
+    def convert(self, doc, chapter):
+        title = chapter.get("title")
         soup = BeautifulSoup(doc, "lxml")
 
         content_el = soup.select_one(self.selectors.content_element)
@@ -27,6 +27,7 @@ class Converter:
         if not content_el:
             raise ElementNotFoundException("Content element not found")
 
+        # If a cut-off element is specified, set its previous sibling as last element, otherwise the last paragraph
         if s := self.selectors.get("cut_off_element"):
             last_p_el = content_el.select_one(s)
             if not last_p_el:
@@ -35,16 +36,19 @@ class Converter:
         else:
             last_p_el = content_el.select_one("p:last-of-type")
 
-        # Delete everything after the last paragraph
+        # Delete everything after the last element
         while last_p_el.find_next_sibling():
             last_p_el.find_next_sibling().decompose()
 
-        for el in content_el.findChildren():
-            if self.remove_empty_elements and el.get_text().strip() == "":
-                el.decompose()
+        # Remove empty elements if enabled
+        if self.remove_empty_elements:
+            for el in content_el.findChildren():
+                if el.get_text().strip() == "":
+                    el.decompose()
 
+        # Apply substitutions with CSS selector
         for s in [s for s in self.substitutions if s.selector_type == "css"]:
-            if s.chapter_url != url:
+            if s.chapter_url != chapter.get("url"):
                 continue
 
             els = content_el.select(s.selector)
@@ -54,16 +58,19 @@ class Converter:
                 else:
                     el.decompose()
 
+        # Change the content elements tag to <body> and add the chapter title
         content_el.name = "body"
         del content_el["class"]
         content_el.insert(0, soup.new_tag("h1"))
         content_el.h1.append(title)
 
+        # Create the output document and add the body
         doc = BeautifulSoup(CHAPTER_DOC, "lxml")
         doc.head.append(doc.new_tag("title"))
         doc.head.title.append(title)
         doc.body.replace_with(content_el)
 
+        # Apply text and regex substitutions
         doc = str(doc)
         for s in self.substitutions:
             if s.selector_type == "text":
@@ -75,36 +82,30 @@ class Converter:
 
         return doc
 
-    def convert_file(self, path, converted_path, url, title):
-        if os.path.isfile(path):
-            with open(path, "r", encoding="utf8") as file:
+    def convert_file(self, index, chapter):
+        in_file = os.path.join(self.files.cache_folder, chapter.get("file"))
+        out_file = os.path.join(self.files.book_folder, chapter.get("file"))
+
+        if os.path.isfile(in_file):
+            with open(in_file, "r", encoding="utf8") as file:
                 doc = file.read()
-            with open(converted_path, "w", encoding="utf8") as file:
-                doc = str(self.convert(doc, url, title))
+            with open(out_file, "w", encoding="utf8") as file:
+                doc = self.convert(doc, chapter)
                 file.write(doc)
         else:
             raise FileNotFoundError()
 
-    def _convert_helper(self, e):
-        index = e[0]
-        chapter = e[1]
-        if not chapter.get("converted"):
-            self.convert_file(
-                os.path.join(self.files.cache_folder, chapter.get("file")),
-                os.path.join(self.files.book_folder, chapter.get("file")),
-                chapter.get("url"),
-                chapter.get("title")
-            )
-            # TODO: this doesn't work
-            self.manifest[index].update({"converted": True})
-            self.manifest.save()
+        return index
 
     def convert_all(self):
-        pool = Pool(multiprocessing.cpu_count())
-        pool.map(self._convert_helper, enumerate(self.manifest))
+        with Pool(processes=cpu_count()) as pool:
+            chapters_to_convert = filter(lambda t: not t[1].get("converted"), enumerate(self.manifest))
+            results = [pool.apply_async(self.convert_file, args=m) for m in chapters_to_convert]
+            converted_chapters = [p.get() for p in results]
 
-        for i in range(len(self.manifest)):
+        for i in converted_chapters:
             self.manifest[i].update({"converted": True})
+
         self.manifest.save()
 
         echo("Converted all chapters!")
