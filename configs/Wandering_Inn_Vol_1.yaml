@@ -5,12 +5,18 @@
 
 # URL of the first chapter (or prologue) of the webfiction
 startUrl: https://wanderinginn.com/2016/07/27/1-00/
-# OPTIONAL: URL of the last chapter. For example, you might want to split a fiction into different volumes.
+# OPTIONAL: URL of the last chapter. For example, if you want to split a fiction into different volumes, you can create
+# a config file for each.
 endUrl: https://wanderinginn.com/2017/03/04/1-45/
+# OPTIONAL: A list of chapters (URLs) that you don't want in your final EBook. They will be skipped during download, so
+# changing this afterwards requires you to re-download the content!
+# skipChapters:
+#  - https://...
 
-# EPUB metadata
+# EPUB metadata (more information: https://wiki.mobileread.com/wiki/Metadata#ePUB_metadata)
 metadata:
   title: The Wandering Inn - Volume 1
+  # The "author" key will be renamed into the "creator" key for the EPUB
   author: pirateaba
   description: |
     "No killing Goblins."
@@ -25,36 +31,43 @@ metadata:
   # OPTIONAL: Default metadata fields, can be changed if required.
   language: en
   publisher: Scrapy eBooks
-  # The book UUID will be generated based on the author (creator) and title (here: pirateaba-thewanderinginn) if none is provided.
+  # The book UUID will be generated based on the author and title (here: pirateaba-thewanderinginn) if none is provided.
   identifier: 938ed288-8a8c-55bb-a3b2-9cae45e3c6e1
   # You can also include your own custom metdata tags, e.g.:
   date: 2016-07-26
 
-# Specify file locations.
+# OPTIONAL: File locations / paths
 files:
-  # By default, the working folder is inside data/. Default here would be:
-  workingFolder: The Wandering Inn Volume 1
+  # By default, the working folder in named the same as the config file and placed inside data/. Default here would be:
+  workingFolder: Wandering_Inn_Vol_1
   # The following locations are relative to (inside) the workingFolder
   # You can provide the path to a PNG/JPEG/GIF file or a URL. If nothing is provided, a generic cover will be generated.
   coverFile: cover.jpg
   # The output EPUB file. Default here would be:
   epubFile: The Wandering Inn - Volume 1.epub
 
-
-# Element selectors. You can use both CSS and XPATH selectors. For more information see the Scrapy Selectors documentation.
+# Element CSS selectors (more information: https://facelessuser.github.io/soupsieve/)
 selectors:
+  # Element containing the chapter title
+  # (Select the element with the CSS class "entry-title")
   titleElement: .entry-title
+  # Element containing the chapter content
+  # (Select the element with the class "entry-content")
   contentElement: .entry-content
-  # This selects a link inside .entry-content that contains the text "Next Chapter"
-  nextChapterElement: .entry-content p a:contains("Next Chapter")
-  # This selects the paragraph that contains the nextChapterElement, this and everything after it will be removed
+  # Element linking the next chapter, has to have the "href" attribute
+  # (Select the link with text content "Next Chapter" inside the contentElement)
+  nextChapterElement: .entry-content a:contains("Next Chapter")
+  # OPTIONAL: Element after which everything is removed, by default the last <p> inside contentElement
+  # Since in The Wandering Inn links to previous / next chapters at the end of the post, we select that as cut-off
+  # (Select the paragraph which contains a link with text content "Next Chapter")
   cutOffElement: p:has(a:contains("Next Chapter"))
 
 # Substitutions which will be applied to all chapters
 # By default, all empty elements, e.g. paragraphs, are removed. This can be disabled by including the following:
 # removeEmptyElements: false
-# You can use simple strings, css selectors or regular expressions.
+# You can use css selectors, text or regular expressions.
 # For chapter-specific substitutions, include the chapter URL
+# If replaceWith is emitted, the selected element(s) will be removed
 substitutions:
   # This will be applied to all chapters
   - selectorType: text
@@ -64,7 +77,6 @@ substitutions:
   - chapterUrl: https://wanderinginn.com/2018/07/28/5-07
     selectorType: css
     selector: p:first-of-type
-    # If replaceWith is emitted, the selected element(s) will be removed
   - chapterUrl: https://wanderinginn.com/2018/07/31/5-08
     selectorType: css
     selector: p:first-of-type
