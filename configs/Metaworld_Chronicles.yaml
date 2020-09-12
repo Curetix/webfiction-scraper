@@ -1,4 +1,13 @@
 startUrl: https://royalroad.com/fiction/14167/metaworld-chronicles/chapter/163574/chapter-1-some-things-begin-something-ends
+skipChapters:
+  - https://www.royalroad.com/fiction/14167/metaworld-chronicles/chapter/171009/character-summaries
+  - https://www.royalroad.com/fiction/14167/metaworld-chronicles/chapter/179669/character-and-magic-summary-2
+  - https://www.royalroad.com/fiction/14167/metaworld-chronicles/chapter/202367/character-summary-3
+  - https://www.royalroad.com/fiction/14167/metaworld-chronicles/chapter/242718/character-summary-4
+  - https://www.royalroad.com/fiction/14167/metaworld-chronicles/chapter/401973/character-summary-5
+  - https://www.royalroad.com/fiction/14167/metaworld-chronicles/chapter/521452/character-summary-357
+  - https://www.royalroad.com/fiction/14167/metaworld-chronicles/chapter/309797/metaworld-spellcraft-glossary
+  - https://www.royalroad.com/fiction/14167/metaworld-chronicles/chapter/501870/glossary
 metadata:
   title: Metaworld Chronicles
   author: Wutosama
@@ -7,6 +16,6 @@ metadata:
 
     Follow Gwen across the world as she struggles to rebuild her life in this strange new reality. Behold a tale of adventure, friendship, and (of course), magic! Witness as she grows from a simple grade school student to a fully-fledged Mage, through university and beyond, discovering the secrets of a world made unreal by magic and mysticism.
 selectors:
+  titleElement: .fic-header h1
   contentElement: .chapter-content
-  nextChapterElement: .nav-buttons .col-lg-offset-6 a
-  titleElement: h1
+  nextChapterElement: .nav-buttons a:contains("Next Chapter")

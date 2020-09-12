@@ -6,6 +6,7 @@ from schema import And, Optional
 CONFIG_SCHEMA = {
     "startUrl": And(str, lambda s: s.startswith("http")),
     Optional("endUrl", default=""): And(str, lambda s: s.startswith("http")),
+    Optional("skipChapters", default=[]): [str],
     "metadata": {
         "title": str,
         "author": str,

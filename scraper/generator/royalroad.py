@@ -17,9 +17,9 @@ class RoyalRoadConfigGenerator(ConfigGenerator):
 
     def get_selectors(self):
         return Box(
-            titleElement="h1",
+            titleElement=".fic-header h1",
             contentElement=".chapter-content",
-            nextChapterElement=".nav-buttons .col-lg-offset-6 a"
+            nextChapterElement=".nav-buttons a:contains(\"Next Chapter\")"
         )
 
     def get_metadata(self):

@@ -6,6 +6,7 @@ from requests import get
 from box import Box
 from bs4 import BeautifulSoup
 
+from scraper.generator import ElementNotFoundException
 from scraper.manifest import Manifest
 
 
@@ -13,6 +14,7 @@ class Crawler:
     def __init__(self, config: Box):
         self.start_url = config.start_url
         self.end_url = config.end_url
+        self.skip_chapters = config.skip_chapters
         self.selectors = config.selectors
         self.files = config.files
         self.manifest = Manifest(config.files.manifest_file)
@@ -31,24 +33,33 @@ class Crawler:
         if len(self.manifest) > 0 and url == self.manifest[-1].get("url"):
             index = len(self.manifest) - 1
 
-        file_name = self.save_chapter(r.content, index)
         soup = BeautifulSoup(r.content, "html.parser")
         title_el = soup.select_one(self.selectors.title_element)
-        manifest_entry = {
-            "title": title_el.get_text(),
-            "file": file_name,
-            "converted": False,
-            "url": url,
-        }
 
-        if len(self.manifest) - 1 == index:
-            self.manifest[index] = manifest_entry
+        if not title_el:
+            raise ElementNotFoundException("Title element not found on " + url)
+
+        title = title_el.get_text()
+
+        if url not in self.skip_chapters:
+            file_name = self.save_chapter(r.content, index)
+            manifest_entry = {
+                "title": title,
+                "file": file_name,
+                "converted": False,
+                "url": url,
+            }
+
+            if len(self.manifest) - 1 == index:
+                self.manifest[index] = manifest_entry
+            else:
+                self.manifest.append(manifest_entry)
+
+            self.manifest.save()
+
+            echo("Downloaded chapter %s from %s" % (title, url))
         else:
-            self.manifest.append(manifest_entry)
-
-        self.manifest.save()
-
-        echo("Downloaded chapter %s from %s" % (title_el.get_text(), url))
+            echo("Skipped chapter %s from %s" % (title, url))
 
         if url == self.end_url:
             return True
@@ -68,7 +79,7 @@ class Crawler:
 
             return self.download(next_url)
         else:
-            echo("next_chapter_el not found")
+            echo("Next chapter element not found")
             return True
 
     def save_chapter(self, content, index=0):
