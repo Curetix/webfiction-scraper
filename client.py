@@ -10,6 +10,7 @@ from box import Box
 from click import echo
 from schema import Schema, SchemaError
 
+from scraper.binder import Binder
 from scraper.const import CONFIG_SCHEMA
 from scraper.converter import Converter
 from scraper.crawler import Crawler
@@ -27,17 +28,39 @@ def cli():
 
 @cli.command()
 @click.argument("config")
-@click.option("--clean-download", is_flag=True)
-@click.option("--clean-convert", is_flag=True)
-def run(config, clean_download, clean_convert):
+@click.option("--download/--no-download", default=True, help="Enable/disable chapter download")
+@click.option("--clean-download", is_flag=True, help="Clear existing downloaded chapters")
+@click.option("--convert/--no-convert", default=True, help="Enable/disable chapter conversion")
+@click.option("--clean-convert", is_flag=True, help="Clear existing converted chapters")
+@click.option("--bind/--no-bind", default=True, help="Enable/disable EBook creation")
+def run(config, download, clean_download, convert, clean_convert, bind):
     """Run the scraper with the provided CONFIG.
 
     CONFIG can be a path to a valid JSON or YAML config file,
-    or the name of a built-in config. To list all available
-    default configs, use the command LIST-CONFIGS.
+    or the name of a file inside the configs/ folder.
     """
     config_name = config
 
+    config = load_config(config_name)
+
+    if download:
+        crawler = Crawler(config)
+        if clean_download:
+            crawler.clean()
+        crawler.download()
+
+    if convert:
+        converter = Converter(config)
+        if clean_convert:
+            converter.clean()
+        converter.convert_all()
+
+    # if bind:
+    #     binder = Binder(config)
+    #     binder.bind_book()
+
+
+def load_config(config_name):
     if config_name in get_builtin_configs():
         path = os.path.join(SCRIPT_FOLDER, "configs", "%s.yaml" % config_name)
     else:
@@ -57,64 +80,7 @@ def run(config, clean_download, clean_convert):
         echo("Invalid file extension, only .json and .yaml/.yml are supported!")
         return
 
-    config = get_validated_config(config_name, config)
-
-    crawler = Crawler(config)
-    if clean_download:
-        crawler.clean()
-    crawler.download()
-
-    converter = Converter(config)
-    if clean_convert:
-        converter.clean()
-    converter.convert_all()
-
-    # import code
-    # variables = variables = {**globals(), **locals()}
-    # shell = code.InteractiveConsole(variables)
-    # shell.interact()
-
-
-@cli.command()
-def list_configs():
-    """List all available built-in configs."""
-    echo("Available built-in configs:")
-    for c in get_builtin_configs():
-        echo(c)
-
-
-@cli.command()
-@click.argument("url")
-@click.option("--name", type=str)
-def generate_config(url, name):
-    if not url.startswith("http"):
-        url = "https://" + url
-
-    parsed = urllib.parse.urlparse(url)
-    domain = parsed.netloc
-
-    if domain == "royalroad.com" or domain == "www.royalroad.com":
-        echo("Detected Royal Road URL!")
-        generator = RoyalRoadConfigGenerator(url)
-    else:
-        echo("Invalid URL or site not supported!")
-        return
-
-    config = generator.get_config()
-    if not name:
-        name = config.metadata.title
-
-    try:
-        Schema(CONFIG_SCHEMA).validate(config)
-    except SchemaError as e:
-        echo(e)
-        if not click.confirm("Couldn't validate newly generated config, save anyways?"):
-            return
-
-    config.to_yaml(filename="configs/%s.yaml" % name)
-
-    echo("Config for \"%s\" successfully generated, validated and saved!" % config.metadata.title)
-    echo("It can now be used with \"client.py run %s\"!" % name)
+    return get_validated_config(config_name, config)
 
 
 def get_validated_config(config_name: str, config: Box):
@@ -184,12 +150,62 @@ def get_validated_config(config_name: str, config: Box):
     return validated
 
 
+@cli.command()
+@click.option("--info", is_flag=True, help="Load the configs and list more information")
+def list_configs():
+    """List all configs inside the configs/ folder."""
+    echo("Available built-in configs:")
+    for c in get_builtin_configs():
+        echo(c)
+
+
 def get_builtin_configs():
     configs = []
     for file in os.listdir(os.path.join(SCRIPT_FOLDER, "configs")):
         if file.endswith(".json") or file.endswith(".yaml"):
             configs.append(file.replace(".json", "").replace(".yaml", ""))
     return configs
+
+
+@cli.command()
+@click.argument("url")
+@click.option("--name", type=str, help="Name of the config (file)")
+def generate_config(url, name):
+    """Generate a config file for a fiction from a support site.
+
+    URL can be either the fictions overview page or a chapter (which will be used as the startUrl config entry).
+
+    Currently supported sites:
+    - Royal Road
+    """
+    if not url.startswith("http"):
+        url = "https://" + url
+
+    parsed = urllib.parse.urlparse(url)
+    domain = parsed.netloc
+
+    if domain == "royalroad.com" or domain == "www.royalroad.com":
+        echo("Detected Royal Road URL!")
+        generator = RoyalRoadConfigGenerator(url)
+    else:
+        echo("Invalid URL or site not supported!")
+        return
+
+    config = generator.get_config()
+    if not name:
+        name = config.metadata.title
+
+    try:
+        Schema(CONFIG_SCHEMA).validate(config)
+    except SchemaError as e:
+        echo(e)
+        if not click.confirm("Couldn't validate newly generated config, save anyways?"):
+            return
+
+    config.to_yaml(filename="configs/%s.yaml" % name)
+
+    echo("Config for \"%s\" successfully generated, validated and saved!" % config.metadata.title)
+    echo("It can now be used with \"client.py run %s\"!" % name)
 
 
 if __name__ == "__main__":
