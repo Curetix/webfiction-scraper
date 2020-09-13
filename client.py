@@ -55,9 +55,9 @@ def run(config, download, clean_download, convert, clean_convert, bind):
             converter.clean()
         converter.convert_all()
 
-    # if bind:
-    #     binder = Binder(config)
-    #     binder.bind_book()
+    if bind:
+        binder = Binder(config)
+        binder.bind_book()
 
 
 def load_config(config_name):

@@ -1,24 +1,20 @@
 import os
-import uuid
 
 from ebooklib import epub
 
 from scraper.const import DC_KEYS
+from scraper.manifest import Manifest
 
 
 class Binder:
     def __init__(self, config):
         self.config = config
-        pass
+        self.manifest = Manifest(config.files.manifest_file)
 
-    def get_path(self, path):
-        paths = self.config.get("files")
-        return path if os.path.isabs(path) else os.path.join(paths.get("workingFolder"), path)
-
-    def bind_book(self, manifest):
+    def bind_book(self):
         book = epub.EpubBook()
 
-        for (m, v) in self.config.get("metadata"):
+        for (m, v) in self.config.metadata.items():
             m = m.lower()
             if m in DC_KEYS:
                 if m == "identifier":
@@ -30,24 +26,23 @@ class Binder:
                 elif m == "author" or m == "creator":
                     book.add_author(v)
                 else:
-                    book.add_metadata("DC", m, v)
+                    book.add_metadata("DC", m, str(v))
             else:
-                book.add_metadata(None, "meta", "", {"name": m, "content": v})
+                book.add_metadata(None, "meta", "", {"name": m, "content": str(v)})
 
-        cover_file = self.config.get("files").get("coverFile", "none.jpg")
-        cover_file_path = self.get_path(cover_file)
-        if cover_file and os.path.isfile(cover_file_path):
-            with open(cover_file_path, "rb") as file:
+        cover_file = self.config.files.cover_file
+        if cover_file and os.path.isfile(cover_file):
+            with open(cover_file, "rb") as file:
                 book.set_cover(os.path.basename(cover_file), file.read())
 
         chapters = []
-        base_folder = self.get_path(self.config.get("files").get("bookFolder"))
-        for (i, c) in enumerate([c for c in manifest if c.get("converted", False)]):
+        base_folder = self.config.files.book_folder
+        for (i, c) in enumerate(filter(lambda x: x.get("converted"), self.manifest)):
             file_name = os.path.basename(c.get("file"))
             chapter = epub.EpubHtml(
                 title=c.get("title"),
                 file_name=file_name,
-                lang=self.config.get("metadata").get("language", "en"),
+                lang=self.config.metadata.language,
             )
             with open(os.path.join(base_folder, file_name), "rb") as file:
                 chapter.set_content(file.read())
@@ -56,3 +51,8 @@ class Binder:
 
         book.toc = tuple(chapters)
         book.spine = chapters
+
+        book.add_item(epub.EpubNcx())
+        book.add_item(epub.EpubNav())
+
+        epub.write_epub(self.config.files.epub_file, book, {})
