@@ -1,4 +1,5 @@
-# This is an example config file for 'The Wandering Inn' by pirateaba
+# The Wandering Inn - Volume 1
+# by pirateaba
 # https://wanderinginn.com
 
 #####################################################################
@@ -34,7 +35,7 @@ metadata:
   # The book UUID will be generated based on the author and title (here: pirateaba-thewanderinginn) if none is provided.
   identifier: 938ed288-8a8c-55bb-a3b2-9cae45e3c6e1
   # You can also include your own custom metdata tags, e.g.:
-  date: 2016-07-26
+  date: 2017-03-04
 
 # OPTIONAL: File locations / paths
 files:

@@ -1,0 +1,37 @@
+# The Wandering Inn - Volume 5
+# by pirateaba
+# https://wanderinginn.com
+
+#####################################################################
+
+startUrl: https://wanderinginn.com/2018/07/10/5-00/
+endUrl: https://wanderinginn.com/2019/03/02/interlude-5/
+
+metadata:
+  title: The Wandering Inn - Volume 5
+  author: pirateaba
+  description: |
+    "No killing Goblins."
+
+    So reads the sign outside of the Wandering Inn, a small building run by a young woman named Erin Solstice. She serves pasta with sausage, blue fruit juice, and dead acid flies on request. And she comes from another world. Ours.
+
+    It's a bad day when Erin finds herself transported to a fantastical world and nearly gets eaten by a dragon. She doesn't belong in a place where monster attacks are a fact of life, and where humans are one species among many. But she must adapt to her new life. Or die.
+
+    In a dangerous world where magic is real and people can level up and gain classes, Erin Solstice must battle somewhat evil Goblins, deadly Rock Crabs, and hungry [Necromancers]. She is no [Warrior], no [Mage]. Erin Solstice runs an inn.
+
+    She's an [Innkeeper].
+  date: 2019-03-02
+
+files:
+  coverFile: cover.jpg
+
+selectors:
+  titleElement: .entry-title
+  contentElement: .entry-content
+  nextChapterElement: .entry-content a:contains("Next Chapter")
+  cutOffElement: p:has(a:contains("Next Chapter"))
+
+substitutions:
+  - selectorType: text
+    selector: <p>—-</p>
+    replaceWith: <hr/>
