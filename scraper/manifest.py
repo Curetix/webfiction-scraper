@@ -10,11 +10,11 @@ class Manifest(list):
 
     def load(self):
         if os.path.isfile(self.path):
-            with open(os.path.join(self.path), "r") as file:
+            with open(os.path.join(self.path), "r", encoding="utf-8") as file:
                 items = json.load(file)
             for i in items:
                 self.append(i)
 
     def save(self):
-        with open(os.path.join(self.path), "w") as file:
+        with open(os.path.join(self.path), "w", encoding="utf-8") as file:
             json.dump(self, file, indent=2)
