@@ -39,7 +39,8 @@ class Crawler:
         if not title_el:
             raise ElementNotFoundException("Title element not found on " + url)
 
-        title = title_el.get_text()
+        title = title_el.get_text().strip()
+        title = title.replace(" ", " ").replace("  ", " ")  # Replace unicode spaces and double spaces
 
         if url not in self.skip_chapters:
             file_name = self.save_chapter(r.content, index)
