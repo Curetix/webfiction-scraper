@@ -48,7 +48,7 @@ class Converter:
 
         # Apply substitutions with CSS selector
         for s in [s for s in self.substitutions if s.selector_type == "css"]:
-            if s.chapter_url != chapter.get("url"):
+            if s.chapter_url and s.chapter_url != chapter.get("url"):
                 continue
 
             els = content_el.select(s.selector)

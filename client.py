@@ -71,10 +71,10 @@ def load_config(config_name):
         sys.exit(1)
 
     if path.endswith(".json"):
-        with open(path, "r") as file:
+        with open(path, "r", encoding="utf-8") as file:
             config = json.load(file)
     elif path.endswith(".yaml") or path.endswith(".yml"):
-        with open(path, "r") as file:
+        with open(path, "r", encoding="utf-8") as file:
             config = yaml.load(file, Loader=yaml.FullLoader)
     else:
         echo("Invalid file extension, only .json and .yaml/.yml are supported!")
