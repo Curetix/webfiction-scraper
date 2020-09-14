@@ -6,10 +6,11 @@ from requests import get
 from box import Box
 from bs4 import BeautifulSoup
 
-from scraper import Manifest
-from scraper.exception import ElementNotFoundException
+from ..manifest import Manifest
+from ..exception import ElementNotFoundException
 
 
+# noinspection DuplicatedCode
 class Crawler:
     def __init__(self, config: Box):
         self.start_url = config.start_url
@@ -30,6 +31,9 @@ class Crawler:
         while next_url is not None:
             url, title, content, soup = self.download_chapter(next_url)
 
+            if not title and not content and not soup:
+                return
+
             if url not in self.skip_chapters:
                 file_name = self.save_chapter(content, index)
                 self.add_chapter_to_manifest(index, url, title, file_name)
@@ -38,7 +42,7 @@ class Crawler:
                 echo("Skipped chapter %s from %s" % (title, url))
 
             if url == self.end_url:
-                return True
+                return
 
             index += 1
             next_url = self.find_next_chapter_url(url, soup)
@@ -46,7 +50,7 @@ class Crawler:
     def download_chapter(self, url):
         r = get(url)
 
-        soup = BeautifulSoup(r.content, "html.parser")
+        soup = BeautifulSoup(r.content, "lxml")
 
         title_el = soup.select_one(self.selectors.title_element)
 
@@ -54,8 +58,8 @@ class Crawler:
             raise ElementNotFoundException("Title element not found")
 
         title = title_el.get_text().strip()
-        title = title.replace(" ", " ").replace("  ", " ")  # Replace unicode spaces and double spaces
-        title = title.replace("–", "-")
+        title = title.replace(" ", " ")\
+            .replace("  ", " ")
 
         return r.url, title, r.content, soup
 

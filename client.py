@@ -10,12 +10,17 @@ from box import Box
 from click import echo
 from schema import Schema, SchemaError
 
-from scraper import Crawler, Converter, Binder, RoyalRoadConfigGenerator
+from scraper import Crawler, Converter, Binder
+from scraper import RoyalRoadConfigGenerator, WanderingInnPatreonCrawler
 from scraper.const import CONFIG_SCHEMA
 from scraper.utils import normalize_string, lowercase_clean
 
 SCRIPT_PATH = os.path.realpath(__file__)
 SCRIPT_FOLDER = os.path.dirname(SCRIPT_PATH)
+CRAWLER_MODULES = {
+    "Crawler": Crawler,
+    "WanderingInnPatreonCrawler": WanderingInnPatreonCrawler
+}
 
 
 @click.group()
@@ -42,7 +47,7 @@ def run(config, download, clean_download, convert, clean_convert, bind):
 
     if download:
         echo("Downloading chapters...")
-        crawler = Crawler(config)
+        crawler = CRAWLER_MODULES.get(config.crawler_module, Crawler)(config)
         if clean_download:
             crawler.clean()
         crawler.start_download()

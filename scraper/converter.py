@@ -5,9 +5,9 @@ from multiprocessing import Pool, cpu_count
 from bs4 import BeautifulSoup
 from click import echo
 
-from scraper import Manifest
-from scraper.const import CHAPTER_DOC
-from scraper.exception import ElementNotFoundException
+from .manifest import Manifest
+from .const import CHAPTER_DOC
+from .exception import ElementNotFoundException
 
 
 class Converter:

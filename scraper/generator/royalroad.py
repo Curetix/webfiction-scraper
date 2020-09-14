@@ -4,8 +4,8 @@ from requests import get
 from box import Box
 from bs4 import BeautifulSoup
 
-from scraper import ConfigGenerator
-from scraper.exception import ElementNotFoundException, InvalidPageException
+from .generator import ConfigGenerator
+from ..exception import ElementNotFoundException, InvalidPageException
 
 FICTION_PAGE_PATTERN = re.compile(r"(?:http[s]://)?www\.royalroad\.com/fiction/\d+/.+")
 CHAPTER_PATTERN = re.compile(r"(?:http[s]://)?www\.royalroad\.com/fiction/\d+/.+/chapter/\d+/.+")

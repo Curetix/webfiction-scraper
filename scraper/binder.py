@@ -3,8 +3,8 @@ import os
 from click import echo
 from ebooklib import epub
 
-from scraper import Manifest
-from scraper.const import DC_KEYS
+from .manifest import Manifest
+from .const import DC_KEYS
 
 
 class Binder:

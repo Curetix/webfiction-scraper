@@ -7,6 +7,7 @@ CONFIG_SCHEMA = {
     "startUrl": And(str, lambda s: s.startswith("http")),
     Optional("endUrl", default=""): And(str, lambda s: s.startswith("http")),
     Optional("skipChapters", default=[]): [str],
+    Optional("crawlerModule", default="Crawler"): str,
     "metadata": {
         "title": str,
         "author": str,
