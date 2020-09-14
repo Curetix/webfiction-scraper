@@ -6,6 +6,8 @@
 
 startUrl: https://wanderinginn.com/2020/01/19/7-00/
 
+crawlerModule: WanderingInnPatreonCrawler
+
 metadata:
   title: The Wandering Inn - Volume 7
   author: pirateaba
@@ -35,6 +37,84 @@ substitutions:
   - selectorType: text
     selector: <p>—-</p>
     replaceWith: <hr/>
-  - chapterUrl: https://wanderinginn.com/2020/01/01/6-68/
+  - chapterUrl: https://wanderinginn.com/2020/01/22/7-01/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/01/26/7-02/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/03/29/7-15-r/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/03/31/7-16-l/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/04/12/7-17-s/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/04/19/interlude-strategists-at-sea-pt-1/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/04/22/interlude-strategists-at-sea-pt-2/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/05/13/7-23-lm/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/05/24/7-24/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/05/27/7-25/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/06/14/7-29-b/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/06/28/7-31/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/07/01/interlude-a-meeting-of-druids/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/07/05/7-32-d/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/07/12/7-34-c/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/07/15/7-35-c/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/07/19/7-36-c/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/07/29/7-37/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/07/29/7-37/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/08/05/7-39-a/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/08/08/interlude-carriages-and-conversations/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/08/11/7-40-er/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/08/12/interlude-food-and-growth/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/09/02/7-43-g/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/09/13/7-46-k/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/09/13/7-46-k/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/09/13/7-46-k/
     selectorType: css
     selector: p:first-of-type
