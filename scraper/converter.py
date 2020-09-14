@@ -5,9 +5,9 @@ from multiprocessing import Pool, cpu_count
 from bs4 import BeautifulSoup
 from click import echo
 
+from scraper import Manifest
 from scraper.const import CHAPTER_DOC
-from scraper.manifest import Manifest
-from scraper.generator import ElementNotFoundException
+from scraper.exception import ElementNotFoundException
 
 
 class Converter:
@@ -27,14 +27,18 @@ class Converter:
         if not content_el:
             raise ElementNotFoundException("Content element not found")
 
+        last_p_el = content_el.select_one("p:last-of-type")
+
         # If a cut-off element is specified, set its previous sibling as last element, otherwise the last paragraph
         if s := self.selectors.get("cut_off_element"):
-            last_p_el = content_el.select_one(s)
-            if not last_p_el:
-                raise ElementNotFoundException()
-            last_p_el = last_p_el.find_previous_sibling()
-        else:
-            last_p_el = content_el.select_one("p:last-of-type")
+            if type(s) == str:
+                s = [s]
+
+            for e in s:
+                last_p_el = content_el.select_one(e)
+                if last_p_el:
+                    last_p_el = last_p_el.find_previous_sibling()
+                    break
 
         # Delete everything after the last element
         while last_p_el.find_next_sibling():

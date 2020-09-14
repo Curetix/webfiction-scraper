@@ -10,12 +10,9 @@ from box import Box
 from click import echo
 from schema import Schema, SchemaError
 
-from scraper.binder import Binder
+from scraper import Crawler, Converter, Binder, RoyalRoadConfigGenerator
 from scraper.const import CONFIG_SCHEMA
-from scraper.converter import Converter
-from scraper.crawler import Crawler
 from scraper.utils import normalize_string, lowercase_clean
-from scraper.generator import RoyalRoadConfigGenerator
 
 SCRIPT_PATH = os.path.realpath(__file__)
 SCRIPT_FOLDER = os.path.dirname(SCRIPT_PATH)
@@ -44,18 +41,23 @@ def run(config, download, clean_download, convert, clean_convert, bind):
     config = load_config(config_name)
 
     if download:
+        echo("Downloading chapters...")
         crawler = Crawler(config)
         if clean_download:
             crawler.clean()
-        crawler.download()
+        crawler.start_download()
 
     if convert:
+        echo("---------------------------")
+        echo("Converting chapters...")
         converter = Converter(config)
         if clean_convert:
             converter.clean()
         converter.convert_all()
 
     if bind:
+        echo("---------------------------")
+        echo("Binding book into EPUB...")
         binder = Binder(config)
         binder.bind_book()
 

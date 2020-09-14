@@ -1,9 +1,10 @@
 import os
 
+from click import echo
 from ebooklib import epub
 
+from scraper import Manifest
 from scraper.const import DC_KEYS
-from scraper.manifest import Manifest
 
 
 class Binder:
@@ -56,3 +57,5 @@ class Binder:
         book.add_item(epub.EpubNav())
 
         epub.write_epub(self.config.files.epub_file, book, {})
+
+        echo("Created EPUB!")

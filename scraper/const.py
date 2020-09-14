@@ -1,6 +1,6 @@
 import datetime
 
-from schema import And, Optional
+from schema import And, Or, Optional
 
 
 CONFIG_SCHEMA = {
@@ -26,7 +26,7 @@ CONFIG_SCHEMA = {
         "titleElement": str,
         "contentElement": str,
         "nextChapterElement": str,
-        Optional("cutOffElement", default=None): str,
+        Optional("cutOffElement", default=None): Or(str, [str]),
     },
     Optional("removeEmptyElements", default=True): bool,
     Optional("substitutions", default=[]): [
