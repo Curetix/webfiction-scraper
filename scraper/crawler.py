@@ -41,6 +41,7 @@ class Crawler:
 
         title = title_el.get_text().strip()
         title = title.replace(" ", " ").replace("  ", " ")  # Replace unicode spaces and double spaces
+        title = title.replace("–", "-")
 
         if url not in self.skip_chapters:
             file_name = self.save_chapter(r.content, index)
