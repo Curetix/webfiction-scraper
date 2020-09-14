@@ -27,7 +27,7 @@ class Converter:
         if not content_el:
             raise ElementNotFoundException("Content element not found")
 
-        last_p_el = content_el.select_one("p:last-of-type")
+        last_p_el = content_el.select_one(self.selectors.content_element + " > p:last-of-type")
 
         # If a cut-off element is specified, set its previous sibling as last element, otherwise the last paragraph
         if s := self.selectors.get("cut_off_element"):
