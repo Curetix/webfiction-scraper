@@ -3,7 +3,7 @@ from box import Box
 from bs4 import BeautifulSoup
 from requests import Session
 
-from ..crawler import Crawler
+from .crawler import Crawler
 from ..exception import ElementNotFoundException
 
 

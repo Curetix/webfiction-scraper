@@ -1,2 +1,2 @@
 from .crawler import Crawler
-from .wanderinginn_patreon_crawler import WanderingInnPatreonCrawler
+from .wandering_inn_patreon_crawler import WanderingInnPatreonCrawler
