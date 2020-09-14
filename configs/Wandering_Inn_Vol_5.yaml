@@ -6,6 +6,8 @@
 
 startUrl: https://wanderinginn.com/2018/07/10/5-00/
 endUrl: https://wanderinginn.com/2019/03/02/interlude-5/
+skipChapters:
+  - https://wanderinginn.com/2019/01/19/5-54/
 
 metadata:
   title: The Wandering Inn - Volume 5
@@ -35,3 +37,21 @@ substitutions:
   - selectorType: text
     selector: <p>—-</p>
     replaceWith: <hr/>
+  - chapterUrl: https://wanderinginn.com/2018/07/28/5-07/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2018/07/31/5-08/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2018/08/04/interlude-flos/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2018/12/30/interlude-bird/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2019/02/19/5-61/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2019/03/02/interlude-5/
+    selectorType: css
+    selector: p:first-of-type

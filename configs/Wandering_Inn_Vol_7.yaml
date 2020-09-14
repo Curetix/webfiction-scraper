@@ -27,9 +27,14 @@ selectors:
   titleElement: .entry-title
   contentElement: .entry-content
   nextChapterElement: .entry-content a:contains("Next Chapter")
-  cutOffElement: p:has(a:contains("Next Chapter"))
+  cutOffElement:
+    - p:contains("Author’s Note:")
+    - p:has(a:contains("Next Chapter"))
 
 substitutions:
   - selectorType: text
     selector: <p>—-</p>
     replaceWith: <hr/>
+  - chapterUrl: https://wanderinginn.com/2020/01/01/6-68/
+    selectorType: css
+    selector: p:first-of-type

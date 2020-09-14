@@ -35,3 +35,9 @@ substitutions:
   - selectorType: text
     selector: <p>—-</p>
     replaceWith: <hr/>
+  - selectorType: text
+    selector: "#8ae8ff"
+    replaceWith: "#528B99"
+  - chapterUrl: https://wanderinginn.com/2017/04/04/2-08/
+    selectorType: css
+    selector: p:first-of-type

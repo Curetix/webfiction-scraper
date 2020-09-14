@@ -35,3 +35,6 @@ substitutions:
   - selectorType: text
     selector: <p>—-</p>
     replaceWith: <hr/>
+  - selectorType: text
+    selector: "#8ae8ff"
+    replaceWith: "#528B99"

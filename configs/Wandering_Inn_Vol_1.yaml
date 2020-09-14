@@ -74,14 +74,7 @@ substitutions:
   - selectorType: text
     selector: <p>—-</p>
     replaceWith: <hr/>
-  # These will only be applied to the specified chapter
-  - chapterUrl: https://wanderinginn.com/2018/07/28/5-07
-    selectorType: css
-    selector: p:first-of-type
-  - chapterUrl: https://wanderinginn.com/2018/07/31/5-08
-    selectorType: css
-    selector: p:first-of-type
-  - chapterUrl: https://wanderinginn.com/2018/08/04/interlude-flos
-    selectorType: css
-    selector: p:first-of-type
-  # ...
+  # This one would only be applied to the specified chapter
+  #- chapterUrl: https://wanderinginn.com/2017/03/04/1-45/
+  #  selectorType: css
+  #  selector: p:contains("Author’s Note")
