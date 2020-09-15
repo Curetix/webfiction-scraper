@@ -6,6 +6,7 @@ import uuid
 
 import click
 import yaml
+from PyInquirer import prompt
 from box import Box
 from click import echo
 from schema import Schema, SchemaError
@@ -29,19 +30,82 @@ def cli():
 
 
 @cli.command()
+def interactive():
+    questions = [
+        {
+            "type": "list",
+            "message": "Which config do you want to run?",
+            "name": "config_name",
+            "choices": [{"name": f} for f in get_builtin_configs()]
+        },
+        {
+            "type": "checkbox",
+            "message": "Which tasks do you want to run?",
+            "name": "tasks",
+            "choices": [
+                {
+                    "name": "Download chapters",
+                    "checked": True
+                },
+                {
+                    "name": "Clean download chapters",
+                    "checked": False
+                },
+                {
+                    "name": "Convert chapters",
+                    "checked": True
+                },
+                {
+                    "name": "Clean convert chapters",
+                    "checked": False
+                },
+                {
+                    "name": "Bind chapters into eBook",
+                    "checked": True
+                }
+            ]
+        },
+    ]
+
+    answers = prompt(questions)
+
+    if not answers:
+        return
+
+    config_name = answers.get("config_name")
+    tasks = answers.get("tasks")
+
+    if not tasks:
+        return
+
+    _run(
+        config_name,
+        "Download chapters" in tasks,
+        "Clean download chapters" in tasks,
+        "Convert chapters" in tasks,
+        "Clean convert chapters" in tasks,
+        "Bind chapters into eBook" in tasks,
+        ""
+    )
+
+
+@cli.command()
 @click.argument("config")
 @click.option("--download/--no-download", default=True, help="Enable/disable chapter download")
 @click.option("--clean-download", is_flag=True, help="Clear existing downloaded chapters")
 @click.option("--convert/--no-convert", default=True, help="Enable/disable chapter conversion")
 @click.option("--clean-convert", is_flag=True, help="Clear existing converted chapters")
 @click.option("--bind/--no-bind", default=True, help="Enable/disable eBook creation")
-@click.option("--copy-to", default="", type=str)
 def run(config, download, clean_download, convert, clean_convert, bind, copy_to):
     """Run the scraper with the provided CONFIG.
 
     CONFIG can be a path to a valid JSON or YAML config file,
     or the name of a file inside the configs/ folder.
     """
+    _run(config, download, clean_download, convert, clean_convert, bind, copy_to)
+
+
+def _run(config, download, clean_download, convert, clean_convert, bind, copy_to):
     config_name = config
 
     config = load_config(config_name)
