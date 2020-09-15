@@ -22,6 +22,7 @@ CRAWLER_MODULES = {
     "Crawler": Crawler,
     "WanderingInnPatreonCrawler": WanderingInnPatreonCrawler
 }
+SEPARATOR = 30 * "-" + "\n"
 
 
 @click.group()
@@ -62,6 +63,10 @@ def interactive():
                 {
                     "name": "Bind chapters into eBook",
                     "checked": True
+                },
+                {
+                    "name": "Create eBook formats specified in the config",
+                    "checked": True
                 }
             ]
         },
@@ -78,14 +83,14 @@ def interactive():
     if not tasks:
         return
 
-    _run(
+    run_tool(
         config_name,
         "Download chapters" in tasks,
         "Clean download chapters" in tasks,
         "Convert chapters" in tasks,
         "Clean convert chapters" in tasks,
         "Bind chapters into eBook" in tasks,
-        ""
+        "Create eBook formats specified in the config" in tasks
     )
 
 
@@ -96,16 +101,17 @@ def interactive():
 @click.option("--convert/--no-convert", default=True, help="Enable/disable chapter conversion")
 @click.option("--clean-convert", is_flag=True, help="Clear existing converted chapters")
 @click.option("--bind/--no-bind", default=True, help="Enable/disable eBook creation")
-def run(config, download, clean_download, convert, clean_convert, bind, copy_to):
+@click.option("--ebook-convert/--no-ebook-convert", default=True, help="Create eBook formats specified in the config")
+def run(config, download, clean_download, convert, clean_convert, bind, ebook_convert):
     """Run the scraper with the provided CONFIG.
 
     CONFIG can be a path to a valid JSON or YAML config file,
     or the name of a file inside the configs/ folder.
     """
-    _run(config, download, clean_download, convert, clean_convert, bind, copy_to)
+    run_tool(config, download, clean_download, convert, clean_convert, bind, ebook_convert)
 
 
-def _run(config, download, clean_download, convert, clean_convert, bind, copy_to):
+def run_tool(config, download, clean_download, convert, clean_convert, bind, ebook_convert):
     config_name = config
 
     config = load_config(config_name)
@@ -118,25 +124,38 @@ def _run(config, download, clean_download, convert, clean_convert, bind, copy_to
         crawler.start_download()
 
     if convert:
-        echo("---------------------------")
-        echo("Converting chapters...")
+        echo(SEPARATOR + "Converting chapters...")
         converter = Converter(config)
         if clean_convert:
             converter.clean()
         converter.convert_all()
 
     if bind:
-        echo("---------------------------")
-        echo("Binding chapters into eBook...")
+        echo(SEPARATOR + "Binding chapters into eBook...")
         binder = Binder(config)
         binder.bind_book()
 
-        if copy_to:
-            if os.path.isfile(copy_to) or os.path.isdir(os.path.dirname(copy_to)):
-                from shutil import copyfile
-                copyfile(config.files.epub_file, copy_to)
+    if ebook_convert:
+        echo(SEPARATOR + "Creating other eBook formats...")
+        for f in config.files.ebook_formats:
+            echo("Converting epub into " + f)
+            os.system("ebook-convert \"%s\" \"%s\"" % (config.files.epub_file, config.files.epub_file.replace("epub", f)))
+
+    if config.files.copy_book_to:
+        echo(SEPARATOR + "Copying files...")
+        formats = ["epub"] + config.files.ebook_formats
+        for f in formats:
+            source = config.files.epub_file.replace("epub", f)
+            target = config.files.copy_book_to.replace("epub", f)
+            if os.path.isfile(source):
+                if os.path.isdir(os.path.dirname(target)):
+                    from shutil import copyfile
+                    copyfile(source, target)
+                    echo("Copied %s to %s" % (os.path.basename(source), os.path.dirname(target)))
+                else:
+                    echo("Couldn't copy eBook to specified path, directory not found!")
             else:
-                echo("Couldn't copy eBook to specified path, directory not found!")
+                echo("%s not found!" % source)
 
 
 def load_config(config_name):
@@ -208,14 +227,12 @@ def get_validated_config(config_name: str, config: Box):
     elif cover_file and not os.path.isabs(cover_file):
         cover_file = os.path.join(working_folder, cover_file)
 
-    validated.files = Box(
-        working_folder=working_folder,
-        cache_folder=cache_folder,
-        book_folder=book_folder,
-        epub_file=epub_file,
-        cover_file=cover_file,
-        manifest_file=manifest_file
-    )
+    validated.files.working_folder = working_folder
+    validated.files.cache_folder = cache_folder
+    validated.files.book_folder = book_folder
+    validated.files.epub_file = epub_file
+    validated.files.cover_file = cover_file
+    validated.files.manifest_file = manifest_file
 
     if not os.path.isdir(working_folder):
         os.mkdir(working_folder)

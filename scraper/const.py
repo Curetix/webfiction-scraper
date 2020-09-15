@@ -21,7 +21,9 @@ CONFIG_SCHEMA = {
     Optional("files", default={}): {
         Optional("workingFolder"): str,
         Optional("coverFile"): str,
-        Optional("epubFile"): str
+        Optional("epubFile"): str,
+        Optional("ebookFormats", default=[]): [str],
+        Optional("copyBookTo", default=""): str
     },
     "selectors": {
         "titleElement": str,

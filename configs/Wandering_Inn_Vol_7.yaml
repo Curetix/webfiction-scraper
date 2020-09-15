@@ -24,6 +24,9 @@ metadata:
 
 files:
   coverFile: cover.jpg
+  ebookFormats:
+    - mobi
+  copyBookTo: C:\Users\panam\OneDrive\Dokumente\Calibre\pirateaba\The Wandering Inn_ Volume 7 (312)\The Wandering Inn_ Volume 7 - pirateaba.epub
 
 selectors:
   titleElement: .entry-title

@@ -46,6 +46,12 @@ files:
   coverFile: cover.jpg
   # The output EPUB file. Default here would be:
   epubFile: The Wandering Inn - Volume 1.epub
+  # A list of alternative eBook formats (just the extension without name or dot) that the epub should be converted into.
+  # Make sure Calibre's ebook-convert tool is in your PATH variable and usable through the command line.
+  ebookFormats:
+    - mobi
+  # A path where the final eBook gets copied to. If multiple formats are generated, this will be repeated for each of them.
+#  copyBookTo:
 
 # Element CSS selectors (more information: https://facelessuser.github.io/soupsieve/)
 selectors:
