@@ -34,8 +34,9 @@ def cli():
 @click.option("--clean-download", is_flag=True, help="Clear existing downloaded chapters")
 @click.option("--convert/--no-convert", default=True, help="Enable/disable chapter conversion")
 @click.option("--clean-convert", is_flag=True, help="Clear existing converted chapters")
-@click.option("--bind/--no-bind", default=True, help="Enable/disable EBook creation")
-def run(config, download, clean_download, convert, clean_convert, bind):
+@click.option("--bind/--no-bind", default=True, help="Enable/disable eBook creation")
+@click.option("--copy-to", default="", type=str)
+def run(config, download, clean_download, convert, clean_convert, bind, copy_to):
     """Run the scraper with the provided CONFIG.
 
     CONFIG can be a path to a valid JSON or YAML config file,
@@ -62,9 +63,16 @@ def run(config, download, clean_download, convert, clean_convert, bind):
 
     if bind:
         echo("---------------------------")
-        echo("Binding book into EPUB...")
+        echo("Binding chapters into eBook...")
         binder = Binder(config)
         binder.bind_book()
+
+        if copy_to:
+            if os.path.isfile(copy_to) or os.path.isdir(os.path.dirname(copy_to)):
+                from shutil import copyfile
+                copyfile(config.files.epub_file, copy_to)
+            else:
+                echo("Couldn't copy eBook to specified path, directory not found!")
 
 
 def load_config(config_name):
