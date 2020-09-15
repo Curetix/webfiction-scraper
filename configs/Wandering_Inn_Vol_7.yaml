@@ -30,6 +30,7 @@ selectors:
   contentElement: .entry-content
   nextChapterElement: .entry-content a:contains("Next Chapter")
   cutOffElement:
+    - p:contains("After Chapter Thoughts:")
     - p:contains("Author’s Note:")
     - p:has(a:contains("Next Chapter"))
 
