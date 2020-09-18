@@ -17,6 +17,7 @@ def cli():
 
 @cli.command()
 def interactive():
+    """Start an interactive session."""
     questions = [
         {
             "type": "list",
