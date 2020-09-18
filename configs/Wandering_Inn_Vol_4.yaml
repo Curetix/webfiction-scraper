@@ -22,9 +22,6 @@ metadata:
     She's an [Innkeeper].
   date: 2018-07-09
 
-files:
-  coverFile: cover.jpg
-
 selectors:
   titleElement: .entry-title
   contentElement: .entry-content

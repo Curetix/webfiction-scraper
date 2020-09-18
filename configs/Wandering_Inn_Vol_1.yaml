@@ -42,7 +42,7 @@ files:
   # By default, the working folder in named the same as the config file and placed inside data/. Default here would be:
   workingFolder: Wandering_Inn_Vol_1
   # The following locations are relative to (inside) the workingFolder
-  # You can provide the path to a PNG/JPEG/GIF file or a URL. If nothing is provided, a generic cover will be generated.
+  # You can provide the path to a PNG/JPEG/GIF file or a URL.
   coverFile: cover.jpg
   # The output EPUB file. Default here would be:
   epubFile: The Wandering Inn - Volume 1.epub
