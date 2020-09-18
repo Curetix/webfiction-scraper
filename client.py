@@ -5,7 +5,7 @@ from PyInquirer import prompt
 from box import Box
 from click import echo
 
-from scraper.client import FictionScraperClient
+from scraper import FictionScraperClient
 
 SCRIPT_FOLDER = os.path.dirname(os.path.realpath(__file__))
 

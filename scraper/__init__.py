@@ -1,3 +1,4 @@
+from .client import FictionScraperClient
 from .crawler import Crawler, WanderingInnPatreonCrawler
 from .converter import Converter
 from .binder import Binder

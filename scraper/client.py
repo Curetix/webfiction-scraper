@@ -9,22 +9,19 @@ from box import Box
 from click import echo, confirm
 from schema import Schema, SchemaError
 
-from . import Converter, Binder
+from .converter import Converter
+from .binder import Binder
 from .crawler import Crawler, WanderingInnPatreonCrawler
 from .generator import RoyalRoadConfigGenerator
 from .const import CONFIG_SCHEMA
 from .utils import normalize_string, lowercase_clean
 
-CRAWLER_MODULES = {
-    "Crawler": Crawler,
-    "WanderingInnPatreonCrawler": WanderingInnPatreonCrawler
-}
 SEPARATOR = 30 * "-" + "\n"
 
 
 class FictionScraperClient:
     def __init__(self, client_config, configs_folder, data_folder):
-        self.config_overrides = client_config.get("configOverrides", {})
+        self.client_config = client_config
         self.configs_folder = configs_folder
         self.data_folder = data_folder
 
@@ -33,7 +30,12 @@ class FictionScraperClient:
 
         if download:
             echo("Downloading chapters...")
-            crawler = CRAWLER_MODULES.get(config.crawler_module, Crawler)(config)
+
+            if config.get("crawler_module") == "WanderingInnPatreonCrawler":
+                crawler = WanderingInnPatreonCrawler(config, self.client_config.get("patreonSessionCookie"))
+            else:
+                crawler = Crawler(config)
+
             if clean_download:
                 crawler.clean()
             crawler.start_download()
@@ -94,7 +96,7 @@ class FictionScraperClient:
             echo("Invalid file extension, only .json and .yaml/.yml are supported!")
             return
 
-        if override := self.config_overrides.get(config_name):
+        if override := self.client_config.get("configOverrides", {}).get(config_name):
             # Supports nested dictionary updates
             def update(d, u):
                 import collections.abc
