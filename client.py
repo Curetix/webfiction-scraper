@@ -1,9 +1,12 @@
 import os
+from time import sleep
 
 import click
 from PyInquirer import prompt
 from box import Box
+from bs4 import BeautifulSoup
 from click import echo
+from requests import get
 
 from scraper import FictionScraperClient
 
@@ -95,6 +98,48 @@ def run(config, download, clean_download, convert, clean_convert, bind, ebook_co
     or the name of a file inside the configs/ folder.
     """
     client.run(config, download, clean_download, convert, clean_convert, bind, ebook_convert)
+
+
+@cli.command()
+def monitor():
+    last_posts = Box()
+
+    if not client_config.get("monitored_fictions"):
+        echo("No fictions to monitor configured!")
+        return
+
+    while True:
+        for fiction in client_config.monitored_fictions:
+            c = fiction.config_name
+            r = get(fiction.rss_feed_url)
+            soup = BeautifulSoup(r.content, "lxml")
+            latest_post = soup.find("item").find("link").get_text()
+
+            if last_posts.get(c) != latest_post:
+                last_posts[c] = latest_post
+
+                if not last_posts.get(c):
+                    echo("Initial post recorded for: %s" % c)
+                    continue
+
+                echo("New post for: %s" % c)
+
+                options = fiction.get("client_options", Box())
+
+                client.run(
+                    c,
+                    options.get("download", True),
+                    options.get("clean_download", False),
+                    options.get("convert", True),
+                    options.get("clean_convert", False),
+                    options.get("bind", True),
+                    options.get("ebook_convert", True)
+                )
+            else:
+                echo("Nothing new for:  %s" % c)
+
+        echo("Done! Sleeping...")
+        sleep(1800)
 
 
 @cli.command()
