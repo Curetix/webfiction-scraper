@@ -1,4 +1,3 @@
-import json
 import os
 import sys
 import urllib.parse
@@ -13,17 +12,15 @@ from .converter import Converter
 from .binder import Binder
 from .crawler import Crawler, WanderingInnPatreonCrawler
 from .generator import RoyalRoadConfigGenerator
-from .const import CONFIG_SCHEMA
-from .utils import normalize_string, lowercase_clean
+from .const import CONFIG_SCHEMA, DATA_DIR, USER_CONFIGS_DIR
+from .utils import normalize_string, lowercase_clean, get_fiction_config
 
 SEPARATOR = 30 * "-" + "\n"
 
 
 class FictionScraperClient:
-    def __init__(self, client_config, configs_folder, data_folder):
+    def __init__(self, client_config):
         self.client_config = client_config
-        self.configs_folder = configs_folder
-        self.data_folder = data_folder
 
     def run(self, config_name, download, clean_download, convert, clean_convert, bind, ebook_convert):
         config = self.load_fiction_config(config_name)
@@ -76,25 +73,23 @@ class FictionScraperClient:
                     echo("%s not found!" % source)
 
     def load_fiction_config(self, config_name):
-        if config_name in self.get_fiction_configs():
-            path = os.path.join(self.configs_folder, "%s.yaml" % config_name)
-        else:
+        if os.path.isfile(config_name):
             path = config_name
             config_name = os.path.basename(config_name).replace(".yaml", "")
-
-        if not os.path.isfile(path):
+        elif p := get_fiction_config("%s.yaml" % config_name):
+            path = p
+        elif p := get_fiction_config("%s.yaml" % config_name, user_dir=True):
+            path = p
+        else:
             echo("Couldn't find config file!")
             sys.exit(1)
 
-        if path.endswith(".json"):
-            with open(path, "r", encoding="utf-8") as file:
-                config = json.load(file)
-        elif path.endswith(".yaml") or path.endswith(".yml"):
-            with open(path, "r", encoding="utf-8") as file:
-                config = yaml.load(file, Loader=yaml.FullLoader)
-        else:
-            echo("Invalid file extension, only .json and .yaml/.yml are supported!")
-            return
+        if not path.endswith(".yaml"):
+            echo("Invalid file extension, only .yaml is supported!")
+            sys.exit(1)
+
+        with open(path, "r", encoding="utf-8") as file:
+            config = yaml.load(file, Loader=yaml.FullLoader)
 
         if override := self.client_config.get("configOverrides", {}).get(config_name):
             # Supports nested dictionary updates
@@ -132,9 +127,9 @@ class FictionScraperClient:
         working_folder = files.get("working_folder")
 
         if not working_folder:
-            working_folder = os.path.join(self.data_folder, config_name)
+            working_folder = os.path.join(DATA_DIR, config_name)
         elif working_folder and not os.path.isabs(working_folder):
-            working_folder = os.path.join(self.data_folder, working_folder)
+            working_folder = os.path.join(DATA_DIR, working_folder)
 
         cache_folder = os.path.join(working_folder, "cache")
         book_folder = os.path.join(working_folder, "book")
@@ -172,14 +167,8 @@ class FictionScraperClient:
 
         return validated
 
-    def get_fiction_configs(self):
-        configs = []
-        for file in os.listdir(self.configs_folder):
-            if file.endswith(".json") or file.endswith(".yaml"):
-                configs.append(file.replace(".json", "").replace(".yaml", ""))
-        return configs
-
-    def generate_fiction_config(self, url, name):
+    @staticmethod
+    def generate_fiction_config(url, name):
         """Generate a config file for a fiction from a support site.
 
         URL can be either the fictions overview page or a chapter (which will be used as the startUrl config entry).
@@ -211,7 +200,7 @@ class FictionScraperClient:
             if not confirm("Couldn't validate newly generated config, save anyways?"):
                 return
 
-        config.to_yaml(filename=os.path.join(self.configs_folder, "%s.yaml" % name))
+        config.to_yaml(filename=os.path.join(USER_CONFIGS_DIR, "%s.yaml" % name))
 
         echo("Config for \"%s\" successfully generated, validated and saved!" % config.metadata.title)
         echo("It can now be used with \"client.py run %s\"!" % name)

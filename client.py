@@ -9,8 +9,8 @@ from click import echo
 from requests import get
 
 from scraper import FictionScraperClient
-
-SCRIPT_FOLDER = os.path.dirname(os.path.realpath(__file__))
+from scraper.const import DATA_DIR
+from scraper.utils import list_fiction_configs
 
 
 @click.group()
@@ -26,7 +26,7 @@ def interactive():
             "type": "list",
             "message": "Which config do you want to run?",
             "name": "config_name",
-            "choices": [{"name": f} for f in client.get_fiction_configs()]
+            "choices": [{"name": f} for f in list_fiction_configs()]
         },
         {
             "type": "checkbox",
@@ -144,10 +144,10 @@ def monitor():
 
 @cli.command()
 @click.option("--info", is_flag=True, help="Load the configs and list more information")
-def list_configs():
+def list_configs(info):
     """List all configs inside the configs/ folder."""
     echo("Available built-in configs:")
-    for c in client.get_fiction_configs():
+    for c in list_fiction_configs() + list_fiction_configs(user_dir=True):
         echo(c)
 
 
@@ -166,14 +166,15 @@ def generate_config(url, name):
 
 
 if __name__ == "__main__":
-    client_config = Box()
-    configs_folder = os.path.join(SCRIPT_FOLDER, "configs")
-    data_folder = os.path.join(SCRIPT_FOLDER, "data")
+    if not os.path.isdir(DATA_DIR):
+        os.makedirs(DATA_DIR)
+        os.mkdir(os.path.join(DATA_DIR, "configs"))
 
-    if os.path.isfile(path := os.path.join(SCRIPT_FOLDER, "client.yaml")):
+    if os.path.isfile(path := os.path.join(DATA_DIR, "client.yaml")):
         client_config = Box.from_yaml(filename=path)
-        if folder := client_config.get("dataFolder"):
-            data_folder = folder
+    else:
+        client_config = Box()
 
-    client = FictionScraperClient(client_config, configs_folder, data_folder)
+    client = FictionScraperClient(client_config)
+
     cli()
