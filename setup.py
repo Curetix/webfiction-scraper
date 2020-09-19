@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name="WebFictionScraper",
     version="1.0",
-    packages=find_packages(),
+    py_modules=["client", "scraper"],
     package_data={"scraper": ["configs/*.yaml"]},
     install_requires=[
         "ebooklib",
