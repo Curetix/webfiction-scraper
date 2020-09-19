@@ -12,10 +12,24 @@ from scraper import FictionScraperClient
 from scraper.const import DATA_DIR
 from scraper.utils import list_fiction_configs
 
+client = FictionScraperClient(None)
+config = Box()
+
 
 @click.group()
 def cli():
-    pass
+    global client, config
+
+    if not os.path.isdir(DATA_DIR):
+        os.makedirs(DATA_DIR)
+        os.mkdir(os.path.join(DATA_DIR, "configs"))
+
+    if os.path.isfile(path := os.path.join(DATA_DIR, "client.yaml")):
+        config = Box.from_yaml(filename=path)
+    else:
+        config = Box()
+
+    client = FictionScraperClient(config)
 
 
 @cli.command()
@@ -84,32 +98,32 @@ def interactive():
 
 
 @cli.command()
-@click.argument("config")
+@click.argument("config_name")
 @click.option("--download/--no-download", default=True, help="Enable/disable chapter download")
 @click.option("--clean-download", is_flag=True, help="Clear existing downloaded chapters")
 @click.option("--convert/--no-convert", default=True, help="Enable/disable chapter conversion")
 @click.option("--clean-convert", is_flag=True, help="Clear existing converted chapters")
 @click.option("--bind/--no-bind", default=True, help="Enable/disable eBook creation")
 @click.option("--ebook-convert/--no-ebook-convert", default=True, help="Create eBook formats specified in the config")
-def run(config, download, clean_download, convert, clean_convert, bind, ebook_convert):
+def run(config_name, download, clean_download, convert, clean_convert, bind, ebook_convert):
     """Run the scraper with the provided CONFIG.
 
     CONFIG can be a path to a valid JSON or YAML config file,
     or the name of a file inside the configs/ folder.
     """
-    client.run(config, download, clean_download, convert, clean_convert, bind, ebook_convert)
+    client.run(config_name, download, clean_download, convert, clean_convert, bind, ebook_convert)
 
 
 @cli.command()
 def monitor():
     last_posts = Box()
 
-    if not client_config.get("monitored_fictions"):
+    if not config.get("monitored_fictions"):
         echo("No fictions to monitor configured!")
         return
 
     while True:
-        for fiction in client_config.monitored_fictions:
+        for fiction in config.monitored_fictions:
             c = fiction.config_name
             r = get(fiction.rss_feed_url)
             soup = BeautifulSoup(r.content, "lxml")
@@ -166,15 +180,4 @@ def generate_config(url, name):
 
 
 if __name__ == "__main__":
-    if not os.path.isdir(DATA_DIR):
-        os.makedirs(DATA_DIR)
-        os.mkdir(os.path.join(DATA_DIR, "configs"))
-
-    if os.path.isfile(path := os.path.join(DATA_DIR, "client.yaml")):
-        client_config = Box.from_yaml(filename=path)
-    else:
-        client_config = Box()
-
-    client = FictionScraperClient(client_config)
-
     cli()
