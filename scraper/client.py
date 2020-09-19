@@ -3,7 +3,6 @@ import sys
 import urllib.parse
 import uuid
 
-import yaml
 from box import Box
 from click import echo, confirm
 from schema import Schema, SchemaError
@@ -12,15 +11,15 @@ from .converter import Converter
 from .binder import Binder
 from .crawler import Crawler, WanderingInnPatreonCrawler
 from .generator import RoyalRoadConfigGenerator
-from .const import CONFIG_SCHEMA, DATA_DIR, USER_CONFIGS_DIR
+from .const import FICTION_CONFIG_SCHEMA, DATA_DIR, USER_CONFIGS_DIR, CLIENT_CONFIG_SCHEMA
 from .utils import normalize_string, lowercase_clean, get_fiction_config
 
 SEPARATOR = 30 * "-" + "\n"
 
 
 class FictionScraperClient:
-    def __init__(self, client_config):
-        self.client_config = client_config
+    def __init__(self):
+        self.client_config = self.load_client_config()
 
     def run(self, config_name, download, clean_download, convert, clean_convert, bind, ebook_convert):
         config = self.load_fiction_config(config_name)
@@ -29,7 +28,7 @@ class FictionScraperClient:
             echo("Downloading chapters...")
 
             if config.get("crawler_module") == "WanderingInnPatreonCrawler":
-                crawler = WanderingInnPatreonCrawler(config, self.client_config.get("patreonSessionCookie"))
+                crawler = WanderingInnPatreonCrawler(config, self.client_config.patreon_session_cookie)
             else:
                 crawler = Crawler(config)
 
@@ -56,7 +55,7 @@ class FictionScraperClient:
                 os.system(
                     "ebook-convert \"%s\" \"%s\"" % (config.files.epub_file, config.files.epub_file.replace("epub", f)))
 
-        if config.files.copy_book_to:
+        if config.files.get("copy_book_to"):
             echo(SEPARATOR + "Copying files...")
             formats = ["epub"] + config.files.ebook_formats
             for f in formats:
@@ -71,6 +70,24 @@ class FictionScraperClient:
                         echo("Couldn't copy eBook to specified path, directory not found!")
                 else:
                     echo("%s not found!" % source)
+
+    @staticmethod
+    def load_client_config():
+        if not os.path.isdir(DATA_DIR):
+            os.makedirs(os.path.join(DATA_DIR, "configs"))
+
+        if os.path.isfile(path := os.path.join(DATA_DIR, "client.yaml")):
+            config = Box.from_yaml(filename=path, camel_killer_box=True)
+
+            try:
+                validated = Schema(CLIENT_CONFIG_SCHEMA).validate(config)
+            except SchemaError as e:
+                echo(e)
+                sys.exit(1)
+
+            return validated
+
+        return Box()
 
     def load_fiction_config(self, config_name):
         if os.path.isfile(config_name):
@@ -88,10 +105,9 @@ class FictionScraperClient:
             echo("Invalid file extension, only .yaml is supported!")
             sys.exit(1)
 
-        with open(path, "r", encoding="utf-8") as file:
-            config = yaml.load(file, Loader=yaml.FullLoader)
+        config = Box.from_yaml(filename=path, camel_killer_box=True, default_box=True)
 
-        if override := self.client_config.get("configOverrides", {}).get(config_name):
+        if override := self.client_config.config_overrides.get(config_name.lower()):
             # Supports nested dictionary updates
             def update(d, u):
                 import collections.abc
@@ -105,12 +121,11 @@ class FictionScraperClient:
             update(config, override)
 
         try:
-            validated = Schema(CONFIG_SCHEMA).validate(config)
+            validated = Schema(FICTION_CONFIG_SCHEMA).validate(config)
         except SchemaError as e:
             echo(e)
             sys.exit(1)
 
-        validated = Box(validated, camel_killer_box=True, default_box=True)
         files = validated.files
         metadata = validated.metadata
         title = normalize_string(metadata.title)
@@ -194,7 +209,7 @@ class FictionScraperClient:
             name = config.metadata.title
 
         try:
-            Schema(CONFIG_SCHEMA).validate(config)
+            Schema(FICTION_CONFIG_SCHEMA).validate(config)
         except SchemaError as e:
             echo(e)
             if not confirm("Couldn't validate newly generated config, save anyways?"):

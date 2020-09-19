@@ -1,4 +1,3 @@
-import os
 from time import sleep
 
 import click
@@ -9,32 +8,19 @@ from click import echo
 from requests import get
 
 from scraper import FictionScraperClient
-from scraper.const import DATA_DIR
 from scraper.utils import list_fiction_configs
 
-client = FictionScraperClient(None)
-config = Box()
+client = FictionScraperClient()
 
 
 @click.group()
 def cli():
-    global client, config
-
-    if not os.path.isdir(DATA_DIR):
-        os.makedirs(DATA_DIR)
-        os.mkdir(os.path.join(DATA_DIR, "configs"))
-
-    if os.path.isfile(path := os.path.join(DATA_DIR, "client.yaml")):
-        config = Box.from_yaml(filename=path)
-    else:
-        config = Box()
-
-    client = FictionScraperClient(config)
+    pass
 
 
 @cli.command()
 def interactive():
-    """Start an interactive session."""
+    """Start the scraper interactively."""
     questions = [
         {
             "type": "list",
@@ -106,24 +92,26 @@ def interactive():
 @click.option("--bind/--no-bind", default=True, help="Enable/disable eBook creation")
 @click.option("--ebook-convert/--no-ebook-convert", default=True, help="Create eBook formats specified in the config")
 def run(config_name, download, clean_download, convert, clean_convert, bind, ebook_convert):
-    """Run the scraper with the provided CONFIG.
+    """Run the scraper with the provided CONFIG_NAME.
 
-    CONFIG can be a path to a valid JSON or YAML config file,
-    or the name of a file inside the configs/ folder.
+    CONFIG_NAME can be a path to a YAML config file, the name of a built-in config or the name of a config inside
+    the users configs/ directory. To list all automatically detected config files, use the list-configs command.
     """
     client.run(config_name, download, clean_download, convert, clean_convert, bind, ebook_convert)
 
 
 @cli.command()
 def monitor():
+    """Monitor feeds and run the scraper when content is posted."""
     last_posts = Box()
+    monitored_fictions = client.client_config.get("monitored_fictions")
 
-    if not config.get("monitored_fictions"):
+    if not monitored_fictions:
         echo("No fictions to monitor configured!")
         return
 
     while True:
-        for fiction in config.monitored_fictions:
+        for fiction in monitored_fictions:
             c = fiction.config_name
             r = get(fiction.rss_feed_url)
             soup = BeautifulSoup(r.content, "lxml")
@@ -157,9 +145,8 @@ def monitor():
 
 
 @cli.command()
-@click.option("--info", is_flag=True, help="Load the configs and list more information")
-def list_configs(info):
-    """List all configs inside the configs/ folder."""
+def list_configs():
+    """List all detected configs."""
     echo("Available built-in configs:")
     for c in list_fiction_configs() + list_fiction_configs(user_dir=True):
         echo(c)
@@ -174,6 +161,7 @@ def generate_config(url, name):
     URL can be either the fictions overview page or a chapter (which will be used as the startUrl config entry).
 
     Currently supported sites:
+
     - Royal Road
     """
     client.generate_fiction_config(url, name)

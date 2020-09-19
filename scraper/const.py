@@ -9,11 +9,22 @@ CONFIGS_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), "configs"
 DATA_DIR = user_data_dir("WebFictionScraper", "Curetix")
 USER_CONFIGS_DIR = os.path.join(DATA_DIR, "configs")
 
-CONFIG_SCHEMA = {
-    "startUrl": And(str, lambda s: s.startswith("http")),
-    Optional("endUrl", default=""): And(str, lambda s: s.startswith("http")),
-    Optional("skipChapters", default=[]): [str],
-    Optional("crawlerModule", default="Crawler"): str,
+CLIENT_CONFIG_SCHEMA = {
+    Optional("patreon_session_cookie", default=None): str,
+    Optional("config_overrides", default={}): dict,
+    Optional("monitored_fictions", default=[]): [
+        {
+            "rss_feed_url": And(str, lambda s: s.startswith("http")),
+            "config_name": str
+        }
+    ]
+}
+
+FICTION_CONFIG_SCHEMA = {
+    "start_url": And(str, lambda s: s.startswith("http")),
+    Optional("end_url", default=""): And(str, lambda s: s.startswith("http")),
+    Optional("skip_chapters", default=[]): [str],
+    Optional("crawler_module", default="Crawler"): str,
     "metadata": {
         "title": str,
         "author": str,
@@ -25,25 +36,25 @@ CONFIG_SCHEMA = {
         Optional(str): str,
     },
     Optional("files", default={}): {
-        Optional("workingFolder"): str,
-        Optional("coverFile"): str,
-        Optional("epubFile"): str,
-        Optional("ebookFormats", default=[]): [str],
-        Optional("copyBookTo", default=""): str
+        Optional("working_folder"): str,
+        Optional("cover_file"): str,
+        Optional("epub_file"): str,
+        Optional("ebook_formats", default=[]): [str],
+        Optional("copy_book_to", default=""): str
     },
     "selectors": {
-        "titleElement": str,
-        "contentElement": str,
-        "nextChapterElement": str,
-        Optional("cutOffElement", default=None): Or(str, [str]),
+        "title_element": str,
+        "content_element": str,
+        "next_chapter_element": str,
+        Optional("cut_off_element", default=None): Or(str, [str]),
     },
-    Optional("removeEmptyElements", default=True): bool,
+    Optional("remove_empty_elements", default=True): bool,
     Optional("substitutions", default=[]): [
         {
-            "selectorType": lambda s: s == "css" or s == "regex" or s == "text",
+            "selector_type": lambda s: s == "css" or s == "regex" or s == "text",
             "selector": str,
-            Optional("chapterUrl", default=""): str,
-            Optional("replaceWith", default=""): str,
+            Optional("chapter_url", default=""): str,
+            Optional("replace_with", default=""): str,
         }
     ],
 }
