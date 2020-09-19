@@ -155,7 +155,7 @@ def list_configs():
 @cli.command()
 @click.argument("url")
 @click.option("--name", type=str, help="Name of the config (file)")
-def generate_config(url, name):
+def generate_config(url, name=None):
     """Generate a config file for a fiction from a support site.
 
     URL can be either the fictions overview page or a chapter (which will be used as the startUrl config entry).
@@ -164,7 +164,8 @@ def generate_config(url, name):
 
     - Royal Road
     """
-    client.generate_fiction_config(url, name)
+    config_name = client.generate_fiction_config(url, name)
+    echo("Config can now be used with \"client.py run %s\"!" % config_name)
 
 
 if __name__ == "__main__":

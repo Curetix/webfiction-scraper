@@ -21,7 +21,17 @@ class FictionScraperClient:
     def __init__(self):
         self.client_config = self.load_client_config()
 
-    def run(self, config_name, download, clean_download, convert, clean_convert, bind, ebook_convert):
+    def run(self, config_name: str, download: bool, clean_download: bool, convert: bool, clean_convert: bool, bind: bool, ebook_convert: bool):
+        """Run the scraper with the provided config_name and tasks.
+
+        :param config_name: name or path of fiction config file
+        :param download: flag if chapters should be downloaded
+        :param clean_download: flag if currently downloaded chapters should be cleared
+        :param convert: flag if chapters should be converted
+        :param clean_convert: flag if currently converted chapters should be cleared
+        :param bind: flag if eBook should be created
+        :param ebook_convert: flag if eBook should be converted into configured formats
+        """
         config = self.load_fiction_config(config_name)
 
         if download:
@@ -72,7 +82,11 @@ class FictionScraperClient:
                     echo("%s not found!" % source)
 
     @staticmethod
-    def load_client_config():
+    def load_client_config() -> Box:
+        """Load the client configuration file from the users data directory, if it exists.
+
+        :return: client configuration
+        """
         if not os.path.isdir(DATA_DIR):
             os.makedirs(os.path.join(DATA_DIR, "configs"))
 
@@ -89,7 +103,12 @@ class FictionScraperClient:
 
         return Box()
 
-    def load_fiction_config(self, config_name):
+    def load_fiction_config(self, config_name: str) -> Box:
+        """Load the fiction configuration from the provided config_name, if it exists.
+
+        :param config_name: path or name of fiction config
+        :return: validated config
+        """
         if os.path.isfile(config_name):
             path = config_name
             config_name = os.path.basename(config_name).replace(".yaml", "")
@@ -182,13 +201,12 @@ class FictionScraperClient:
         return validated
 
     @staticmethod
-    def generate_fiction_config(url, name):
+    def generate_fiction_config(url, name=None) -> str:
         """Generate a config file for a fiction from a support site.
 
-        URL can be either the fictions overview page or a chapter (which will be used as the startUrl config entry).
-
-        Currently supported sites:
-        - Royal Road
+        :param url: URl of fictions overview page or a chapter (which will be used startUrl)
+        :param name: optional name of the config file
+        :return: name of the config
         """
         if not url.startswith("http"):
             url = "https://" + url
@@ -201,7 +219,7 @@ class FictionScraperClient:
             generator = RoyalRoadConfigGenerator(url)
         else:
             echo("Invalid URL or site not supported!")
-            return
+            sys.exit(1)
 
         config = generator.get_config()
         if not name:
@@ -212,9 +230,10 @@ class FictionScraperClient:
         except SchemaError as e:
             echo(e)
             if not confirm("Couldn't validate newly generated config, save anyways?"):
-                return
+                sys.exit()
 
         config.to_yaml(filename=os.path.join(USER_CONFIGS_DIR, "%s.yaml" % name))
 
         echo("Config for \"%s\" successfully generated, validated and saved!" % config.metadata.title)
-        echo("It can now be used with \"client.py run %s\"!" % name)
+
+        return name
