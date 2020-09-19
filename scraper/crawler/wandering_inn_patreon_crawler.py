@@ -85,6 +85,8 @@ class WanderingInnPatreonCrawler(Crawler):
             .replace("Protected: ", "")
 
         if soup.select_one(".post-password-form"):
+            echo("Protected chapter %s reached!" % title)
+
             password = None
 
             if self.patreon_session and not self.attempted_patreon_password:
@@ -92,7 +94,7 @@ class WanderingInnPatreonCrawler(Crawler):
                 password = self.get_patreon_password(title, url)
 
             if not password:
-                if confirm("Protected chapter %s reached! Do you have the password?" % title):
+                if confirm("Do you have the password?"):
                     password = prompt("Enter the password")
                 else:
                     return r.url, None, None, None
