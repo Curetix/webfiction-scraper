@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
     name="WebFictionScraper",
@@ -19,6 +19,6 @@ setup(
     ],
     entry_points="""
         [console_scripts]
-        webficscraper=client:cli
+        webfictionscraper=client:cli
     """,
 )
