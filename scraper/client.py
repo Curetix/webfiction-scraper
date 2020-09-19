@@ -158,7 +158,6 @@ class FictionScraperClient:
         elif epub_file and not os.path.isabs(epub_file):
             epub_file = os.path.join(working_folder, epub_file)
 
-        # TODO: if file is a URL, download it. If it isn't specified, generate one.
         if not cover_file:
             cover_file = os.path.join(working_folder, "cover.jpg")
         elif cover_file and not os.path.isabs(cover_file):
