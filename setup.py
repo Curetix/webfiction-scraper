@@ -1,9 +1,14 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name="WebFictionScraper",
-    version="1.0",
-    py_modules=["client", "scraper"],
+    version="1.1",
+    author="Curetix",
+    author_email="hello@curetix.me",
+    url="https://gitlab.com/Curetix/python-webfiction-scraper",
+    description="Scrape web fiction blogs into eBooks.",
+    packages=find_packages(),
+    py_modules=["client"],
     package_data={"scraper": ["configs/*.yaml"]},
     install_requires=[
         "ebooklib",
