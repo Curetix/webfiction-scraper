@@ -1,8 +1,10 @@
 import os
 import re
+import sys
 from multiprocessing import Pool, cpu_count
 
 from bs4 import BeautifulSoup
+from bs4.element import Tag
 from click import echo
 
 from .manifest import Manifest
@@ -25,9 +27,14 @@ class Converter:
         content_el = soup.select_one(self.selectors.content_element)
 
         if not content_el:
-            raise ElementNotFoundException("Content element not found")
+            raise ElementNotFoundException("Content element not found for chapter: " + title)
+
+        content_el = self.apply_chapter_fix(chapter, soup, content_el)
 
         last_p_el = content_el.select_one(self.selectors.content_element + " > p:last-of-type")
+
+        if not last_p_el:
+            raise ElementNotFoundException("Last paragraph not found for chapter: " + title)
 
         # If a cut-off element is specified, set its previous sibling as last element, otherwise the last paragraph
         if s := self.selectors.get("cut_off_element"):
@@ -46,7 +53,7 @@ class Converter:
 
         # Remove empty elements if enabled
         if self.remove_empty_elements:
-            for el in content_el.findChildren():
+            for el in content_el.find_all(recursive=False):
                 if el.get_text().strip() == "":
                     el.decompose()
 
@@ -82,9 +89,41 @@ class Converter:
             elif s.selector_type == "regex":
                 doc = re.sub(r"%s" % s.selector, s.replace_with, doc)
 
-        echo("Converted chapter %s" % title)
+        echo("Converted chapter: %s" % title)
 
         return doc
+
+    @staticmethod
+    def apply_chapter_fix(chapter, soup, content_el):
+        def fix_nothing():
+            pass
+
+        def fix_metaworld_chronicles_paragraphs():
+            """Some chapters have <div> elements instead of proper <p> paragraphs, so rename all <div> tags to <p>"""
+            for el in content_el.find_all("div", recursive=False):
+                el.name = "p"
+
+        def fix_metaworld_chronicles_single_div():
+            div_el = content_el.select_one("div")
+            for e in div_el.contents:
+                if type(e) is Tag and e.name == "br":
+                    continue
+                new_p = soup.new_tag("p")
+                content_el.append(new_p)
+                content_el.append("\n")
+                content_el.select_one("p:last-of-type").append(e)
+            div_el.decompose()
+
+        fixes = {
+            "https://www.royalroad.com/fiction/14167/metaworld-chronicles/chapter/494392/chapter-346-bride-and-groom": fix_metaworld_chronicles_paragraphs,
+            "https://www.royalroad.com/fiction/14167/metaworld-chronicles/chapter/541710/chapter-368-even-death-may-die": fix_metaworld_chronicles_paragraphs,
+            "https://www.royalroad.com/fiction/14167/metaworld-chronicles/chapter/551476/chapter-372-a-little-knowledge": fix_metaworld_chronicles_paragraphs,
+            "https://www.royalroad.com/fiction/14167/metaworld-chronicles/chapter/553925/chapter-373-the-burden-of-knowledge": fix_metaworld_chronicles_single_div,
+        }
+
+        fixes.get(chapter.get("url"), fix_nothing)()
+
+        return content_el
 
     def convert_file(self, index, chapter):
         in_file = os.path.join(self.files.cache_folder, chapter.get("file"))
@@ -94,10 +133,15 @@ class Converter:
             with open(in_file, "r", encoding="utf8") as file:
                 doc = file.read()
             with open(out_file, "w", encoding="utf8") as file:
-                doc = self.convert(doc, chapter)
+                try:
+                    doc = self.convert(doc, chapter)
+                except ElementNotFoundException as e:
+                    echo(e)
+                    sys.exit()
                 file.write(doc)
         else:
-            raise FileNotFoundError()
+            echo("File %s not found" % in_file)
+            sys.exit()
 
         return index
 

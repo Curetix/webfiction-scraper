@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="WebFictionScraper",
-    version="1.1",
+    version="1.2",
     author="Curetix",
     author_email="hello@curetix.me",
     url="https://gitlab.com/Curetix/python-webfiction-scraper",

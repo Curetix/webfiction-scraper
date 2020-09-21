@@ -32,7 +32,7 @@ class RoyalRoadConfigGenerator(ConfigGenerator):
         btn = soup.select_one(".fic-buttons a.btn-primary")
 
         if not btn:
-            raise ElementNotFoundException()
+            raise ElementNotFoundException("Fiction / chapter button not found")
 
         fiction_page_match = re.match(FICTION_PAGE_PATTERN, start_url)
         chapter_page_match = re.match(CHAPTER_PATTERN, start_url)

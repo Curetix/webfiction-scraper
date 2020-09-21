@@ -1,4 +1,5 @@
 import os
+import sys
 import urllib.parse
 
 from click import echo
@@ -29,7 +30,11 @@ class Crawler:
             index = 0
 
         while next_url is not None:
-            url, title, content, soup = self.download_chapter(next_url)
+            try:
+                url, title, content, soup = self.download_chapter(next_url)
+            except ElementNotFoundException as e:
+                echo(e)
+                sys.exit()
 
             if not title and not content and not soup:
                 return
