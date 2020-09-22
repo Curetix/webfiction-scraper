@@ -165,7 +165,7 @@ def generate_config(url, name=None):
     - Royal Road
     """
     config_name = client.generate_fiction_config(url, name)
-    echo("Config can now be used with \"client.py run %s\"!" % config_name)
+    echo("Config can now be used with \"webfictionscraper.py run %s\"!" % config_name)
 
 
 if __name__ == "__main__":

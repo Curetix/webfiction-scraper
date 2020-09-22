@@ -4,9 +4,9 @@ setup(
     name="WebFictionScraper",
     version="1.2",
     author="Curetix",
-    author_email="hello@curetix.me",
+    author_email="contact@curetix.eu",
     url="https://gitlab.com/Curetix/python-webfiction-scraper",
-    description="Scrape web fiction blogs into eBooks.",
+    description="Scrape web fictions into eBooks.",
     packages=find_packages(),
     py_modules=["client"],
     package_data={"scraper": ["configs/*.yaml"]},
@@ -24,6 +24,6 @@ setup(
     ],
     entry_points="""
         [console_scripts]
-        webfictionscraper=client:cli
+        webfictionscraper=webfictionscraper:cli
     """,
 )
