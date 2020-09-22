@@ -8,12 +8,12 @@ from bs4.element import Tag
 from click import echo
 
 from .manifest import Manifest
-from .const import CHAPTER_DOC, DATA_DIR
+from .const import CHAPTER_DOC, FIXES_MODULE_DIR
 from .exception import ElementNotFoundException
 
 # Append the data dir to path if it contains the chapter_fixes.py file
-if os.path.isfile(os.path.join(DATA_DIR, "chapter_fixes.py")):
-    sys.path.insert(0, DATA_DIR)
+if os.path.isfile(os.path.join(FIXES_MODULE_DIR, "chapter_fixes.py")):
+    sys.path.insert(0, FIXES_MODULE_DIR)
 
 from chapter_fixes import apply_chapter_fix
 

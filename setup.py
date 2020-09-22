@@ -8,7 +8,7 @@ setup(
     url="https://gitlab.com/Curetix/python-webfiction-scraper",
     description="Scrape web fictions into eBooks.",
     packages=find_packages(),
-    py_modules=["client"],
+    py_modules=["webfictionscraper"],
     package_data={"scraper": ["configs/*.yaml"]},
     install_requires=[
         "ebooklib",

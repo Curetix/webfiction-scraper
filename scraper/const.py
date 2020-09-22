@@ -9,6 +9,7 @@ ROOT_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)))
 CONFIGS_DIR = os.path.join(ROOT_DIR, "configs")
 DATA_DIR = user_data_dir("WebFictionScraper", "Curetix")
 USER_CONFIGS_DIR = os.path.join(DATA_DIR, "configs")
+FIXES_MODULE_DIR = os.path.join(DATA_DIR, "chapter_fixes")
 
 CLIENT_CONFIG_SCHEMA = {
     Optional("patreon_session_cookie", default=None): str,
