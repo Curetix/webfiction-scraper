@@ -8,8 +8,14 @@ from bs4.element import Tag
 from click import echo
 
 from .manifest import Manifest
-from .const import CHAPTER_DOC
+from .const import CHAPTER_DOC, DATA_DIR
 from .exception import ElementNotFoundException
+
+# Append the data dir to path if it contains the chapter_fixes.py file
+if os.path.isfile(os.path.join(DATA_DIR, "chapter_fixes.py")):
+    sys.path.insert(0, DATA_DIR)
+
+from chapter_fixes import apply_chapter_fix
 
 
 class Converter:
@@ -29,7 +35,7 @@ class Converter:
         if not content_el:
             raise ElementNotFoundException("Content element not found for chapter: " + title)
 
-        content_el = self.apply_chapter_fix(chapter, soup, content_el)
+        content_el = apply_chapter_fix(chapter, soup, content_el)
 
         last_p_el = content_el.select_one(self.selectors.content_element + " > p:last-of-type")
 
