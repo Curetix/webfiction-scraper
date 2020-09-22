@@ -12,7 +12,7 @@ from .binder import Binder
 from .crawler import Crawler, WanderingInnPatreonCrawler
 from .generator import RoyalRoadConfigGenerator
 from .const import FICTION_CONFIG_SCHEMA, DATA_DIR, USER_CONFIGS_DIR, CLIENT_CONFIG_SCHEMA
-from .utils import normalize_string, lowercase_clean, get_fiction_config
+from .utils import normalize_string, lowercase_clean, get_fiction_config, init_data_dir
 
 SEPARATOR = 30 * "-" + "\n"
 
@@ -49,7 +49,7 @@ class FictionScraperClient:
         if convert:
             echo(SEPARATOR + "Converting chapters...")
             converter = Converter(config)
-            if clean_convert:
+            if clean_download or clean_convert:
                 converter.clean()
             converter.convert_all()
 
@@ -88,7 +88,7 @@ class FictionScraperClient:
         :return: client configuration
         """
         if not os.path.isdir(DATA_DIR):
-            os.makedirs(os.path.join(DATA_DIR, "configs"))
+            init_data_dir()
 
         if os.path.isfile(path := os.path.join(DATA_DIR, "client.yaml")):
             config = Box.from_yaml(filename=path, camel_killer_box=True)

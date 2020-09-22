@@ -5,7 +5,8 @@ from appdirs import user_data_dir
 from schema import And, Or, Optional
 
 
-CONFIGS_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), "configs")
+ROOT_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)))
+CONFIGS_DIR = os.path.join(ROOT_DIR, "configs")
 DATA_DIR = user_data_dir("WebFictionScraper", "Curetix")
 USER_CONFIGS_DIR = os.path.join(DATA_DIR, "configs")
 

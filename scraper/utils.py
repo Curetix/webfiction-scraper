@@ -1,6 +1,6 @@
 import os
 
-from .const import CONFIGS_DIR, USER_CONFIGS_DIR
+from .const import CONFIGS_DIR, USER_CONFIGS_DIR, DATA_DIR, ROOT_DIR
 
 
 def normalize_string(s):
@@ -13,6 +13,13 @@ def normalize_string(s):
 
 def lowercase_clean(s):
     return "".join([c for c in s if c.isalpha() or c.isdigit()]).strip().lower()
+
+
+def init_data_dir():
+    os.makedirs(DATA_DIR)
+    os.mkdir(os.path.join(DATA_DIR, "configs"))
+    from shutil import copyfile
+    copyfile(os.path.join(ROOT_DIR, "chapter_fixes.py"), os.path.join(DATA_DIR, "chapter_fixes.py"))
 
 
 def get_fiction_config(path, user_dir=False):
