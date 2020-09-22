@@ -42,14 +42,14 @@ class Crawler:
             if url not in self.skip_chapters:
                 file_name = self.save_chapter(content, index)
                 self.add_chapter_to_manifest(index, url, title, file_name)
-                echo("Downloaded chapter %s from %s" % (title, url))
+                index += 1
+                echo("Downloaded chapter %s" % title)
             else:
-                echo("Skipped chapter %s from %s" % (title, url))
+                echo("Skipped chapter %s" % title)
 
             if url == self.end_url:
                 return
 
-            index += 1
             next_url = self.find_next_chapter_url(url, soup)
 
     def download_chapter(self, url):
