@@ -1,7 +1,6 @@
 import os
-from shutil import copyfile
 
-from .const import CONFIGS_DIR, USER_CONFIGS_DIR, DATA_DIR, ROOT_DIR, FIXES_MODULE_DIR
+from .const import CONFIGS_DIR, USER_CONFIGS_DIR, DATA_DIR
 
 
 def normalize_string(s):
@@ -23,18 +22,6 @@ def init_data_dir():
         os.mkdir(USER_CONFIGS_DIR)
     except FileExistsError:
         pass
-
-    try:
-        os.mkdir(FIXES_MODULE_DIR)
-    except FileExistsError:
-        pass
-
-    fixes_file = os.path.join(FIXES_MODULE_DIR, "chapter_fixes.py")
-
-    if os.path.isfile(fixes_file):
-        copyfile(fixes_file, fixes_file + ".bak")
-
-    copyfile(os.path.join(ROOT_DIR, "chapter_fixes.py"), fixes_file)
 
 
 def get_fiction_config(path, user_dir=False):

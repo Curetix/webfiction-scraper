@@ -10,11 +10,14 @@ from .manifest import Manifest
 from .const import CHAPTER_DOC, FIXES_MODULE_DIR
 from .exception import ElementNotFoundException
 
-# Append the data dir to path if it contains the chapter_fixes.py file
-if os.path.isfile(os.path.join(FIXES_MODULE_DIR, "chapter_fixes.py")):
-    sys.path.insert(0, FIXES_MODULE_DIR)
+from .chapter_fixes import CHAPTER_FIXES
 
-from chapter_fixes import apply_chapter_fix
+# Append the data dir to path if it contains the chapter_fixes.py file
+if os.path.isfile(os.path.join(FIXES_MODULE_DIR, "user_chapter_fixes.py")):
+    sys.path.append(FIXES_MODULE_DIR)
+    from user_chapter_fixes import USER_CHAPTER_FIXES
+else:
+    USER_CHAPTER_FIXES = {}
 
 
 class Converter:
@@ -34,7 +37,7 @@ class Converter:
         if not content_el:
             raise ElementNotFoundException("Content element not found for chapter: " + title)
 
-        content_el = apply_chapter_fix(chapter, soup, content_el)
+        self.apply_chapter_fix(chapter, soup, content_el)
 
         last_p_el = content_el.select_one(self.selectors.content_element + " > p:last-of-type")
 
@@ -97,6 +100,14 @@ class Converter:
         echo("Converted chapter: %s" % title)
 
         return doc
+
+    @staticmethod
+    def apply_chapter_fix(chapter, soup, content_el):
+        if func := CHAPTER_FIXES.get(chapter.get("url")):
+            func(soup, content_el)
+
+        if func := USER_CHAPTER_FIXES.get(chapter.get("url")):
+            func(soup, content_el)
 
     def convert_file(self, index, chapter):
         in_file = os.path.join(self.files.cache_folder, chapter.get("file"))
