@@ -29,6 +29,7 @@ selectors:
   cutOffElement:
     - p:contains("After Chapter Thoughts:")
     - p:contains("Author’s Note:")
+    - p:has(a:contains("Previous Chapter"))
     - p:has(a:contains("Next Chapter"))
 
 substitutions:
