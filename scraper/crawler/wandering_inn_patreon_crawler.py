@@ -54,7 +54,7 @@ class WanderingInnPatreonCrawler(Crawler):
         if len(post_by_title) > 0:
             found_post = post_by_title[0]
         else:
-            post_by_url = list(filter(lambda p: p["attributes"].get("content").contains(chapter_url.replace("https://", "")), posts))
+            post_by_url = list(filter(lambda p: chapter_url.replace("https://", "") in p["attributes"].get("content", ""), posts))
 
             if len(post_by_url) > 0:
                 found_post = post_by_url[0]
