@@ -72,6 +72,14 @@ class WanderingInnPatreonCrawler(Crawler):
     def download_chapter(self, url):
         r = self.session.get(url)
 
+        if r.status_code != 200:
+            echo("Something went wrong! URL: %s, Status: %s" % (r.url, r.status_code))
+            if confirm("Do you want to enter another URL?"):
+                new_url = prompt("Enter the URL")
+                return self.download_chapter(new_url)
+            else:
+                return r.url, None, None, None
+
         soup = BeautifulSoup(r.content, "html.parser")
 
         title_el = soup.select_one(self.selectors.title_element)
