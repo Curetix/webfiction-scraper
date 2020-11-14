@@ -132,3 +132,6 @@ substitutions:
   - chapterUrl: https://wanderinginn.com/2020/11/04/interlude-saliss-the-adventurer/
     selectorType: css
     selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/11/08/7-56/
+    selectorType: css
+    selector: p:first-of-type
