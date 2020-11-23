@@ -29,12 +29,16 @@ selectors:
   cutOffElement:
     - p:contains("After Chapter Thoughts:")
     - p:contains("Author’s Note:")
+    - p:contains("Author’s Notes:")
     - p:has(a:contains("Previous Chapter"))
     - p:has(a:contains("Next Chapter"))
 
 substitutions:
   - selectorType: text
     selector: <p>—-</p>
+    replaceWith: <hr/>
+  - selectorType: text
+    selector: <p>—–</p>
     replaceWith: <hr/>
   - chapterUrl: https://wanderinginn.com/2020/01/22/7-01/
     selectorType: css
