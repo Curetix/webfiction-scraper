@@ -19,6 +19,7 @@ selectors:
   titleElement: .fic-header h1
   contentElement: .chapter-content
   nextChapterElement: .nav-buttons a:contains("Next Chapter")
+removeEmptyElements: false
 substitutions:
   - selectorType: regex
     selector: <p>.*<img.*>.*<\/p>
