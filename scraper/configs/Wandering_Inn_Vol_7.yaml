@@ -139,3 +139,9 @@ substitutions:
   - chapterUrl: https://wanderinginn.com/2020/11/08/7-56/
     selectorType: css
     selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/11/25/interlude-the-tribes-of-izril/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2020/12/06/interlude-the-innkeepers-knight/
+    selectorType: css
+    selector: p:first-of-type
