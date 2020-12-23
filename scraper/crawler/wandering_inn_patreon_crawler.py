@@ -117,3 +117,21 @@ class WanderingInnPatreonCrawler(Crawler):
             return self.download_chapter(r.url)
 
         return r.url, title, r.content, soup
+
+    def find_next_chapter_url(self, current_url, soup):
+        # The Volume 7 "Finale" is split into multiple chapters, but the links are at the end of the chapter and in
+        # the usual "Next Chapter" element, so we're just doing this manually here.
+        if current_url == "https://wanderinginn.com/2020/12/23/solstice-pt-3/":
+            return "https://wanderinginn.com/2020/12/23/solstice-pt-4/"
+        elif current_url == "https://wanderinginn.com/2020/12/23/solstice-pt-4/":
+            return "https://wanderinginn.com/2020/12/23/solstice-pt-5/"
+        elif current_url == "https://wanderinginn.com/2020/12/23/solstice-pt-5/":
+            return "https://wanderinginn.com/2020/12/23/solstice-pt-6/"
+        elif current_url == "https://wanderinginn.com/2020/12/23/solstice-pt-6/":
+            return "https://wanderinginn.com/2020/12/23/solstice-pt-7/"
+        elif current_url == "https://wanderinginn.com/2020/12/23/solstice-pt-7/":
+            return "https://wanderinginn.com/2020/12/23/solstice-pt-8/"
+        elif current_url == "https://wanderinginn.com/2020/12/23/solstice-pt-8/":
+            return "https://wanderinginn.com/2020/12/23/solstice-pt-9/"
+        else:
+            return super(WanderingInnPatreonCrawler, self).find_next_chapter_url(current_url, soup)

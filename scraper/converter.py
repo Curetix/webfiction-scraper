@@ -56,7 +56,7 @@ class Converter:
                     break
 
         # Delete everything after the last element
-        while last_p_el.find_next_sibling():
+        while last_p_el and last_p_el.find_next_sibling():
             last_p_el.find_next_sibling().decompose()
 
         # Remove empty elements if enabled
