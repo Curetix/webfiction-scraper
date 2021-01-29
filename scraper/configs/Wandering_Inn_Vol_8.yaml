@@ -46,3 +46,6 @@ substitutions:
   - chapterUrl: https://wanderinginn.com/2021/01/13/8-01/
     selectorType: css
     selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2021/01/27/8-04-t/
+    selectorType: css
+    selector: p:first-of-type

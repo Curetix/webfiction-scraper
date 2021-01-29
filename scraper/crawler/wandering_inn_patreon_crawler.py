@@ -119,8 +119,8 @@ class WanderingInnPatreonCrawler(Crawler):
         return r.url, title, r.content, soup
 
     def find_next_chapter_url(self, current_url, soup):
-        # The Volume 7 "Finale" is split into multiple chapters, but the links are at the end of the chapter and in
-        # the usual "Next Chapter" element, so we're just doing this manually here.
+        # The Volume 7 "Finale" is split into multiple chapters, but the following chapters are linked at end of 
+        # the content element, instead of the usual "Next Chapter" element, so we're just doing this manually here.
         if current_url == "https://wanderinginn.com/2020/12/23/solstice-pt-3/":
             return "https://wanderinginn.com/2020/12/23/solstice-pt-4/"
         elif current_url == "https://wanderinginn.com/2020/12/23/solstice-pt-4/":
