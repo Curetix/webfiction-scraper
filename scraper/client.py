@@ -101,7 +101,7 @@ class FictionScraperClient:
 
             return validated
 
-        return Box()
+        return Box(config_overrides=Box())
 
     def load_fiction_config(self, config_name: str) -> Box:
         """Load the fiction configuration from the provided config_name, if it exists.
@@ -126,7 +126,7 @@ class FictionScraperClient:
 
         config = Box.from_yaml(filename=path, camel_killer_box=True, default_box=True)
 
-        if override := self.client_config.config_overrides.get(config_name.lower()):
+        if override := self.client_config.get("config_overrides").get(config_name.lower()):
             # Supports nested dictionary updates
             def update(d, u):
                 import collections.abc
