@@ -63,7 +63,7 @@ class WanderingInnPatreonCrawler(Crawler):
             return
 
         soup = BeautifulSoup(found_post["attributes"]["content"], "lxml")
-        password_element = soup.select_one("p:contains(\"Password:\")")
+        password_element = soup.select_one("p:-soup-contains(\"Password:\")")
 
         if password_element:
             echo("Found a password! But does it work?")

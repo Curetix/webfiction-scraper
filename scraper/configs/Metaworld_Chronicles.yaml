@@ -18,7 +18,7 @@ metadata:
 selectors:
   titleElement: .fic-header h1
   contentElement: .chapter-content
-  nextChapterElement: .nav-buttons a:contains("Next Chapter")
+  nextChapterElement: .nav-buttons a:-soup-contains("Next Chapter")
 removeEmptyElements: false
 substitutions:
   - selectorType: regex

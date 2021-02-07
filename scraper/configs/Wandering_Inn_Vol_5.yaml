@@ -27,8 +27,8 @@ metadata:
 selectors:
   titleElement: .entry-title
   contentElement: .entry-content
-  nextChapterElement: .entry-content a:contains("Next Chapter")
-  cutOffElement: p:has(a:contains("Next Chapter"))
+  nextChapterElement: .entry-content a:-soup-contains("Next Chapter")
+  cutOffElement: p:has(a:-soup-contains("Next Chapter"))
 
 substitutions:
   - selectorType: text

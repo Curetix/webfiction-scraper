@@ -25,13 +25,13 @@ metadata:
 selectors:
   titleElement: .entry-title
   contentElement: .entry-content
-  nextChapterElement: .entry-content a:contains("Next Chapter")
+  nextChapterElement: .entry-content a:-soup-contains("Next Chapter")
   cutOffElement:
-    - p:contains("After Chapter Thoughts:")
-    - p:contains("Author’s Note:")
-    - p:contains("Author’s Notes:")
-    - p:has(a:contains("Previous Chapter"))
-    - p:has(a:contains("Next Chapter"))
+    - p:-soup-contains("After Chapter Thoughts:")
+    - p:-soup-contains("Author’s Note:")
+    - p:-soup-contains("Author’s Notes:")
+    - p:has(a:-soup-contains("Previous Chapter"))
+    - p:has(a:-soup-contains("Next Chapter"))
 
 substitutions:
   - selectorType: text

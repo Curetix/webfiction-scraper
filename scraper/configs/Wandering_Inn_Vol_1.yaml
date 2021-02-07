@@ -63,11 +63,11 @@ selectors:
   contentElement: .entry-content
   # Element linking the next chapter, has to have the "href" attribute
   # (Select the link with text content "Next Chapter" inside the contentElement)
-  nextChapterElement: .entry-content a:contains("Next Chapter")
+  nextChapterElement: .entry-content a:-soup-contains("Next Chapter")
   # OPTIONAL: Element after which everything is removed, by default the last <p> inside contentElement
   # Since in The Wandering Inn links to previous / next chapters at the end of the post, we select that as cut-off
   # (Select the paragraph which contains a link with text content "Next Chapter")
-  cutOffElement: p:has(a:contains("Next Chapter"))
+  cutOffElement: p:has(a:-soup-contains("Next Chapter"))
 
 # Substitutions which will be applied to all chapters
 # By default, all empty elements, e.g. paragraphs, are removed. This can be disabled by including the following:
@@ -83,4 +83,4 @@ substitutions:
   # This one would only be applied to the specified chapter
   #- chapterUrl: https://wanderinginn.com/2017/03/04/1-45/
   #  selectorType: css
-  #  selector: p:contains("Author’s Note")
+  #  selector: p:-soup-contains("Author’s Note")

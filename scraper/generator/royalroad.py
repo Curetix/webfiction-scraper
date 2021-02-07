@@ -20,7 +20,7 @@ class RoyalRoadConfigGenerator(ConfigGenerator):
         return Box(
             titleElement=".fic-header h1",
             contentElement=".chapter-content",
-            nextChapterElement=".nav-buttons a:contains(\"Next Chapter\")"
+            nextChapterElement=".nav-buttons a:-soup-contains(\"Next Chapter\")"
         )
 
     def get_metadata(self):

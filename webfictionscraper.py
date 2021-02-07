@@ -82,6 +82,8 @@ def interactive():
         "Create eBook formats specified in the config" in tasks
     )
 
+    input("Press any key to exit...")
+
 
 @cli.command()
 @click.argument("config_name")
