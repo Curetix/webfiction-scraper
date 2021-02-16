@@ -28,6 +28,7 @@ selectors:
   nextChapterElement: .entry-content a:-soup-contains("Next Chapter")
   cutOffElement:
     - p:-soup-contains("After Chapter Thoughts:")
+    - p:-soup-contains("After Chapter Notes:")
     - p:-soup-contains("Author’s Note:")
     - p:-soup-contains("Author’s Notes:")
     - p:has(a:-soup-contains("Previous Chapter"))
@@ -50,5 +51,11 @@ substitutions:
     selectorType: css
     selector: p:first-of-type
   - chapterUrl: https://wanderinginn.com/2021/02/07/8-05-i/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2021/02/10/8-06-rt/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2021/02/14/8-07-l/
     selectorType: css
     selector: p:first-of-type
