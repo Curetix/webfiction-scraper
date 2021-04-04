@@ -71,3 +71,30 @@ substitutions:
   - chapterUrl: https://wanderinginn.com/2021/02/24/8-10/
     selectorType: css
     selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2021/03/07/8-11-e/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2021/03/14/interlude-the-rower-and-the-bartender/
+    selectorType: css
+    selector: p:first-of-type
+  - chapterUrl: https://wanderinginn.com/2021/03/17/8-13-f/
+    selectorType: css
+    selector: p:-soup-contains("On Sunday, 6 PM EST, Rebecca Brewer")
+  - chapterUrl: https://wanderinginn.com/2021/03/21/8-14-n/
+    selectorType: css
+    selector: p:-soup-contains("The author is on break")
+  - chapterUrl: https://wanderinginn.com/2021/03/21/8-14-n/
+    selectorType: css
+    selector: p:-soup-contains("Rebecca Brewer, the editor who worked on 8.11 E")
+  - chapterUrl: https://wanderinginn.com/2021/03/21/8-14-n/
+    selectorType: css
+    selector: p:-soup-contains("Also, she has done an interview with The Fantasy Inn!")
+  - chapterUrl: https://wanderinginn.com/2021/03/30/8-15/
+    selectorType: css
+    selector: p:-soup-contains("Iron Prince by Bryce O’Conner")
+  - chapterUrl: https://wanderinginn.com/2021/04/04/interlude-paradigm-shift-pt-1/
+    selectorType: css
+    selector: p:-soup-contains("Enuryn the [Naturalist] has opened an online store")
+  - chapterUrl: https://wanderinginn.com/2021/04/04/interlude-paradigm-shift-pt-2/
+    selectorType: css
+    selector: p:-soup-contains("I am skipping the next update and will be posting the next chapter on the 10th")
