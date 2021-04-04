@@ -34,7 +34,7 @@ class FictionScraperClient:
         """
         config = self.load_fiction_config(config_name)
 
-        if download:
+        if download or clean_download:
             echo("Downloading chapters...")
 
             if config.get("crawler_module") == "WanderingInnPatreonCrawler":
@@ -46,7 +46,7 @@ class FictionScraperClient:
                 crawler.clean()
             crawler.start_download()
 
-        if convert:
+        if convert or clean_convert or clean_download:
             echo(SEPARATOR + "Converting chapters...")
             converter = Converter(config)
             if clean_download or clean_convert:
