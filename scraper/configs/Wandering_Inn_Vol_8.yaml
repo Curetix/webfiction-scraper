@@ -98,3 +98,12 @@ substitutions:
   - chapterUrl: https://wanderinginn.com/2021/04/04/interlude-paradigm-shift-pt-2/
     selectorType: css
     selector: p:-soup-contains("I am skipping the next update and will be posting the next chapter on the 10th")
+  - chapterUrl: https://wanderinginn.com/2021/04/10/8-16/
+    selectorType: css
+    selector: p:-soup-contains("Podium Publishing is offering a TWI-embossed frying pan giveaway")
+  - chapterUrl: https://wanderinginn.com/2021/04/13/8-17-h/
+    selectorType: css
+    selector: p:-soup-contains("Podium Publishing is offering a TWI-embossed frying pan giveaway")
+  - chapterUrl: https://wanderinginn.com/2021/04/13/8-17-h/
+    selectorType: css
+    selector: p:-soup-contains("Also, I am taking my break early due to getting the vaccine shot")
