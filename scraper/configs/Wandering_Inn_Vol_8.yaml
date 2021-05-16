@@ -107,3 +107,12 @@ substitutions:
   - chapterUrl: https://wanderinginn.com/2021/04/13/8-17-h/
     selectorType: css
     selector: p:-soup-contains("Also, I am taking my break early due to getting the vaccine shot")
+  - chapterUrl: https://wanderinginn.com/2021/04/25/8-18-h/
+    selectorType: css
+    selector: p:-soup-contains("The Flowers of Esthelm, Book 3 of The Wandering Inn is out on Audible!")
+  - chapterUrl: https://wanderinginn.com/2021/04/28/8-19-h/
+    selectorType: css
+    selector: p:-soup-contains("The Flowers of Esthelm, Book 3 of The Wandering Inn is out on Audible!")
+  - chapterUrl: https://wanderinginn.com/2021/05/04/8-21-l/
+    selectorType: css
+    selector: p:-soup-contains("I am taking a 1-update break")
