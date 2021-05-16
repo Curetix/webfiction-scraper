@@ -23,4 +23,7 @@ CHAPTER_FIXES = {
     "https://www.royalroad.com/fiction/14167/metaworld-chronicles/chapter/541710/chapter-368-even-death-may-die": fix_metaworld_chronicles_paragraphs,
     "https://www.royalroad.com/fiction/14167/metaworld-chronicles/chapter/551476/chapter-372-a-little-knowledge": fix_metaworld_chronicles_paragraphs,
     "https://www.royalroad.com/fiction/14167/metaworld-chronicles/chapter/553925/chapter-373-the-burden-of-knowledge": fix_metaworld_chronicles_single_div,
+    "https://www.royalroad.com/fiction/14167/metaworld-chronicles/chapter/601164/chapter-389-taking-the-low-road": fix_metaworld_chronicles_paragraphs,
+    "https://www.royalroad.com/fiction/14167/metaworld-chronicles/chapter/605224/chapter-390-deep-politics": fix_metaworld_chronicles_paragraphs,
+    "https://www.royalroad.com/fiction/14167/metaworld-chronicles/chapter/623067/chapter-396-bait-and-switch": fix_metaworld_chronicles_paragraphs,
 }
