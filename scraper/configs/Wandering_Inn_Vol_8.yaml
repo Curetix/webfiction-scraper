@@ -116,3 +116,12 @@ substitutions:
   - chapterUrl: https://wanderinginn.com/2021/05/04/8-21-l/
     selectorType: css
     selector: p:-soup-contains("I am taking a 1-update break")
+  - chapterUrl: https://wanderinginn.com/2021/05/19/8-23/
+    selectorType: css
+    selector: p:-soup-contains("The author is taking their monthly break!")
+  - chapterUrl: https://wanderinginn.com/2021/06/12/8-27/
+    selectorType: css
+    selector: p:-soup-contains("The next Public chapter will be released on June 22nd")
+  - chapterUrl: https://wanderinginn.com/2021/06/26/interlude-the-pets-of-innworld/
+    selectorType: css
+    selector: p:-soup-contains("The Wandering Inn is on break!")
