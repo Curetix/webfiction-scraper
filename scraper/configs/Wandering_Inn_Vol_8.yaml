@@ -125,3 +125,9 @@ substitutions:
   - chapterUrl: https://wanderinginn.com/2021/06/26/interlude-the-pets-of-innworld/
     selectorType: css
     selector: p:-soup-contains("The Wandering Inn is on break!")
+  - chapterUrl: https://wanderinginn.com/2021/07/18/8-31/
+    selectorType: css
+    selector: p:-soup-contains("Side story chapter AND edited chapter are delayed due to…Windows Update.")
+  - chapterUrl: https://wanderinginn.com/2021/07/20/interlude-pisces-revised/
+    selectorType: css
+    selector: p:-soup-contains("Trigger Warning")
