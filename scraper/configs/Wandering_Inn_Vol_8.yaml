@@ -131,3 +131,45 @@ substitutions:
   - chapterUrl: https://wanderinginn.com/2021/07/20/interlude-pisces-revised/
     selectorType: css
     selector: p:-soup-contains("Trigger Warning")
+  - chapterUrl: https://wanderinginn.com/2021/07/25/8-32/
+    selectorType: css
+    selector: p:-soup-contains("It is the 5th Anniversary of The Wandering Inn")
+  - chapterUrl: https://wanderinginn.com/2021/07/25/8-32/
+    selectorType: css
+    selector: p:-soup-contains("The Last Tide is going to launch a Kickstarter on August 24th")
+  - chapterUrl: https://wanderinginn.com/2021/07/25/8-32/
+    selectorType: css
+    selector: p:has(a:has(img))
+  - chapterUrl: https://wanderinginn.com/2021/07/28/8-33-r/
+    selectorType: css
+    selector: p:-soup-contains("It is the 5th Anniversary of The Wandering Inn")
+  - chapterUrl: https://wanderinginn.com/2021/08/04/8-35/
+    selectorType: css
+    selector: p:-soup-contains("The Wandering Inn is on its monthly week-long break!")
+  - chapterUrl: https://wanderinginn.com/2021/08/04/8-35/
+    selectorType: css
+    selector: p:-soup-contains("Editor Contest Announcement")
+  - chapterUrl: https://wanderinginn.com/2021/08/15/8-36-h/
+    selectorType: css
+    selector: p:-soup-contains("The Facebook Gamelit Society")
+  - chapterUrl: https://wanderinginn.com/2021/08/15/8-36-h/
+    selectorType: css
+    selector: p:-soup-contains("The Kickstarter for The Last Tide will be on the 24th of August!")
+  - chapterUrl: https://wanderinginn.com/2021/08/15/8-36-h/
+    selectorType: css
+    selector: p:has(span:has(iframe))
+  - chapterUrl: https://wanderinginn.com/2021/08/17/8-37-h/
+    selectorType: css
+    selector: p:-soup-contains("Do you like The Wandering Inn?")
+  - chapterUrl: https://wanderinginn.com/2021/08/17/8-37-h/
+    selectorType: css
+    selector: p:-soup-contains("That’s right. We’re going international!")
+  - chapterUrl: https://wanderinginn.com/2021/08/17/8-37-h/
+    selectorType: css
+    selector: p:has(a)
+  - chapterUrl: https://wanderinginn.com/2021/08/17/8-37-h/
+    selectorType: css
+    selector: p:has(span:has(iframe))
+  - chapterUrl: https://wanderinginn.com/2021/08/22/8-38-h/
+    selectorType: css
+    selector: p:-soup-contains("The Last Tide")
