@@ -3,7 +3,7 @@ from box import Box
 
 class ConfigGenerator:
     def __init__(self, start_url, end_url=None):
-        self.config = Box(startUrl=start_url)
+        self.config = Box(startUrl=start_url, camel_killer_box=True)
 
         if end_url:
             self.config.endUrl = end_url

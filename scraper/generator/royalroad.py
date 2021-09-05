@@ -14,7 +14,6 @@ CHAPTER_PATTERN = re.compile(r"(?:http[s]://)?www\.royalroad\.com/fiction/\d+/.+
 class RoyalRoadConfigGenerator(ConfigGenerator):
     def __init__(self, start_url, end_url=None):
         super().__init__(start_url, end_url)
-        self.cover_file_url = None
 
     def get_selectors(self):
         return Box(
