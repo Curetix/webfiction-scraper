@@ -41,42 +41,42 @@ substitutions:
   - selectorType: text
     selector: <p>—–</p>
     replaceWith: <hr/>
+  - selectorType: text
+    selector: <p>——</p>
+    replaceWith: <hr/>
   - chapterUrl: https://wanderinginn.com/2021/01/10/8-00/
     selectorType: css
-    selector: p:first-of-type
+    selector: p:-soup-contains("Andrea Parsneau, MouthyMaven")
   - chapterUrl: https://wanderinginn.com/2021/01/13/8-01/
     selectorType: css
-    selector: p:first-of-type
+    selector: p:-soup-contains("One of The Wandering Inn’s readers")
   - chapterUrl: https://wanderinginn.com/2021/01/27/8-04-t/
     selectorType: css
-    selector: p:first-of-type
+    selector: p:-soup-contains("The author is on their monthly break")
   - chapterUrl: https://wanderinginn.com/2021/02/07/8-05-i/
     selectorType: css
-    selector: p:first-of-type
+    selector: p:-soup-contains("Trigger Warning.")
   - chapterUrl: https://wanderinginn.com/2021/02/10/8-06-rt/
     selectorType: css
-    selector: p:first-of-type
+    selector: p:-soup-contains("Flowers of Esthelm, Book 3 of The Wandering Inn")
   - chapterUrl: https://wanderinginn.com/2021/02/14/8-07-l/
     selectorType: css
-    selector: p:first-of-type
+    selector: p:-soup-contains("Flowers of Esthelm, Book 3 of The Wandering Inn")
   - chapterUrl: https://wanderinginn.com/2021/02/17/8-08-j/
     selectorType: css
-    selector: p:first-of-type
+    selector: p:-soup-contains("Flowers of Esthelm, Book 3 of The Wandering Inn")
   - chapterUrl: https://wanderinginn.com/2021/02/21/8-09/
     selectorType: css
-    selector: p:first-of-type
+    selector: p:-soup-contains("The Wandering Inn is going to be working with editors")
   - chapterUrl: https://wanderinginn.com/2021/02/24/8-10/
     selectorType: css
-    selector: p:first-of-type
+    selector: p:-soup-contains("The Wandering Inn is going to be working with editors")
   - chapterUrl: https://wanderinginn.com/2021/02/24/8-10/
     selectorType: css
-    selector: p:first-of-type
-  - chapterUrl: https://wanderinginn.com/2021/03/07/8-11-e/
-    selectorType: css
-    selector: p:first-of-type
+    selector: p:-soup-contains("Also, the author is on break until March 6th")
   - chapterUrl: https://wanderinginn.com/2021/03/14/interlude-the-rower-and-the-bartender/
     selectorType: css
-    selector: p:first-of-type
+    selector: p:-soup-contains("Trigger Warning.")
   - chapterUrl: https://wanderinginn.com/2021/03/17/8-13-f/
     selectorType: css
     selector: p:-soup-contains("On Sunday, 6 PM EST, Rebecca Brewer")
@@ -126,6 +126,10 @@ substitutions:
     selectorType: css
     selector: p:-soup-contains("The Wandering Inn is on break!")
   - chapterUrl: https://wanderinginn.com/2021/07/18/8-31/
+    selectorType: text
+    selector: <p class="western">—-</p>
+    replaceWith: <hr/>
+  - chapterUrl: https://wanderinginn.com/2021/07/18/8-31/
     selectorType: css
     selector: p:-soup-contains("Side story chapter AND edited chapter are delayed due to…Windows Update.")
   - chapterUrl: https://wanderinginn.com/2021/07/20/interlude-pisces-revised/
@@ -160,16 +164,16 @@ substitutions:
     selector: p:has(span:has(iframe))
   - chapterUrl: https://wanderinginn.com/2021/08/17/8-37-h/
     selectorType: css
-    selector: p:-soup-contains("Do you like The Wandering Inn?")
-  - chapterUrl: https://wanderinginn.com/2021/08/17/8-37-h/
-    selectorType: css
-    selector: p:-soup-contains("That’s right. We’re going international!")
-  - chapterUrl: https://wanderinginn.com/2021/08/17/8-37-h/
-    selectorType: css
-    selector: p:has(a)
-  - chapterUrl: https://wanderinginn.com/2021/08/17/8-37-h/
-    selectorType: css
-    selector: p:has(span:has(iframe))
+    selector: p:nth-of-type(-n + 4)
   - chapterUrl: https://wanderinginn.com/2021/08/22/8-38-h/
     selectorType: css
     selector: p:-soup-contains("The Last Tide")
+  - chapterUrl: https://wanderinginn.com/2021/08/24/8-39/
+    selectorType: css
+    selector: p:has(a)
+  - chapterUrl: https://wanderinginn.com/2021/08/24/8-39/
+    selectorType: css
+    selector: p:nth-of-type(-n + 9)
+  - chapterUrl: https://wanderinginn.com/2021/09/04/8-41/
+    selectorType: css
+    selector: p:-soup-contains("The Wandering Inn will be on break")
