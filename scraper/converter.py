@@ -12,14 +12,6 @@ from .exception import ElementNotFoundException
 
 from .chapter_fixes import CHAPTER_FIXES
 
-# Append the data dir to path if it contains the chapter_fixes.py file
-if os.path.isfile(os.path.join(FIXES_MODULE_DIR, "user_chapter_fixes.py")):
-    sys.path.append(FIXES_MODULE_DIR)
-    from user_chapter_fixes import USER_CHAPTER_FIXES
-else:
-    USER_CHAPTER_FIXES = {}
-
-
 class Converter:
     def __init__(self, config):
         self.files = config.files
@@ -104,9 +96,6 @@ class Converter:
     @staticmethod
     def apply_chapter_fix(chapter, soup, content_el):
         if func := CHAPTER_FIXES.get(chapter.get("url")):
-            func(soup, content_el)
-
-        if func := USER_CHAPTER_FIXES.get(chapter.get("url")):
             func(soup, content_el)
 
     def convert_file(self, index, chapter):
