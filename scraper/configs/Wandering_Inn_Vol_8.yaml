@@ -31,6 +31,7 @@ selectors:
     - p:-soup-contains("After Chapter Notes:")
     - p:-soup-contains("Author’s Note:")
     - p:-soup-contains("Author’s Notes:")
+    - p:-soup-contains("Author’s Story:")
     - p:has(a:-soup-contains("Previous Chapter"))
     - p:has(a:-soup-contains("Next Chapter"))
 
