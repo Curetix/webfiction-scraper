@@ -1,0 +1,16 @@
+startUrl: https://www.royalroad.com/fiction/39408/beware-of-chicken/chapter/614481/chapter-1-he-bravely-turned-his-tail-and-fled
+metadata:
+  title: Beware Of Chicken
+  author: Casualfarmer
+  description: |
+    Jin Rou wanted to be a cultivator who defied the heavens, and surpassed all limits.
+    Unfortunately for him, he died, and now I'm stuck here.
+    Arrogant young masters? Heavenly tribulations? Cultivating for days on end, then getting into life or death battles?
+    Yeah, no thanks. I'm getting out of here.
+    In which a transmigrator decides that the only winning move is not to play.
+files:
+  coverFile: https://www.royalroadcdn.com/public/covers-full/beware-of-chicken-aacav1xoeg8.jpg?time=1610566797
+selectors:
+  contentElement: .chapter-content
+  nextChapterElement: .nav-buttons a:-soup-contains("Next Chapter")
+  titleElement: .fic-header h1

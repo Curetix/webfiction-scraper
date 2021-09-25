@@ -1,0 +1,29 @@
+start_url: https://www.royalroad.com/fiction/26294/he-who-fights-with-monsters/chapter/545964/chapter-267-volume-ii-a-better-pants-solution
+
+metadata:
+  title: He Who Fights with Monsters - Volume 2
+  author: Shirtaloon
+  description: |
+    Jason wakes up in a mysterious world of magic and monsters.
+    He'll face off against cannibals, cultists, wizards, monsters, and that's just the first day.
+    He's going to need courage, he's going to need wit and he's going to need some magic powers of his own.
+    But first, he's going to need pants.
+    Follow Jason as he makes a place for himself in a world that is strange, yet sometimes strangely familiar.
+    He'll meet crime lords and aristocrats, gods and monsters on his path from would-be victim to heroic adventurer.
+    At least, he tries to be heroic. It's hard to be good when all your powers are evil.
+
+files:
+  cover_file: https://www.royalroadcdn.com/public/covers-full/26294-he-who-fights-with-monsters.jpg
+
+selectors:
+  content_element: .chapter-content
+  next_chapter_element: .nav-buttons a:-soup-contains("Next Chapter")
+  title_element: .fic-header h1
+
+substitutions:
+  - selectorType: text
+    selector: rgba(51, 204, 204, 1)
+    replaceWith: "#28A3A3"
+  - chapterUrl: https://www.royalroad.com/fiction/26294/he-who-fights-with-monsters/chapter/545964/chapter-267-volume-ii-a-better-pants-solution
+    selectorType: css
+    selector: p:-soup-contains("This is the beginning of volume II")
