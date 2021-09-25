@@ -26,7 +26,7 @@ def interactive():
             "type": "list",
             "message": "Which config do you want to run?",
             "name": "config_name",
-            "choices": [{"name": f} for f in list_fiction_configs()]
+            "choices": [{"name": f} for f in list_fiction_configs() + list_fiction_configs(user_dir=True)]
         },
         {
             "type": "checkbox",
