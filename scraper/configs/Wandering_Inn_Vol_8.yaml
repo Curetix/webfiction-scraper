@@ -29,9 +29,9 @@ selectors:
   cutOffElement:
     - p:-soup-contains("After Chapter Thoughts:")
     - p:-soup-contains("After Chapter Notes:")
+    - p:-soup-contains("Author’s Story:")
     - p:-soup-contains("Author’s Note:")
     - p:-soup-contains("Author’s Notes:")
-    - p:-soup-contains("Author’s Story:")
     - p:has(a:-soup-contains("Previous Chapter"))
     - p:has(a:-soup-contains("Next Chapter"))
 
@@ -178,3 +178,9 @@ substitutions:
   - chapterUrl: https://wanderinginn.com/2021/09/04/8-41/
     selectorType: css
     selector: p:-soup-contains("The Wandering Inn will be on break")
+  - chapterUrl: https://wanderinginn.com/2021/09/26/8-44-o/
+    selectorType: css
+    selector: p:-soup-contains("I did another interview")
+  - chapterUrl: https://wanderinginn.com/2021/09/26/8-45-o/
+    selectorType: css
+    selector: p:-soup-contains("The story is taking a one-update break")
