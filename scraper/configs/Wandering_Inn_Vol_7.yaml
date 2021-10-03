@@ -7,8 +7,6 @@
 startUrl: https://wanderinginn.com/2020/01/19/7-00/
 endUrl: https://wanderinginn.com/2020/12/23/solstice-pt-9/
 
-crawlerModule: WanderingInnPatreonCrawler
-
 metadata:
   title: The Wandering Inn - Volume 7
   author: pirateaba
