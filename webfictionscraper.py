@@ -4,7 +4,7 @@ import click
 from PyInquirer import prompt
 from box import Box
 from bs4 import BeautifulSoup
-from click import echo
+from click import echo, progressbar
 from requests import get
 
 from scraper import FictionScraperClient
@@ -21,12 +21,23 @@ def cli():
 @cli.command()
 def interactive():
     """Start the scraper interactively."""
+    configs = list_fiction_configs() + list_fiction_configs(user_dir=True)
+    config_choices = []
+    with progressbar(configs, label="Loading configs") as bar:
+        for config_name in bar:
+            config = client.load_fiction_config(config_name)
+            config_choices.append({
+                "name": config.metadata.title,
+                "value": config_name
+            })
+    config_choices.sort(key=lambda c: c["name"])
+
     questions = [
         {
             "type": "list",
             "message": "Which config do you want to run?",
             "name": "config_name",
-            "choices": [{"name": f} for f in list_fiction_configs() + list_fiction_configs(user_dir=True)]
+            "choices": config_choices
         },
         {
             "type": "checkbox",
