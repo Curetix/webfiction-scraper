@@ -1,7 +1,8 @@
 from time import sleep
 
 import click
-from PyInquirer import prompt
+import questionary
+from questionary import Choice
 from box import Box
 from bs4 import BeautifulSoup
 from click import echo, progressbar
@@ -26,53 +27,26 @@ def interactive():
     with progressbar(configs, label="Loading configs") as bar:
         for config_name in bar:
             config = client.load_fiction_config(config_name)
-            config_choices.append({
-                "name": config.metadata.title,
-                "value": config_name
-            })
-    config_choices.sort(key=lambda c: c["name"])
+            config_choices.append(Choice(title=config.metadata.title, value=config_name))
+    config_choices.sort(key=lambda c: c.title)
 
-    questions = [
-        {
-            "type": "list",
-            "message": "Which config do you want to run?",
-            "name": "config_name",
-            "choices": config_choices
-        },
-        {
-            "type": "checkbox",
-            "message": "Which tasks do you want to run?",
-            "name": "tasks",
-            "choices": [
-                {
-                    "name": "Download chapters",
-                    "checked": True
-                },
-                {
-                    "name": "Clean download chapters",
-                    "checked": False
-                },
-                {
-                    "name": "Convert chapters",
-                    "checked": True
-                },
-                {
-                    "name": "Clean convert chapters",
-                    "checked": False
-                },
-                {
-                    "name": "Bind chapters into eBook",
-                    "checked": True
-                },
-                {
-                    "name": "Create eBook formats specified in the config",
-                    "checked": True
-                }
+    answers = questionary.form(
+        config_name=questionary.select(
+            "Which config do you want to run?",
+            choices=config_choices
+        ),
+        tasks=questionary.checkbox(
+            "Which tasks do you want to run?",
+            choices=[
+                Choice(title="Download chapters", value="download", checked=True),
+                Choice(title="Clean download chapters", value="clean_download", checked=False),
+                Choice(title="Convert chapters", value="convert", checked=True),
+                Choice(title="Clean convert chapters", value="clean_convert", checked=False),
+                Choice(title="Bind chapters into eBook", value="bind", checked=True),
+                Choice(title="Create eBook formats specified in the config", value="format", checked=False)
             ]
-        },
-    ]
-
-    answers = prompt(questions)
+        )
+    ).ask()
 
     if not answers:
         return
@@ -85,12 +59,12 @@ def interactive():
 
     client.run(
         config_name,
-        "Download chapters" in tasks,
-        "Clean download chapters" in tasks,
-        "Convert chapters" in tasks,
-        "Clean convert chapters" in tasks,
-        "Bind chapters into eBook" in tasks,
-        "Create eBook formats specified in the config" in tasks
+        "download" in tasks,
+        "clean_download" in tasks,
+        "convert" in tasks,
+        "clean_convert" in tasks,
+        "bind" in tasks,
+        "format" in tasks
     )
 
     input("Press any key to exit...")
