@@ -187,3 +187,6 @@ substitutions:
   - chapterUrl: https://wanderinginn.com/2021/10/03/8-46-g/
     selectorType: css
     selector: p:-soup-contains("Barbara Clark will edit a chapter in October!")
+  - chapterUrl: https://wanderinginn.com/2021/10/06/interlude-perspective-and-past/
+    selectorType: css
+    selector: p:-soup-contains("The Wandering Inn is on its monthly break")
