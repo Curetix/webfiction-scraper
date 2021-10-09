@@ -1,0 +1,13 @@
+start_url: https://www.royalroad.com/fiction/21410/super-minion/chapter/303435/ch1-taste-test
+metadata:
+  title: Super Minion
+  author: Gogglesbear
+  description: |
+    Fortress City has Super Villains, who have evil lairs, and in them they make super weapons.
+    But when a bioweapon is granted super powers of its own, will Fortress City be able to handle the Super Minion?
+files:
+  cover_file: https://www.royalroadcdn.com/public/covers-full/21410-super-minion.jpg
+selectors:
+  content_element: .chapter-content
+  next_chapter_element: .nav-buttons a:-soup-contains("Next Chapter")
+  title_element: .fic-header h1
