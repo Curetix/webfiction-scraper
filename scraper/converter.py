@@ -118,15 +118,10 @@ class Converter:
                 doc = re.sub('[\s]+<', '<', doc)  # remove whitespaces before opening tags
                 doc = re.sub('>[\s]+', '>', doc)  # remove whitespaces after closing tags
             with open(out_file, "w", encoding="utf8") as file:
-                try:
-                    doc = self.convert(doc, chapter)
-                except ElementNotFoundException as e:
-                    echo(e)
-                    sys.exit()
+                doc = self.convert(doc, chapter)
                 file.write(doc)
         else:
-            echo("File %s not found" % in_file)
-            sys.exit()
+            raise FileNotFoundError("File %s not found" % in_file)
 
         return index
 
