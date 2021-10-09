@@ -10,7 +10,8 @@ from .manifest import Manifest
 from .const import CHAPTER_DOC, FIXES_MODULE_DIR
 from .exception import ElementNotFoundException
 
-from .chapter_fixes import CHAPTER_FIXES
+from .chapter_fixes import CHAPTER_FIXES, unwrap_div
+
 
 class Converter:
     def __init__(self, config):
@@ -34,7 +35,14 @@ class Converter:
         last_p_el = content_el.select_one(self.selectors.content_element + " > p:last-of-type")
 
         if not last_p_el:
-            raise ElementNotFoundException("Last paragraph not found for chapter: " + title)
+            # In some cases (on Royal Road), the content is not directly inside the content_el, but wrapped in a single
+            # div inside the content_el, so if a div exists we unwrap it and see what happens
+            if "royalroad.com" in chapter.get("url", ""):
+                unwrap_div(soup, content_el)
+                last_p_el = content_el.select_one(self.selectors.content_element + " > p:last-of-type")
+
+            if not last_p_el:
+                raise ElementNotFoundException("Last paragraph not found for chapter: " + title)
 
         # If a cut-off element is specified, set its previous sibling as last element, otherwise the last paragraph
         if s := self.selectors.get("cut_off_element"):
@@ -105,6 +113,10 @@ class Converter:
         if os.path.isfile(in_file):
             with open(in_file, "r", encoding="utf8") as file:
                 doc = file.read()
+                doc = re.sub(re.compile('(^[\s]+)|([\s]+$)', re.MULTILINE), '', doc)  # remove leading and trailing whitespaces
+                doc = re.sub('\n', '', doc)  # convert newlines to spaces, preserve newline delimiters
+                doc = re.sub('[\s]+<', '<', doc)  # remove whitespaces before opening tags
+                doc = re.sub('>[\s]+', '>', doc)  # remove whitespaces after closing tags
             with open(out_file, "w", encoding="utf8") as file:
                 try:
                     doc = self.convert(doc, chapter)
