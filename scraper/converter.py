@@ -23,7 +23,7 @@ class Converter:
 
     def convert(self, doc, chapter):
         title = chapter.get("title")
-        soup = BeautifulSoup(doc, "lxml")
+        soup = BeautifulSoup(doc, "html5lib")
 
         content_el = soup.select_one(self.selectors.content_element)
 
