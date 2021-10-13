@@ -1,7 +1,10 @@
 import os
+from urllib.parse import urlparse
 
 from click import echo
 from ebooklib import epub
+from requests import get
+from click import echo
 
 from .manifest import Manifest
 from .const import DC_KEYS
@@ -32,9 +35,23 @@ class Binder:
                 book.add_metadata(None, "meta", "", {"name": m, "content": str(v)})
 
         cover_file = self.config.files.cover_file
-        if cover_file and os.path.isfile(cover_file):
-            with open(cover_file, "rb") as file:
-                book.set_cover(os.path.basename(cover_file), file.read())
+        if cover_file:
+            url = urlparse(cover_file)
+            if all([url.scheme, url.netloc]):
+                file_name = os.path.basename(url.path)
+                file_path = os.path.join(self.config.files.working_folder, file_name)
+                if not os.path.isfile(file_path):
+                    echo("Downloading cover image...")
+                    r = get(cover_file, stream=True)
+                    if r.status_code == 200:
+                        with open(file_path, "wb") as file:
+                            for chunk in r:
+                                file.write(chunk)
+                cover_file = file_path
+
+            if os.path.isfile(cover_file):
+                with open(cover_file, "rb") as file:
+                    book.set_cover(os.path.basename(cover_file), file.read())
 
         chapters = []
         base_folder = self.config.files.book_folder

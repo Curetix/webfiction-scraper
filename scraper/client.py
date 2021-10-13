@@ -1,7 +1,7 @@
 import os
 import sys
-import urllib.parse
 import uuid
+from urllib.parse import urlparse
 
 from box import Box
 from click import echo, confirm
@@ -169,6 +169,7 @@ class FictionScraperClient:
 
         epub_file = files.get("epub_file")
         cover_file = files.get("cover_file")
+        cover_file_url = urlparse(cover_file)
 
         if not epub_file:
             epub_file = os.path.join(working_folder, title + ".epub")
@@ -177,6 +178,8 @@ class FictionScraperClient:
 
         if not cover_file:
             cover_file = os.path.join(working_folder, "cover.jpg")
+        elif all([cover_file_url.scheme, cover_file_url.netloc]):
+            pass
         elif cover_file and not os.path.isabs(cover_file):
             cover_file = os.path.join(working_folder, cover_file)
 
@@ -209,7 +212,7 @@ class FictionScraperClient:
         if not url.startswith("http"):
             url = "https://" + url
 
-        parsed = urllib.parse.urlparse(url)
+        parsed = urlparse(url)
         domain = parsed.netloc
 
         if domain == "royalroad.com" or domain == "www.royalroad.com":
