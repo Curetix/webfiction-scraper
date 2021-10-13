@@ -15,6 +15,8 @@ metadata:
     Gwen Song awoke in a world that was not her own, in which everything she was familiar with had been replaced. Instead of airplanes and electricity, this 21st-century Earth is ruled by magic and dragons; humanity survives in a land of magical beasts and otherworldly beings, protected by shielded enclaves and magical constructs.
 
     Follow Gwen across the world as she struggles to rebuild her life in this strange new reality. Behold a tale of adventure, friendship, and (of course), magic! Witness as she grows from a simple grade school student to a fully-fledged Mage, through university and beyond, discovering the secrets of a world made unreal by magic and mysticism.
+files:
+  coverFile: https://www.royalroadcdn.com/public/covers-large/14167-metaworld-chronicles.jpg
 selectors:
   titleElement: .fic-header h1
   contentElement: .chapter-content

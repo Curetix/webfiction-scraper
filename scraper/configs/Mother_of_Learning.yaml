@@ -1,37 +1,19 @@
-files:
-  cover_file: https://www.royalroadcdn.com/public/covers-full/21220-mother-of-learning.jpg
+start_url: https://www.royalroad.com/fiction/21220/mother-of-learning/chapter/301778/1-good-morning-brother
 metadata:
-  author: nobody103
-  description: "\nZorian is a teenage mage of humble birth and slightly above-average\
-    \ skill, attending his third year of education at Cyoria's magical academy. He\
-    \ is a driven and irritable young man, consumed by a desire to ensure his own\
-    \ future and free himself of the influence of his family, whom he resents for\
-    \ favoring his brothers over him. Consequently, he has no time for pointless distractions\
-    \ or paying attention to other people's problems. As it happens, time is something\
-    \ he is about to get plenty of. On the eve of the Cyoria's annual summer festival,\
-    \ he is killed and brought back to the beginning of the month, just before he\
-    \ was about to take a train to Cyoria. Suddenly trapped in a time loop with no\
-    \ clear end or exit, Zorian will have to look both within and without to unravel\
-    \ the mystery before him. And he does have to unravel it, for the time loop hadn't\
-    \ been made for his sake and dangers lurk everywhere... Repetition is the mother\
-    \ of learning, but Zorian will have to first make sure he survives to try again\
-    \ - in a world of magic, even a time traveler isn't safe from those who wish him\
-    \ ill.\n**********************************\nIf anyone is interested, I have a\
-    \ story-related worldbuilding site that can be found here. I don't update it as\
-    \ often as I should, but there is a fair amount of content there already. It also\
-    \ contains a page with all the fanart, fan translations, audio books and the like\
-    \ - you can reach it directly by clicking this link.\nI have a patreon account\
-    \ for those kind people that want to give me money. It also contains info for\
-    \ those who want to donate via paypal.\nThe story was originally posted on fictionpress,\
-    \ back in 2011. When I reached chapter 91, I started uploading the story to RoyalRoad,\
-    \ one chapter per day. The story will continue to be updated on fictionpress as\
-    \ well as here, and can be reached by clicking on this link if somebody is interested,\
-    \ though at this point there is nothing there that isn't also on RoyalRoad.\n\
-    **********************************\nThe cover you see on the side has been made\
-    \ by a fellow RoyalRoad user Sydorow. Thank you for your time and art skills.\n"
   title: Mother of Learning
+  author: nobody103
+  description: |
+    Zorian is a teenage mage of humble birth and slightly above-average skill, attending his third year of education at Cyoria's magical academy.
+    He is a driven and irritable young man, consumed by a desire to ensure his own future and free himself of the influence of his family,
+    whom he resents for favoring his brothers over him. Consequently, he has no time for pointless distractions or paying attention to other people's problems.
+    As it happens, time is something he is about to get plenty of. On the eve of the Cyoria's annual summer festival,
+    he is killed and brought back to the beginning of the month, just before he was about to take a train to Cyoria.
+    Suddenly trapped in a time loop with no clear end or exit, Zorian will have to look both within and without to unravel the mystery before him.
+    And he does have to unravel it, for the time loop hadn't been made for his sake and dangers lurk everywhere...
+    Repetition is the mother of learning, but Zorian will have to first make sure he survives to try again - in a world of magic, even a time traveler isn't safe from those who wish him ill.
+files:
+  cover_file: https://www.royalroadcdn.com/public/covers-large/21220-mother-of-learning.jpg
 selectors:
   content_element: .chapter-content
   next_chapter_element: .nav-buttons a:-soup-contains("Next Chapter")
   title_element: .fic-header h1
-start_url: https://www.royalroad.com/fiction/21220/mother-of-learning/chapter/301778/1-good-morning-brother

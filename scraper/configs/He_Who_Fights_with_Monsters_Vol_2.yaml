@@ -13,7 +13,7 @@ metadata:
     At least, he tries to be heroic. It's hard to be good when all your powers are evil.
 
 files:
-  cover_file: https://www.royalroadcdn.com/public/covers-full/26294-he-who-fights-with-monsters.jpg
+  cover_file: https://www.royalroadcdn.com/public/covers-large/26294-he-who-fights-with-monsters.jpg
 
 selectors:
   content_element: .chapter-content

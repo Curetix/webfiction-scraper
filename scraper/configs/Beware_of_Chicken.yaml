@@ -12,7 +12,7 @@ metadata:
     Yeah, no thanks. I'm getting out of here.
     In which a transmigrator decides that the only winning move is not to play.
 files:
-  coverFile: https://www.royalroadcdn.com/public/covers-full/beware-of-chicken-aacav1xoeg8.jpg?time=1610566797
+  coverFile: https://www.royalroadcdn.com/public/covers-large/beware-of-chicken-aacav1xoeg8.jpg
 selectors:
   contentElement: .chapter-content
   nextChapterElement: .nav-buttons a:-soup-contains("Next Chapter")

@@ -10,7 +10,7 @@ metadata:
     Ryan only sees different routes; and from Hero to Villain, he has to try them all.
     Only then will he achieve his perfect ending... no matter how many loops it takes.
 files:
-  cover_file: https://www.royalroadcdn.com/public/covers-full/36735-the-perfect-run.jpg?time=1604749383
+  cover_file: https://www.royalroadcdn.com/public/covers-large/36735-the-perfect-run.jpg?time=1604749383
 selectors:
   content_element: .chapter-content
   next_chapter_element: .nav-buttons a:-soup-contains("Next Chapter")
