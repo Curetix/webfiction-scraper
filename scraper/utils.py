@@ -16,9 +16,8 @@ def lowercase_clean(s):
 
 
 def init_data_dir():
-    os.makedirs(DATA_DIR, exist_ok=True)
-
     try:
+        os.mkdir(DATA_DIR)
         os.mkdir(USER_CONFIGS_DIR)
     except FileExistsError:
         pass
