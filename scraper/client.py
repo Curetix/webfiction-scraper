@@ -112,9 +112,7 @@ class FictionScraperClient:
         if os.path.isfile(config_name):
             path = config_name
             config_name = os.path.basename(config_name).replace(".yaml", "")
-        elif p := get_fiction_config("%s.yaml" % config_name):
-            path = p
-        elif p := get_fiction_config("%s.yaml" % config_name, user_dir=True):
+        elif p := get_fiction_config(config_name):
             path = p
         else:
             echo("Couldn't find config file!")

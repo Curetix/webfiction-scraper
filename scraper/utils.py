@@ -24,17 +24,22 @@ def init_data_dir():
         pass
 
 
-def get_fiction_config(path, user_dir=False):
-    path = os.path.join(USER_CONFIGS_DIR if user_dir else CONFIGS_DIR, path)
-    if os.path.isfile(path):
-        return path
+def get_fiction_config(config_name):
+    file = "%s.yaml" % config_name
+    if os.path.isfile(p := os.path.join(CONFIGS_DIR, file)):
+        return p
+    elif os.path.isfile(p := os.path.join(USER_CONFIGS_DIR, file)):
+        return p
     else:
         return None
 
 
-def list_fiction_configs(user_dir=False):
+def list_fiction_configs():
     configs = []
-    for file in os.listdir(USER_CONFIGS_DIR if user_dir else CONFIGS_DIR):
+    for file in os.listdir(CONFIGS_DIR):
+        if file.endswith(".yaml"):
+            configs.append(file.replace(".yaml", ""))
+    for file in os.listdir(USER_CONFIGS_DIR):
         if file.endswith(".yaml"):
             configs.append(file.replace(".yaml", ""))
     return configs

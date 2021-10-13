@@ -22,7 +22,7 @@ def cli():
 @cli.command()
 def interactive():
     """Start the scraper interactively."""
-    configs = list_fiction_configs() + list_fiction_configs(user_dir=True)
+    configs = list_fiction_configs()
     config_choices = []
     with progressbar(configs, label="Loading configs") as bar:
         for config_name in bar:

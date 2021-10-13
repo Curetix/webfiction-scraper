@@ -1,13 +1,12 @@
 import os
 import re
-import sys
 from multiprocessing import Pool, cpu_count
 
 from bs4 import BeautifulSoup
 from click import echo
 
 from .manifest import Manifest
-from .const import CHAPTER_DOC, FIXES_MODULE_DIR
+from .const import CHAPTER_DOC
 from .exception import ElementNotFoundException
 
 from .chapter_fixes import CHAPTER_FIXES, unwrap_div

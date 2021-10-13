@@ -9,7 +9,6 @@ ROOT_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)))
 CONFIGS_DIR = os.path.join(ROOT_DIR, "configs")
 DATA_DIR = user_data_dir("WebFictionScraper", "Curetix")
 USER_CONFIGS_DIR = os.path.join(DATA_DIR, "configs")
-FIXES_MODULE_DIR = os.path.join(DATA_DIR, "chapter_fixes")
 
 CLIENT_CONFIG_SCHEMA = {
     Optional("patreon_session_cookie", default=None): str,
@@ -32,7 +31,7 @@ FICTION_CONFIG_SCHEMA = {
         "author": str,
         Optional("description"): str,
         Optional("language", default="en"): And(str, lambda s: len(s) == 2),
-        Optional("publisher", default="Scrapy eBooks"): str,
+        Optional("publisher", default="Web Fiction Scraper"): str,
         Optional("date"): datetime.date,
         # Allow additional metadata tags
         Optional(str): str,
@@ -61,6 +60,7 @@ FICTION_CONFIG_SCHEMA = {
     ],
 }
 
+# Valid metadata keys
 DC_KEYS = [
     "author",
     "contributor",

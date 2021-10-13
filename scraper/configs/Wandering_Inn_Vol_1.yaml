@@ -31,7 +31,7 @@ metadata:
     She's an [Innkeeper].
   # OPTIONAL: Default metadata fields, can be changed if required.
   language: en
-  publisher: Scrapy eBooks
+  publisher: Web Fiction Scraper
   # The book UUID will be generated based on the author and title (here: pirateaba-thewanderinginn) if none is provided.
   identifier: 938ed288-8a8c-55bb-a3b2-9cae45e3c6e1
   # You can also include your own custom metdata tags, e.g.:
