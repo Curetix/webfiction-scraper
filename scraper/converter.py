@@ -61,7 +61,7 @@ class Converter:
         # Remove empty elements if enabled
         if self.remove_empty_elements:
             for el in content_el.find_all(recursive=False):
-                if el.get_text().strip() == "":
+                if el.name != "hr" and el.get_text().strip() == "":
                     el.decompose()
 
         # Apply substitutions with CSS selector
