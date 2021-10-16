@@ -20,7 +20,8 @@ def cli():
 
 
 @cli.command()
-def interactive():
+@click.pass_context
+def interactive(ctx):
     """Start the scraper interactively."""
     configs = list_fiction_configs()
     config_choices = []
@@ -30,6 +31,7 @@ def interactive():
             config_choices.append(Choice(title=config.metadata.title, value=config_name))
     config_choices.sort(key=lambda c: c.title)
 
+    click.clear()
     answers = questionary.form(
         config_name=questionary.select(
             "Which config do you want to run?",
@@ -67,7 +69,9 @@ def interactive():
         "format" in tasks
     )
 
-    input("Press any key to exit...")
+    if questionary.confirm("Do you want to run another config?").ask():
+        click.clear()
+        ctx.invoke(interactive)
 
 
 @cli.command()
@@ -134,8 +138,8 @@ def monitor():
 @cli.command()
 def list_configs():
     """List all detected configs."""
-    echo("Available built-in configs:")
-    for c in list_fiction_configs() + list_fiction_configs(user_dir=True):
+    echo("Available configs:")
+    for c in list_fiction_configs():
         echo(c)
 
 
@@ -152,7 +156,6 @@ def generate_config(url, name=None):
     - Royal Road
     """
     config_name = client.generate_fiction_config(url, name)
-    # echo("Config can now be used with \"webfictionscraper.py run %s\"!" % config_name)
     if questionary.confirm("Do you want to run the config now?", default=False).ask():
         client.run(config_name, True, False, True, False, True, False)
 
