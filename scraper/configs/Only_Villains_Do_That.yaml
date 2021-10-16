@@ -1,0 +1,32 @@
+startUrl: https://www.royalroad.com/fiction/40182/only-villains-do-that/chapter/627178/11-in-which-the-dark-lord-technically-doesnt-push
+metadata:
+  title: Only Villains Do That
+  author: Webbonomicon
+  description: |
+    While waiting on an Akihabara train platform one day, ordinary high schooler Yoshi Shinonome was suddenly plucked from his normal life in Japan
+    and whisked away by a beautiful goddess to Ephemera, a world of magic and adventure, to serve as her Hero and drive back the evil Dark Lord.
+
+    This is not his story.
+
+    Standing nearby at the moment Yoshi was isekai'd was a man named Seiji - a rude, cranky, misanthropic musician
+    who was not at all pleased to find himself also snatched up and transported to Ephemera by the goddess's wicked sister, Virya.
+    According to this self-proclaimed Goddess of Evil, the whole fantasy adventure thing was a game she and her sister played to stave off the boredom of immortality,
+    and since the good goddess, Sanora, had picked her Hero...well, Virya needed a Dark Lord. 
+
+    A grown man with his own career and ambitions, Seiji has no interest in playing. 
+    Unfortunately for him, the call to adventure was not a request.
+    Now, he must conquer Ephemera and defeat the Hero...or Virya promises to make him beg for the release of death before granting it. 
+    Playing along for his own survival, Seiji nonetheless is under no illusions who his true enemy is, and it's not the naive young would-be Hero from his own world.
+
+    Placed in an impossible position, Seiji must make enough progress toward world domination to keep his sadistic patron goddess off his back,
+    but not so much that he can't strike an accord with the forces of Good and convince the Hero Yoshi that it's the goddesses who are their mutual enemy.
+    Forced to embrace Evil without being too evil, Seiji walks the razor's edge, building his forces and biding his time till he can get revenge on the goddesses and be free of them,
+    his only certainty that he will not be getting out of this with his hands clean.
+
+    A Dark Lord's gotta do what a Dark Lord's gotta do.
+files:
+  coverFile: https://www.royalroadcdn.com/public/covers-large/only-villains-do-that-aacawnrhlw8.jpg?time=1612511255
+selectors:
+  contentElement: .chapter-content
+  nextChapterElement: .nav-buttons a:-soup-contains("Next Chapter")
+  titleElement: .fic-header h1
