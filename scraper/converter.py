@@ -112,10 +112,10 @@ class Converter:
         if os.path.isfile(in_file):
             with open(in_file, "r", encoding="utf8") as file:
                 doc = file.read()
-                doc = re.sub(re.compile('(^[\s]+)|([\s]+$)', re.MULTILINE), '', doc)  # remove leading and trailing whitespaces
-                doc = re.sub('\n', '', doc)  # convert newlines to spaces, preserve newline delimiters
-                doc = re.sub('[\s]+<', '<', doc)  # remove whitespaces before opening tags
-                doc = re.sub('>[\s]+', '>', doc)  # remove whitespaces after closing tags
+                # doc = re.sub(re.compile('(^[\s]+)|([\s]+$)', re.MULTILINE), '', doc)  # remove leading and trailing whitespaces
+                # doc = re.sub('\n', '', doc)  # convert newlines to spaces, preserve newline delimiters
+                # doc = re.sub('[\s]+<', '<', doc)  # remove whitespaces before opening tags
+                # doc = re.sub('>[\s]+', '>', doc)  # remove whitespaces after closing tags
             with open(out_file, "w", encoding="utf8") as file:
                 doc = self.convert(doc, chapter)
                 file.write(doc)
