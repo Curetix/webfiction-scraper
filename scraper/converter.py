@@ -9,7 +9,7 @@ from .manifest import Manifest
 from .const import CHAPTER_DOC
 from .exception import ElementNotFoundException
 
-from .chapter_fixes import CHAPTER_FIXES, unwrap_div
+from .chapter_fixes import CHAPTER_FIXES, unwrap_toplevel_divs
 
 
 class Converter:
@@ -29,7 +29,7 @@ class Converter:
         if not content_el:
             raise ElementNotFoundException("Content element not found for chapter: " + title)
 
-        self.apply_chapter_fix(chapter, soup, content_el)
+        self.apply_chapter_fix(chapter, soup, content_el, self.selectors.content_element)
 
         last_p_el = content_el.select_one(self.selectors.content_element + " > p:last-of-type")
 
@@ -37,7 +37,7 @@ class Converter:
             # In some cases (on Royal Road), the content is not directly inside the content_el, but wrapped in a single
             # div inside the content_el, so if a div exists we unwrap it and see what happens
             if "royalroad.com" in chapter.get("url", ""):
-                unwrap_div(soup, content_el)
+                unwrap_toplevel_divs(soup, content_el, self.selectors.content_element)
                 last_p_el = content_el.select_one(self.selectors.content_element + " > p:last-of-type")
 
             if not last_p_el:
@@ -101,9 +101,9 @@ class Converter:
         return doc
 
     @staticmethod
-    def apply_chapter_fix(chapter, soup, content_el):
+    def apply_chapter_fix(chapter, soup, content_el, content_el_selector):
         if func := CHAPTER_FIXES.get(chapter.get("url")):
-            func(soup, content_el)
+            func(soup, content_el, content_el_selector)
 
     def convert_file(self, index, chapter):
         in_file = os.path.join(self.files.cache_folder, chapter.get("file"))
@@ -112,10 +112,6 @@ class Converter:
         if os.path.isfile(in_file):
             with open(in_file, "r", encoding="utf8") as file:
                 doc = file.read()
-                # doc = re.sub(re.compile('(^[\s]+)|([\s]+$)', re.MULTILINE), '', doc)  # remove leading and trailing whitespaces
-                # doc = re.sub('\n', '', doc)  # convert newlines to spaces, preserve newline delimiters
-                # doc = re.sub('[\s]+<', '<', doc)  # remove whitespaces before opening tags
-                # doc = re.sub('>[\s]+', '>', doc)  # remove whitespaces after closing tags
             with open(out_file, "w", encoding="utf8") as file:
                 doc = self.convert(doc, chapter)
                 file.write(doc)
