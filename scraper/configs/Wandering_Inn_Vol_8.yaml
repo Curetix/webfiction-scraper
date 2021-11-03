@@ -32,6 +32,7 @@ selectors:
     - p:-soup-contains("Author’s Story:")
     - p:-soup-contains("Author’s Note:")
     - p:-soup-contains("Author’s Notes:")
+    - p:-soup-contains("Author’s Thoughts:")
     - p:has(a:-soup-contains("Previous Chapter"))
     - p:has(a:-soup-contains("Next Chapter"))
 
@@ -190,3 +191,6 @@ substitutions:
   - chapterUrl: https://wanderinginn.com/2021/10/06/interlude-perspective-and-past/
     selectorType: css
     selector: p:-soup-contains("The Wandering Inn is on its monthly break")
+  - chapterUrl: https://wanderinginn.com/2021/11/03/interlude-conversations/
+    selectorType: css
+    selector: p:-soup-contains("The author is on break until the 13th of November!")
