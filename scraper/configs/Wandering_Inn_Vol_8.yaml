@@ -97,9 +97,6 @@ substitutions:
   - chapterUrl: https://wanderinginn.com/2021/04/04/interlude-paradigm-shift-pt-1/
     selectorType: css
     selector: p:-soup-contains("Enuryn the [Naturalist] has opened an online store")
-  - chapterUrl: https://wanderinginn.com/2021/04/04/interlude-paradigm-shift-pt-2/
-    selectorType: css
-    selector: p:-soup-contains("I am skipping the next update and will be posting the next chapter on the 10th")
   - chapterUrl: https://wanderinginn.com/2021/04/10/8-16/
     selectorType: css
     selector: p:-soup-contains("Podium Publishing is offering a TWI-embossed frying pan giveaway")
@@ -143,9 +140,6 @@ substitutions:
   - chapterUrl: https://wanderinginn.com/2021/07/25/8-32/
     selectorType: css
     selector: p:-soup-contains("The Last Tide is going to launch a Kickstarter on August 24th")
-  - chapterUrl: https://wanderinginn.com/2021/07/25/8-32/
-    selectorType: css
-    selector: p:has(a:has(img))
   - chapterUrl: https://wanderinginn.com/2021/07/28/8-33-r/
     selectorType: css
     selector: p:-soup-contains("It is the 5th Anniversary of The Wandering Inn")
@@ -161,9 +155,6 @@ substitutions:
   - chapterUrl: https://wanderinginn.com/2021/08/15/8-36-h/
     selectorType: css
     selector: p:-soup-contains("The Kickstarter for The Last Tide will be on the 24th of August!")
-  - chapterUrl: https://wanderinginn.com/2021/08/15/8-36-h/
-    selectorType: css
-    selector: p:has(span:has(iframe))
   - chapterUrl: https://wanderinginn.com/2021/08/17/8-37-h/
     selectorType: css
     selector: p:nth-of-type(-n + 4)
@@ -182,9 +173,6 @@ substitutions:
   - chapterUrl: https://wanderinginn.com/2021/09/26/8-44-o/
     selectorType: css
     selector: p:-soup-contains("I did another interview")
-  - chapterUrl: https://wanderinginn.com/2021/09/26/8-45-o/
-    selectorType: css
-    selector: p:-soup-contains("The story is taking a one-update break")
   - chapterUrl: https://wanderinginn.com/2021/10/03/8-46-g/
     selectorType: css
     selector: p:-soup-contains("Barbara Clark will edit a chapter in October!")
@@ -193,4 +181,4 @@ substitutions:
     selector: p:-soup-contains("The Wandering Inn is on its monthly break")
   - chapterUrl: https://wanderinginn.com/2021/11/03/interlude-conversations/
     selectorType: css
-    selector: p:-soup-contains("The author is on break until the 13th of November!")
+    selector: p:-soup-contains("The author is on break until the 13th of November for Patrons!")
