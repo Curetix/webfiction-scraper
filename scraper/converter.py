@@ -70,6 +70,11 @@ class Converter:
                 continue
 
             els = content_el.select(s.selector)
+
+            if not len(els):
+                echo("Chapter '%s': No matches for selector '%s'. Please check if the config is up-to-date." % (title, s.selector))
+                continue
+
             for el in els:
                 if s.replace_with:
                     el.replace_with(s.replace_with)
