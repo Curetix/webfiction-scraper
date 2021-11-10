@@ -57,6 +57,7 @@ FICTION_CONFIG_SCHEMA = {
             Optional("replace_with", default=""): str,
         }
     ],
+    Optional("style", default=None): str,
 }
 
 # Valid metadata keys

@@ -53,6 +53,13 @@ class Binder:
                 with open(cover_file, "rb") as file:
                     book.set_cover(os.path.basename(cover_file), file.read())
 
+        style = "@namespace epub \"http://www.idpf.org/2007/ops\";\n"
+        if self.config.style:
+            style += self.config.style
+
+        stylesheet = epub.EpubItem(uid="style", file_name="style.css", media_type="text_css", content=style)
+        book.add_item(stylesheet)
+
         chapters = []
         base_folder = self.config.files.book_folder
         for (i, c) in enumerate(filter(lambda x: x.get("converted"), self.manifest)):
@@ -62,8 +69,11 @@ class Binder:
                 file_name=file_name,
                 lang=self.config.metadata.language,
             )
+
             with open(os.path.join(base_folder, file_name), "rb") as file:
                 chapter.set_content(file.read())
+
+            chapter.add_item(stylesheet)
             chapters.append(chapter)
             book.add_item(chapter)
 
