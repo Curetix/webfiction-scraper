@@ -1,0 +1,15 @@
+start_url: https://www.royalroad.com/fiction/47557/underland/chapter/769236/1-beneath-the-earth
+metadata:
+  title: Underland
+  author: Maxime J. Durand (Void Herald)
+  description: |
+    Once, the sun shone brightly on Azlant. Until came the Whitemoon, to steal mankind's light and condemn it to eternal darkness. 
+
+    Valdemar Verney is a sorcerer with a dream: to find a new world for his people to settle, one where the sky isn't a ceiling made of stone. But in the underground empire of Azlant, dissent is never tolerated. Brought before one of the undead Dark Lords, Valdemar is offered a choice he cannot refuse. Meanwhile, the swordswoman Marianne Reynard is given a mission: to investigate a dead cult with a few mysteries left to unravel.
+
+    Both are looking for the truth, though they might regret finding it; for manyfiles:
+  cover_file: https://www.royalroadcdn.com/public/covers-large/underland-aaaa3sm9eba.jpg
+selectors:
+  content_element: .chapter-content
+  next_chapter_element: .nav-buttons a:-soup-contains("Next Chapter")
+  title_element: .fic-header h1
