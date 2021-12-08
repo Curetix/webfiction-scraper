@@ -182,3 +182,18 @@ substitutions:
   - chapterUrl: https://wanderinginn.com/2021/11/03/interlude-conversations/
     selectorType: css
     selector: p:-soup-contains("The author is on break until the 13th of November for Patrons!")
+  - chapterUrl: https://wanderinginn.com/2021/11/17/8-52-mn/
+    selectorType: css
+    selector: p:-soup-contains("See that header up top? Book 5 on Audible.")
+  - chapterUrl: https://wanderinginn.com/2021/11/17/8-52-mn/
+    selectorType: css
+    selector: p:-soup-contains("The Wandering Inn now has a fan-podcast!")
+  - chapterUrl: https://wanderinginn.com/2021/11/21/8-53-fh/
+    selectorType: css
+    selector: p:-soup-contains("See that header up top? Book 5 on Audible.")
+  - chapterUrl: https://wanderinginn.com/2021/11/21/8-53-fh/
+    selectorType: css
+    selector: p:-soup-contains("I am on break until the 30th for Patrons")
+  - chapterUrl: https://wanderinginn.com/2021/12/05/8-55-l/
+    selectorType: css
+    selector: p:-soup-contains("Mother of Learning is out on Amazon!")
