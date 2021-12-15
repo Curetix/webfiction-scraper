@@ -197,3 +197,6 @@ substitutions:
   - chapterUrl: https://wanderinginn.com/2021/12/05/8-55-l/
     selectorType: css
     selector: p:-soup-contains("Mother of Learning is out on Amazon!")
+  - chapterUrl: https://wanderinginn.com/2021/12/15/8-58-pfh/
+    selectorType: css
+    selector: p:-soup-contains("I am taking a ~mysterious break~")
