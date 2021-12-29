@@ -200,3 +200,9 @@ substitutions:
   - chapterUrl: https://wanderinginn.com/2021/12/15/8-58-pfh/
     selectorType: css
     selector: p:-soup-contains("I am taking a ~mysterious break~")
+  - chapterUrl: https://wanderinginn.com/2021/12/26/8-60/
+    selectorType: css
+    selector: p:-soup-contains("This chapter is out, as is customary for Patreons and Public readers!")
+  - chapterUrl: https://wanderinginn.com/2021/12/29/8-61/
+    selectorType: css
+    selector: p:-soup-contains("The story is on break until January 15th")
