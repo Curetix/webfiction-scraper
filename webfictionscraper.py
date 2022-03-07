@@ -27,7 +27,10 @@ def interactive(ctx):
     config_choices = []
     with progressbar(configs, label="Loading configs") as bar:
         for config_name in bar:
-            config = client.load_fiction_config(config_name)
+            try:
+                config = client.load_fiction_config(config_name)
+            except Exception as error:
+                print('Config %s is invalid: %s' % (config_name, error))
             config_choices.append(Choice(title=config.metadata.title, value=config_name))
     config_choices.sort(key=lambda c: c.title)
 

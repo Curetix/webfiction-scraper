@@ -1,5 +1,7 @@
 import json
+from json import JSONDecodeError
 import os
+from click import echo
 
 
 class Manifest(list):
@@ -11,7 +13,10 @@ class Manifest(list):
     def load(self):
         if os.path.isfile(self.path):
             with open(os.path.join(self.path), "r", encoding="utf-8") as file:
-                items = json.load(file)
+                try:
+                    items = json.load(file)
+                except JSONDecodeError as error:
+                    echo('Manifest could not be loaded. You might need to use the --clean-download flag.')
             for i in items:
                 self.append(i)
 
