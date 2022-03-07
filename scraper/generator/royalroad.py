@@ -44,7 +44,7 @@ class RoyalRoadConfigGenerator(ConfigGenerator):
         else:
             raise InvalidPageException()
 
-        self.config.files = Box(coverFile=soup.select_one("#cover-lightbox-img").get("src"))
+        self.config.files = Box(coverFile=soup.select_one(".thumbnail").get("src"))
         self.config.startUrl = start_url
         metadata = Box(
             title=soup.select_one(".fic-header h1").get_text(),

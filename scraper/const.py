@@ -48,6 +48,7 @@ FICTION_CONFIG_SCHEMA = {
         "next_chapter_element": str,
         Optional("cut_off_element", default=None): Or(str, [str]),
     },
+    Optional("skip_conversion", default=False): bool,
     Optional("remove_empty_elements", default=True): bool,
     Optional("substitutions", default=[]): [
         {

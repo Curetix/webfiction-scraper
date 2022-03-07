@@ -20,6 +20,11 @@ def unwrap_toplevel_divs(soup, content_el, content_el_selector):
     while (el := content_el.select_one(content_el_selector + " > div")) is not None and content_el.select_one(content_el_selector + " > p") is None:
         el.unwrap()
 
+def unwrap_toplevel_divs_alt(soup, content_el, content_el_selector):
+    divs = content_el.select(content_el_selector + " > div")
+    for el in divs:
+        el.unwrap()
+
 
 def fix_nested_div_paragraphs(soup, content_el, content_el_selector):
     # Unwrap the top-level <div>s
@@ -44,4 +49,6 @@ CHAPTER_FIXES = {
     "https://www.royalroad.com/fiction/26675/a-journey-of-black-and-red/chapter/407352/22-the-waiting-maw": unwrap_toplevel_divs,
     "https://www.royalroad.com/fiction/26675/a-journey-of-black-and-red/chapter/426349/34-ring-breaker": fix_nested_div_paragraphs,
     "https://www.royalroad.com/fiction/36735/the-perfect-run/chapter/576217/8-past-fragment-len": fix_blockquote_and_div,
+    "https://www.royalroad.com/fiction/41033/kairos-a-greek-myth-litrpg/chapter/677603/26-the-wedding": unwrap_toplevel_divs_alt,
+    "https://www.royalroad.com/fiction/47557/underland/chapter/775480/8-vernburg": unwrap_toplevel_divs,
 }
