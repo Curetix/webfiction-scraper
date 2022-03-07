@@ -27,3 +27,4 @@ selectors:
   content_element: .chapter-content
   next_chapter_element: .nav-buttons a:-soup-contains("Next Chapter")
   title_element: .fic-header h1
+skip_conversion: true

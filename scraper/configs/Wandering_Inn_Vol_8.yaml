@@ -206,3 +206,21 @@ substitutions:
   - chapterUrl: https://wanderinginn.com/2021/12/29/8-61/
     selectorType: css
     selector: p:-soup-contains("The story is on break until January 15th")
+  - chapterUrl: https://wanderinginn.com/2022/01/16/8-62-k/
+    selectorType: css
+    selector: p:-soup-contains("No Killing Goblins, a The Wandering Inn podcast")
+  - chapterUrl: https://wanderinginn.com/2022/01/16/8-62-k/
+    selectorType: css
+    selector: a:-soup-contains("Podomatic")
+  - chapterUrl: https://wanderinginn.com/2022/01/16/8-62-k/
+    selectorType: css
+    selector: a:-soup-contains("Apple")
+  - chapterUrl: https://wanderinginn.com/2022/01/16/8-62-k/
+    selectorType: css
+    selector: a:-soup-contains("Google")
+  - chapterUrl: https://wanderinginn.com/2022/01/30/8-65/
+    selectorType: css
+    selector: p:-soup-contains("The author is on break until the 8th of February!")
+  - chapterUrl: https://wanderinginn.com/2022/02/13/interlude-hectval-pt-2/
+    selectorType: css
+    selector: p:-soup-contains("I am delighted to shout out fellow author Selkie Myth")
