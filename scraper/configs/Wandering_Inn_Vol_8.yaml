@@ -248,3 +248,21 @@ substitutions:
   - chapterUrl: https://wanderinginn.com/2022/03/30/8-77-b/
     selectorType: css
     selector: p:-soup-contains("The author is on break")
+  - chapterUrl: https://wanderinginn.com/2022/04/17/8-80/
+    selectorType: css
+    selector: p:-soup-contains("Book 6, The General of Izril is available")
+  - chapterUrl: https://wanderinginn.com/2022/04/20/8-81/
+    selectorType: css
+    selector: p:-soup-contains("Book 6, The General of Izril is available")
+  - chapterUrl: https://wanderinginn.com/2022/04/20/8-81/
+    selectorType: css
+    selector: p:-soup-contains("I am taking a small delay of one update")
+  - chapterUrl: https://wanderinginn.com/2022/04/26/8-82-pt-1/
+    selectorType: css
+    selector: p:-soup-contains("The final chapter will be released on May 3rd")
+  - chapterUrl: https://wanderinginn.com/2022/04/26/8-82-pt-1/
+    selectorType: css
+    selector: p:-soup-contains("Podium is hosting an apron giveaway!")
+  - chapterUrl: https://wanderinginn.com/2022/05/03/8-83/
+    selectorType: css
+    selector: p:-soup-contains("Casualfarmer has released their first novel")
