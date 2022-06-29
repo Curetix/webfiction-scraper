@@ -33,6 +33,7 @@ selectors:
     - p:-soup-contains("Author’s Note:")
     - p:-soup-contains("Author’s Notes:")
     - p:-soup-contains("Author’s Thoughts:")
+    - p:-soup-contains("Author Breakdown:")
     - p:has(a:-soup-contains("Previous Chapter"))
     - p:has(a:-soup-contains("Next Chapter"))
 
