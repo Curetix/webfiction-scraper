@@ -116,7 +116,7 @@ class FictionScraperClient:
 
         return Box(config_overrides=Box())
 
-    def load_fiction_config(self, config_name: str) -> Box:
+    def load_fiction_config(self, config_name: str) -> Box or None:
         """Load the fiction configuration from the provided config_name, if it exists.
 
         :param config_name: path or name of fiction config
@@ -152,9 +152,10 @@ class FictionScraperClient:
 
         try:
             validated = Schema(FICTION_CONFIG_SCHEMA).validate(config)
-        except SchemaError as e:
-            echo(e)
-            sys.exit(1)
+        except SchemaError as error:
+            echo("\nValidation failed for config '%s':" % config_name)
+            echo(error)
+            return None
 
         files = validated.files
         metadata = validated.metadata

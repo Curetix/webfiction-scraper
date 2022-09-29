@@ -25,13 +25,26 @@ def interactive(ctx):
     """Start the scraper interactively."""
     configs = list_fiction_configs()
     config_choices = []
+
+    if len(configs) == 0:
+        echo("No configs found.")
+        return
+
     with progressbar(configs, label="Loading configs") as bar:
         for config_name in bar:
             try:
                 config = client.load_fiction_config(config_name)
             except Exception as error:
-                print('Config %s is invalid: %s' % (config_name, error))
-            config_choices.append(Choice(title=config.metadata.title, value=config_name))
+                echo('Error loading config \'%s\': %s' % (config_name, error))
+                input('Press enter to continue...')
+                click.clear()
+
+            if config:
+                config_choices.append(Choice(title=config.metadata.title, value=config_name))
+            else:
+                input('Press enter to continue...')
+                click.clear()
+
     config_choices.sort(key=lambda c: c.title)
 
     click.clear()
