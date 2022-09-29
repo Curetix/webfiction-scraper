@@ -21,6 +21,7 @@ CLIENT_CONFIG_SCHEMA = {
 }
 
 FICTION_CONFIG_SCHEMA = {
+    Optional("official_book_url"): Or(str, [str]),
     "start_url": And(str, lambda s: s.startswith("http")),
     Optional("end_url", default=""): And(str, lambda s: s.startswith("http")),
     Optional("skip_urls", default=[]): [str],

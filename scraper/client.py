@@ -3,7 +3,7 @@ import sys
 import uuid
 from urllib.parse import urlparse
 
-from box import Box
+from box import Box, BoxList
 from click import echo, confirm
 from schema import Schema, SchemaError
 
@@ -33,6 +33,19 @@ class FictionScraperClient:
         :param ebook_convert: flag if eBook should be converted into configured formats
         """
         config = self.load_fiction_config(config_name)
+
+        if not config:
+            echo("Invalid config file!")
+            sys.exit(1)
+
+        if url := config.official_book_url:
+            echo("The author %s has published an official book for %s!" % (config.metadata.author, config.metadata.title))
+            echo("If you want to support their work, consider purchasing it here:")
+            if type(url) is str:
+                echo(" %s" % url)
+            elif type(url) is BoxList:
+                for u in url:
+                    echo(" - %s" % u)
 
         if download or clean_download:
             echo("Downloading chapters...")
