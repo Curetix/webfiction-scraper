@@ -1,6 +1,6 @@
 # Web Fiction Scraper
 
-Scrapes web serials into an eBook format.
+Scrapes web fictions into an eBook format.
 
 ## Installation
 

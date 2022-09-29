@@ -1,4 +1,4 @@
-# Creating Web Serial config files
+# Creating Web Fiction config files
 
 If you want to create a config file for the scraper, this little step-by-step guide will help you out.
 Also check out the documented example config in scraper/configs/Wandering_Inn_Volume_1.yaml.
@@ -24,7 +24,7 @@ since you'll have to type it everytime you want to run the scraper with said con
 
 ## URLs and Metadata
 
-Let's start with the most simple option. The **startUrl** key is the URL of the web serial's first chapter, like so:
+Let's start with the most simple option. The **startUrl** key is the URL of the web fictions first chapter, like so:
 
 ```yaml
 startUrl: https://wanderinginn.com/2016/07/27/1-00/
