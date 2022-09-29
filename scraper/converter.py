@@ -18,7 +18,7 @@ class Converter:
         self.selectors = config.selectors
         self.substitutions = config.substitutions
         self.remove_empty_elements = config.remove_empty_elements
-        self.skip_chapters = config.skip_chapters
+        self.skip_urls = config.skip_urls
         self.skip_conversion = config.skip_conversion
         self.manifest = Manifest(config.files.manifest_file)
 
@@ -130,7 +130,7 @@ class Converter:
 
     def convert_all(self):
         with Pool(processes=cpu_count()) as pool:
-            chapters_to_convert = filter(lambda t: not t[1].get("converted") and not t[1].get("url") in self.skip_chapters, enumerate(self.manifest))
+            chapters_to_convert = filter(lambda t: not t[1].get("converted") and not t[1].get("url") in self.skip_urls, enumerate(self.manifest))
             results = [pool.apply_async(self.convert_file, args=m) for m in chapters_to_convert]
             converted_chapters = [p.get() for p in results]
 

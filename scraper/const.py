@@ -23,7 +23,7 @@ CLIENT_CONFIG_SCHEMA = {
 FICTION_CONFIG_SCHEMA = {
     "start_url": And(str, lambda s: s.startswith("http")),
     Optional("end_url", default=""): And(str, lambda s: s.startswith("http")),
-    Optional("skip_chapters", default=[]): [str],
+    Optional("skip_urls", default=[]): [str],
     Optional("crawler_module", default="Crawler"): str,
     "metadata": {
         "title": str,

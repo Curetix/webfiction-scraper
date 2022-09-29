@@ -16,7 +16,7 @@ class Crawler:
     def __init__(self, config: Box):
         self.start_url = config.start_url
         self.end_url = config.end_url
-        self.skip_chapters = config.skip_chapters
+        self.skip_urls = config.skip_urls
         self.selectors = config.selectors
         self.files = config.files
         self.manifest = Manifest(config.files.manifest_file)
@@ -39,7 +39,7 @@ class Crawler:
             if not title and not content and not soup:
                 return
 
-            if url not in self.skip_chapters:
+            if url not in self.skip_urls:
                 file_name = self.save_chapter(content, index)
                 self.add_chapter_to_manifest(index, url, title, file_name)
                 index += 1
