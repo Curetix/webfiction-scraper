@@ -35,10 +35,12 @@ def get_fiction_config(config_name):
 
 def list_fiction_configs():
     configs = []
-    for file in os.listdir(CONFIGS_DIR):
-        if file.endswith(".yaml"):
-            configs.append(file.replace(".yaml", ""))
-    for file in os.listdir(USER_CONFIGS_DIR):
-        if file.endswith(".yaml"):
-            configs.append(file.replace(".yaml", ""))
+    if os.path.isdir(CONFIGS_DIR):
+        for file in os.listdir(CONFIGS_DIR):
+            if file.endswith(".yaml"):
+                configs.append(file.replace(".yaml", ""))
+    if os.path.isdir(USER_CONFIGS_DIR):
+        for file in os.listdir(USER_CONFIGS_DIR):
+            if file.endswith(".yaml"):
+                configs.append(file.replace(".yaml", ""))
     return configs
