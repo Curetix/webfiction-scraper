@@ -24,7 +24,7 @@ class Converter:
 
     def convert(self, doc, chapter):
         title = chapter.get("title")
-        soup = BeautifulSoup(doc, "html5lib")
+        soup = BeautifulSoup(doc, "html.parser")
 
         content_el = soup.select_one(self.selectors.content_element)
 
