@@ -4,6 +4,5 @@ click
 schema
 requests
 beautifulsoup4
-html5lib
 python-box[all]>=5.0,<6.0
 questionary
