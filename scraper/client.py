@@ -13,7 +13,7 @@ from .converter import Converter
 from .binder import Binder
 from .crawler import Crawler, WanderingInnPatreonCrawler
 from .generator import RoyalRoadConfigGenerator
-from .const import FICTION_CONFIG_SCHEMA, DATA_DIR, USER_CONFIGS_DIR, CLIENT_CONFIG_SCHEMA
+from .const import FICTION_CONFIG_SCHEMA, DATA_DIR, CONFIGS_DIR, CLIENT_CONFIG_SCHEMA
 from .utils import normalize_string, lowercase_clean, get_fiction_config, init_data_dir
 
 SEPARATOR = 30 * "-" + "\n"
@@ -102,8 +102,7 @@ class FictionScraperClient:
 
         :return: client configuration
         """
-        if not os.path.isdir(DATA_DIR):
-            init_data_dir()
+        init_data_dir()
 
         if os.path.isfile(path := os.path.join(DATA_DIR, "client.yaml")):
             config = Box.from_yaml(filename=path, camel_killer_box=True)
@@ -249,7 +248,7 @@ class FictionScraperClient:
             if not confirm("Couldn't validate newly generated config, save anyways?"):
                 sys.exit()
 
-        config.to_yaml(filename=os.path.join(USER_CONFIGS_DIR, "%s.yaml" % name))
+        config.to_yaml(filename=os.path.join(CONFIGS_DIR, "%s.yaml" % name))
 
         echo("Config for \"%s\" successfully generated, validated and saved!" % config.metadata.title)
 
@@ -269,7 +268,7 @@ class FictionScraperClient:
     @staticmethod
     def download_remote_config(name: str, overwrite=False) -> bool:
         file_name = "%s.yaml" % name
-        file_path = os.path.join(USER_CONFIGS_DIR, file_name)
+        file_path = os.path.join(CONFIGS_DIR, file_name)
 
         if not overwrite and os.path.isfile(file_path):
             echo("The file %s already exists in the configs folder and will be overwritten." % file_name)
