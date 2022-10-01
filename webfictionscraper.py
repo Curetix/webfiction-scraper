@@ -108,55 +108,52 @@ def run(config_name, download, clean_download, convert, clean_convert, bind, ebo
 
 
 @cli.command()
-def monitor():
-    """Monitor feeds and run the scraper when content is posted."""
-    last_posts = Box()
-    monitored_fictions = client.client_config.get("monitored_fictions")
+@click.option("--remote", is_flag=True, help="List all configs in the remote repository")
+def list_configs(remote: bool):
+    """List all detected configs."""
+    configs = client.list_remote_configs() if remote else list_fiction_configs()
 
-    if not monitored_fictions:
-        echo("No fictions to monitor configured!")
-        return
-
-    while True:
-        for fiction in monitored_fictions:
-            c = fiction.config_name
-            r = get(fiction.rss_feed_url)
-            soup = BeautifulSoup(r.content, "lxml")
-            latest_post = soup.find("item").find("link").get_text()
-
-            if last_posts.get(c) != latest_post:
-                last_posts[c] = latest_post
-
-                if not last_posts.get(c):
-                    echo("Initial post recorded for: %s" % c)
-                    continue
-
-                echo("New post for: %s" % c)
-
-                options = fiction.get("client_options", Box())
-
-                client.run(
-                    c,
-                    options.get("download", True),
-                    options.get("clean_download", False),
-                    options.get("convert", True),
-                    options.get("clean_convert", False),
-                    options.get("bind", True),
-                    options.get("ebook_convert", True)
-                )
-            else:
-                echo("Nothing new for:  %s" % c)
-
-        echo("Done! Sleeping...")
-        sleep(1800)
+    if remote and not configs:
+        echo("Could not get repository contents.")
+    elif len(configs) == 0:
+        echo("No configs available.")
+    else:
+        echo("Available configs:")
+        for c in configs:
+            echo("  %s" % c)
 
 
 @cli.command()
-def list_configs():
-    """List all detected configs."""
-    echo("Available configs:")
-    for c in list_fiction_configs():
-        echo(c)
+@click.argument("config_name", required=False)
+@click.option("--all", is_flag=True, help="Download all available remote configs")
+@click.option("--overwrite", is_flag=True, help="Overwrite configs when they already exist")
+def download_config(config_name: str, all: bool, overwrite: bool):
+    """Download a config from the remote repository."""
+    if not config_name and not all:
+        echo("Either the config_name argument or the --all option is required.")
+
+    if all:
+        configs = client.list_remote_configs()
+        downloaded = []
+        with progressbar(configs, label="Downloading configs") as bar:
+            for c in bar:
+                success = client.download_remote_config(c, overwrite)
+                if not success:
+                    echo("Downloading config %s was not successful." % c)
+                else:
+                    downloaded.append(c)
+
+        echo("Downloaded %s configs!" % len(downloaded))
+    else:
+        success = client.download_remote_config(config_name, overwrite)
+        if not success:
+            echo("Download was not successful.")
+            return
+
+        echo("Config %s was downloaded!" % config_name)
+
+        if questionary.confirm("Do you want to run the config now?", default=False).ask():
+            client.run(config_name, True, False, True, False, True, False)
 
 
 @cli.command()

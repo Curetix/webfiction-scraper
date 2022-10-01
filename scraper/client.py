@@ -3,9 +3,11 @@ import sys
 import uuid
 from urllib.parse import urlparse
 
+import questionary
 from box import Box, BoxList
 from click import echo, confirm
 from schema import Schema, SchemaError
+from requests import get
 
 from .converter import Converter
 from .binder import Binder
@@ -38,7 +40,7 @@ class FictionScraperClient:
             echo("Invalid config file!")
             sys.exit(1)
 
-        if url := config.official_book_url:
+        if url := config.get("official_book_url"):
             echo("The author %s has published an official book for %s!" % (config.metadata.author, config.metadata.title))
             echo("If you want to support their work, consider purchasing it here:")
             if type(url) is str:
@@ -51,7 +53,7 @@ class FictionScraperClient:
             echo("Downloading chapters...")
 
             if config.get("crawler_module") == "WanderingInnPatreonCrawler":
-                crawler = WanderingInnPatreonCrawler(config, self.client_config.patreon_session_cookie)
+                crawler = WanderingInnPatreonCrawler(config, self.client_config.get("patreon_session_cookie"))
             else:
                 crawler = Crawler(config)
 
@@ -252,3 +254,37 @@ class FictionScraperClient:
         echo("Config for \"%s\" successfully generated, validated and saved!" % config.metadata.title)
 
         return name
+
+    @staticmethod
+    def list_remote_configs() -> [str] or None:
+        r = get('https://api.github.com/repos/curetix/webfiction-scraper-configs/contents/configs')
+
+        if r.ok:
+            json = r.json()
+            configs = [c["name"].replace(".yaml", "") for c in json if c["name"].endswith(".yaml")]
+            return configs
+        else:
+            return None
+
+    @staticmethod
+    def download_remote_config(name: str, overwrite=False) -> bool:
+        file_name = "%s.yaml" % name
+        file_path = os.path.join(USER_CONFIGS_DIR, file_name)
+
+        if not overwrite and os.path.isfile(file_path):
+            echo("The file %s already exists in the configs folder and will be overwritten." % file_name)
+            a = questionary.confirm("Proceed?", default=False).ask()
+
+            if a is None:
+                sys.exit()
+            elif a is False:
+                return False
+
+        r = get('https://raw.githubusercontent.com/Curetix/webfiction-scraper-configs/main/configs/%s' % file_name)
+
+        if r.ok:
+            with open(file_path, "wb") as file:
+                file.write(r.content)
+            return True
+        else:
+            return False
