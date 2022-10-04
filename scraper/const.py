@@ -1,6 +1,3 @@
-import datetime
-
-
 from schema import And, Or, Optional
 
 CLIENT_CONFIG_SCHEMA = {
@@ -14,6 +11,29 @@ CLIENT_CONFIG_SCHEMA = {
     ]
 }
 
+# Valid metadata keys
+OPTIONAL_DC_KEYS = [
+    "contributor",
+    "coverage",
+    "creator",
+    "date",
+    "description",
+    "format",
+    "identifier",
+    "language",
+    "publisher",
+    "relation",
+    "rights",
+    "source",
+    "subject",
+    "type",
+]
+
+DC_KEYS = [
+    "author",
+    "title",
+] + OPTIONAL_DC_KEYS
+
 FICTION_CONFIG_SCHEMA = {
     Optional("official_book_url"): Or(str, [str]),
     "start_url": And(str, lambda s: s.startswith("http")),
@@ -23,12 +43,10 @@ FICTION_CONFIG_SCHEMA = {
     "metadata": {
         "title": str,
         "author": str,
-        Optional("description"): str,
         Optional("language", default="en"): And(str, lambda s: len(s) == 2),
         Optional("publisher", default="Web Fiction Scraper"): str,
-        Optional("date"): datetime.date,
         # Allow additional metadata tags
-        Optional(str): str,
+        Optional(Or(*OPTIONAL_DC_KEYS)): str,
     },
     Optional("files", default={}): {
         Optional("working_folder"): str,
@@ -55,26 +73,6 @@ FICTION_CONFIG_SCHEMA = {
     ],
     Optional("style", default=None): str,
 }
-
-# Valid metadata keys
-DC_KEYS = [
-    "author",
-    "contributor",
-    "coverage",
-    "creator",
-    "date",
-    "description",
-    "format",
-    "identifier",
-    "language",
-    "publisher",
-    "relation",
-    "rights",
-    "source",
-    "subject",
-    "title",
-    "type",
-]
 
 CHAPTER_DOC = """<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
