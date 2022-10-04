@@ -1,12 +1,7 @@
 import datetime
-import os
 
 
 from schema import And, Or, Optional
-
-
-DATA_DIR = os.path.join(os.path.expanduser("~"), "WebFictionScraper")
-CONFIGS_DIR = os.path.join(DATA_DIR, "configs")
 
 CLIENT_CONFIG_SCHEMA = {
     Optional("patreon_session_cookie", default=None): str,

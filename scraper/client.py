@@ -3,7 +3,6 @@ import sys
 import uuid
 from urllib.parse import urlparse
 
-import questionary
 from box import Box, BoxList
 from click import echo, confirm
 from schema import Schema, SchemaError
@@ -13,15 +12,21 @@ from .converter import Converter
 from .binder import Binder
 from .crawler import Crawler, WanderingInnPatreonCrawler
 from .generator import RoyalRoadConfigGenerator
-from .const import FICTION_CONFIG_SCHEMA, DATA_DIR, CONFIGS_DIR, CLIENT_CONFIG_SCHEMA
-from .utils import normalize_string, lowercase_clean, get_fiction_config, init_data_dir
+from .const import FICTION_CONFIG_SCHEMA, CLIENT_CONFIG_SCHEMA
+from .utils import BASE_DIR, DATA_DIR, CONFIGS_DIR, normalize_string, lowercase_clean
 
 SEPARATOR = 30 * "-" + "\n"
 
 
 class FictionScraperClient:
     def __init__(self):
+        self.init_directories()
         self.client_config = self.load_client_config()
+
+    @staticmethod
+    def init_directories():
+        os.makedirs(DATA_DIR, exist_ok=True)
+        os.makedirs(CONFIGS_DIR, exist_ok=True)
 
     def run(self, config_name: str, download: bool, clean_download: bool, convert: bool, clean_convert: bool, bind: bool, ebook_convert: bool):
         """Run the scraper with the provided config_name and tasks.
@@ -102,9 +107,7 @@ class FictionScraperClient:
 
         :return: client configuration
         """
-        init_data_dir()
-
-        if os.path.isfile(path := os.path.join(DATA_DIR, "client.yaml")):
+        if os.path.isfile(path := os.path.join(BASE_DIR, "client.yaml")):
             config = Box.from_yaml(filename=path, camel_killer_box=True)
 
             try:
@@ -126,7 +129,7 @@ class FictionScraperClient:
         if os.path.isfile(config_name):
             path = config_name
             config_name = os.path.basename(config_name).replace(".yaml", "")
-        elif p := get_fiction_config(config_name):
+        elif p := self.get_fiction_config_path(config_name):
             path = p
         else:
             echo("Couldn't find config file!")
@@ -255,35 +258,44 @@ class FictionScraperClient:
         return name
 
     @staticmethod
-    def list_remote_configs() -> [str] or None:
-        r = get('https://api.github.com/repos/curetix/webfiction-scraper-configs/contents/configs')
+    def list_fiction_configs(remote=False) -> [str] or None:
+        if remote:
+            r = get('https://api.github.com/repos/curetix/webfiction-scraper-configs/contents/configs')
 
-        if r.ok:
-            json = r.json()
-            configs = [c["name"].replace(".yaml", "") for c in json if c["name"].endswith(".yaml")]
-            return configs
+            if r.ok:
+                json = r.json()
+                configs = [c["name"].replace(".yaml", "") for c in json if c["name"].endswith(".yaml")]
+                return configs
+            else:
+                return None
+        else:
+            if os.path.isdir(CONFIGS_DIR):
+                configs = [f.replace(".yaml", "") for f in os.listdir(CONFIGS_DIR) if f.endswith(".yaml")]
+                return configs
+            else:
+                return None
+
+    @staticmethod
+    def get_fiction_config_path(config_name) -> str or None:
+        file = "%s.yaml" % config_name
+        if os.path.isfile(p := os.path.join(CONFIGS_DIR, file)):
+            return p
         else:
             return None
 
-    @staticmethod
-    def download_remote_config(name: str, overwrite=False) -> bool:
+    def download_fiction_config(self, name: str, overwrite=False) -> str or None:
         file_name = "%s.yaml" % name
-        file_path = os.path.join(CONFIGS_DIR, file_name)
+        file_path = self.get_fiction_config_path(file_name)
 
-        if not overwrite and os.path.isfile(file_path):
+        if file_path and not overwrite:
+            echo("The file %s already exists in the configs folder. Skipping download." % file_name)
+            return
+        elif file_path and overwrite:
             echo("The file %s already exists in the configs folder and will be overwritten." % file_name)
-            a = questionary.confirm("Proceed?", default=False).ask()
-
-            if a is None:
-                sys.exit()
-            elif a is False:
-                return False
 
         r = get('https://raw.githubusercontent.com/Curetix/webfiction-scraper-configs/main/configs/%s' % file_name)
 
         if r.ok:
             with open(file_path, "wb") as file:
                 file.write(r.content)
-            return True
-        else:
-            return False
+            return file_path

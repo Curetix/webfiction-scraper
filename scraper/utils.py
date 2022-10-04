@@ -1,6 +1,9 @@
 import os
 
-from .const import CONFIGS_DIR, DATA_DIR
+
+BASE_DIR = os.path.join(os.path.expanduser("~"), "WebFictionScraper")
+DATA_DIR = os.path.join(BASE_DIR, "data")
+CONFIGS_DIR = os.path.join(BASE_DIR, "configs")
 
 
 def normalize_string(s):
@@ -13,32 +16,3 @@ def normalize_string(s):
 
 def lowercase_clean(s):
     return "".join([c for c in s if c.isalpha() or c.isdigit()]).strip().lower()
-
-
-def init_data_dir():
-    try:
-        os.mkdir(DATA_DIR)
-    except FileExistsError:
-        pass
-
-    try:
-        os.mkdir(CONFIGS_DIR)
-    except FileExistsError:
-        pass
-
-
-def get_fiction_config(config_name):
-    file = "%s.yaml" % config_name
-    if os.path.isfile(p := os.path.join(CONFIGS_DIR, file)):
-        return p
-    else:
-        return None
-
-
-def list_fiction_configs():
-    configs = []
-    if os.path.isdir(CONFIGS_DIR):
-        for file in os.listdir(CONFIGS_DIR):
-            if file.endswith(".yaml"):
-                configs.append(file.replace(".yaml", ""))
-    return configs

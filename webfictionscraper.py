@@ -4,7 +4,6 @@ from questionary import Choice, Separator
 from click import echo, progressbar
 
 from scraper import FictionScraperClient
-from scraper.utils import list_fiction_configs
 
 client = FictionScraperClient()
 
@@ -58,7 +57,7 @@ def interactive(ctx):
         return
 
     if config_name == "download":
-        configs = client.list_remote_configs()
+        configs = client.list_fiction_configs(remote=True)
         choices = [
             Choice("All (%s) configs" % len(configs), value="all"),
             Separator()
@@ -149,7 +148,7 @@ def run(config_name, download, clean_download, convert, clean_convert, bind, ebo
 @click.option("--remote", is_flag=True, help="List all configs in the remote repository")
 def list_configs(remote: bool):
     """List all detected configs."""
-    configs = client.list_remote_configs() if remote else list_fiction_configs()
+    configs = client.list_fiction_configs(remote)
 
     if remote and not configs:
         echo("Could not get repository contents.")
@@ -171,11 +170,11 @@ def download_config(config_name: str, all: bool, overwrite: bool):
         echo("Either the config_name argument or the --all option is required.")
 
     if all:
-        configs = client.list_remote_configs()
+        configs = client.list_fiction_configs(remote=True)
         downloaded = []
         with progressbar(configs, label="Downloading configs") as bar:
             for c in bar:
-                success = client.download_remote_config(c, overwrite)
+                success = client.download_fiction_config(c, overwrite)
                 if not success:
                     echo("Downloading config %s was not successful." % c)
                 else:
@@ -183,7 +182,7 @@ def download_config(config_name: str, all: bool, overwrite: bool):
 
         echo("Downloaded %s configs!" % len(downloaded))
     else:
-        success = client.download_remote_config(config_name, overwrite)
+        success = client.download_fiction_config(config_name, overwrite)
         if not success:
             echo("Download was not successful.")
             return
