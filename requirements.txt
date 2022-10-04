@@ -1,8 +1,7 @@
-ebooklib
-pyyaml
-click
-schema
-requests
 beautifulsoup4
-python-box[all]>=5.0,<6.0
+click
+ebooklib
+python-box[all]
 questionary
+requests
+schema
