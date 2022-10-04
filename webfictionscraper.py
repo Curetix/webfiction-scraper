@@ -1,3 +1,5 @@
+import os
+
 import click
 import questionary
 from questionary import Choice, Separator
@@ -7,23 +9,32 @@ from scraper import FictionScraperClient
 
 client = FictionScraperClient()
 
+HEADLESS = False
+
 
 @click.group()
-def cli():
-    pass
+@click.option("--headless", is_flag=True, help="Do not prompt for any user input")
+def cli(headless):
+    if headless or os.environ.get("SCRAPER_HEADLESS") == "true":
+        global HEADLESS
+        HEADLESS = True
 
 
 @cli.command()
 @click.pass_context
 def interactive(ctx):
     """Start the scraper interactively."""
-    configs = list_fiction_configs()
-    config_choices = []
+    if HEADLESS:
+        echo("The interactive CLI is not available because headless mode is active.")
+        echo("Don't pass the --headless argument and set the SCRAPER_HEADLESS env variable to anything but 'true'.")
+        return
+
+    configs = client.list_fiction_configs()
+    choices = []
 
     if len(configs) > 0:
         with progressbar(configs, label="Loading configs") as bar:
             for config_name in bar:
-                click.clear()
                 try:
                     config = client.load_fiction_config(config_name)
                 except Exception as error:
@@ -32,37 +43,35 @@ def interactive(ctx):
                     continue
 
                 if config:
-                    config_choices.append(Choice(title=config.metadata.title, value='config:%s' % config_name))
+                    choices.append(Choice(title=config.metadata.title, value='config:%s' % config_name))
                 else:
                     input('Press enter to continue...')
 
-        config_choices.sort(key=lambda c: c.title)
+        choices.sort(key=lambda c: c.title)
     else:
-        config_choices.append(Choice("None", disabled="No configs found"))
+        choices.append(Choice("None", disabled="No configs found"))
 
-    config_choices += [
-        Separator(),
-        Choice(title="Download config(s)", value="download", shortcut_key="d"),
-        Choice(title="Generate new config", value="generate", shortcut_key="g"),
-    ]
+    choices = [
+        Choice(title="Download config(s)", value="download"),
+        Choice(title="Generate new config", value="generate"),
+        Separator()
+    ] + choices
 
     click.clear()
-    config_name = questionary.select(
-        "Which config do you want to run?",
-        choices=config_choices,
-        use_shortcuts=True
+    selected = questionary.select(
+        "What do you want to do or which config do you want to run?",
+        choices=choices
     ).ask()
 
-    if not config_name:
+    if not selected:
         return
 
-    if config_name == "download":
+    if selected == "download":
         configs = client.list_fiction_configs(remote=True)
         choices = [
             Choice("All (%s) configs" % len(configs), value="all"),
             Separator()
-        ]
-        choices.extend([Choice(c, value="config:%s" % c) for c in configs])
+        ] + [Choice(c, value="config:%s" % c) for c in configs]
 
         configs_to_download = questionary.checkbox(
             "Which configs do you want to download?",
@@ -72,30 +81,23 @@ def interactive(ctx):
         if not configs_to_download:
             return
         if "all" in configs_to_download:
-            configs_to_download = [c for c in configs]
+            ctx.invoke(download_config, all=True)
         else:
             configs_to_download = [c.replace("config:", "") for c in configs_to_download]
 
-        downloaded = []
-        with progressbar(configs_to_download, label="Downloading configs") as bar:
-            for c in bar:
-                success = client.download_remote_config(c)
-                if not success:
-                    echo("\nDownloading config %s was not successful." % c)
-                else:
-                    downloaded.append(c)
-
-        echo("Downloaded %s configs!" % len(downloaded))
-    elif config_name == "generate":
+            with progressbar(configs_to_download, label="Downloading configs") as bar:
+                for c in bar:
+                    ctx.invoke(download_config, config_name=c, prompt=False)
+    elif selected == "generate":
         answers = questionary.form(
             url=questionary.text("What's the URL of the web fiction or the first chapter?"),
             name=questionary.text("What do you want to name the config? (Optional, press Enter for default)")
         ).ask()
         if not answers:
             return
-        client.generate_fiction_config(answers.get("url"), answers.get("name"))
-    elif config_name.startswith("config:"):
-        config_name = config_name.replace("config:", "")
+        ctx.invoke(generate_config, url=answers.get("url"), name=answers.get("name"))
+    elif selected.startswith("config:"):
+        config_name = selected.replace("config:", "")
 
         tasks = questionary.checkbox(
             "Which tasks do you want to run?",
@@ -164,10 +166,11 @@ def list_configs(remote: bool):
 @click.argument("config_name", required=False)
 @click.option("--all", is_flag=True, help="Download all available remote configs")
 @click.option("--overwrite", is_flag=True, help="Overwrite configs when they already exist")
-def download_config(config_name: str, all: bool, overwrite: bool):
+def download_config(config_name: str, all: bool, overwrite: bool, prompt=True):
     """Download a config from the remote repository."""
     if not config_name and not all:
         echo("Either the config_name argument or the --all option is required.")
+        return
 
     if all:
         configs = client.list_fiction_configs(remote=True)
@@ -189,7 +192,7 @@ def download_config(config_name: str, all: bool, overwrite: bool):
 
         echo("Config %s was downloaded!" % config_name)
 
-        if questionary.confirm("Do you want to run the config now?", default=False).ask():
+        if not HEADLESS and prompt and questionary.confirm("Do you want to run the config now?", default=False).ask():
             client.run(config_name, True, False, True, False, True, False)
 
 
@@ -206,9 +209,7 @@ def generate_config(url, name=None):
     - Royal Road
     """
     config_name = client.generate_fiction_config(url, name)
-    if questionary.confirm("Do you want to open the create config?", default=False).ask():
-        pass
-    if questionary.confirm("Do you want to run the config now?", default=False).ask():
+    if not HEADLESS and questionary.confirm("Do you want to run the config now?", default=False).ask():
         client.run(config_name, True, False, True, False, True, False)
 
 
