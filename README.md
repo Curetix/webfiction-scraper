@@ -1,6 +1,6 @@
 # Web Fiction Scraper
 
-Scrapes web fictions into an eBook format.
+This project aims to easily and quickly turn any Web Fiction into an eBook for your eReader.
 
 ## Installation
 
@@ -18,24 +18,41 @@ After installation, you can use the scraper:
 webfictionscraper --help
 ```
 
-## Basics
+## Usage
 
-You'll need a config file to run the scraper:
-
-1) Use one of the built-in config files. List all available configs with ```webfictionscraper list-configs ``` and pick one name.
-2) Create your own config file. The built-in config for _The Wandering Inn - Volume 1_ documents all available options.
-3) Automatically generate a config by providing a valid fiction URL to the ```webfictionscraper generate-fiction-config``` command.
-
-Once you picked or created a config file, run the scraper:
+Run the scraper using a fiction config file:
 
 ```bash
-webfictionscraper run CONFIG
+webfictionscraper run <CONFIG_NAME>
 ```
 
-For all available options, use the ```--help``` flag.
+For all available options, use the `--help` flag.
 
-Alternatively, use the interactive mode:
+Alternatively, you can start the interactive mode:
 
 ```bash
 webfictionscraper interactive
 ```
+
+## Where to get Fiction configs
+
+### Download
+
+Download one, multiple, or all configs from the [config repository](https://github.com/curetix/webfiction-scraper-configs).
+
+List them with `webfictionscraper list-configs --remote`.
+Then download them with `webfictionscraper download-config [NAME]`.
+Or download them all with `webfictionscraper download-config --all`.
+
+Alternatively, start the interactive mode with `webfictionscraper interactive` and select **Download config(s)**.
+
+### Create your own
+
+Create your own config file. For examples and documentation, see the [config repository](https://github.com/curetix/webfiction-scraper-configs).
+
+### Generate
+
+The scraper can automatically generate configs for fictions on poplar sites like RoyalRoad or FictionPress with the
+`webfictionscraper generate-config [URL]` command.
+
+Alternatively, start the interactive mode with `webfictionscraper interactive` and select **Generate config**.
