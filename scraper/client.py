@@ -1,6 +1,7 @@
 import os
 import sys
 import uuid
+import json
 from urllib.parse import urlparse
 
 from box import Box, BoxList
@@ -22,11 +23,30 @@ class FictionScraperClient:
     def __init__(self):
         self.init_directories()
         self.client_config = self.load_client_config()
+        self.fiction_schema_config = self.get_fiction_config_schema()
 
     @staticmethod
     def init_directories():
         os.makedirs(DATA_DIR, exist_ok=True)
         os.makedirs(CONFIGS_DIR, exist_ok=True)
+
+    @staticmethod
+    def get_fiction_config_schema() -> str or None:
+        file_path = os.path.join(BASE_DIR, "fiction_config.schema.json")
+        if not os.path.isfile(file_path):
+            r = get('https://raw.githubusercontent.com/Curetix/webfiction-scraper-configs/main/schema/fiction_config.schema.json')
+
+            if r.ok:
+                with open(file_path, "wb") as file:
+                    file.write(r.content)
+                return r.json()
+            else:
+                return None
+
+        with open(file_path, "r") as file:
+            schema = json.load(file)
+
+        return schema
 
     def run(self, config_name: str, download: bool, clean_download: bool, convert: bool, clean_convert: bool, bind: bool, ebook_convert: bool):
         """Run the scraper with the provided config_name and tasks.
