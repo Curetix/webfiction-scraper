@@ -1,3 +1,4 @@
+appdirs
 beautifulsoup4
 click
 ebooklib
