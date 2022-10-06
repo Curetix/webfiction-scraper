@@ -31,6 +31,13 @@ class FictionScraperClient:
         os.makedirs(CONFIGS_DIR, exist_ok=True)
 
     @staticmethod
+    def print_paths():
+        echo("Base: %s" % BASE_DIR)
+        echo("Client config: %s" % os.path.join(BASE_DIR, "client.yaml"))
+        echo("Fiction configs: %s" % CONFIGS_DIR)
+        echo("Data (downloads, books): %s" % DATA_DIR)
+
+    @staticmethod
     def get_fiction_config_schema() -> str or None:
         file_path = os.path.join(BASE_DIR, "fiction_config.schema.json")
         if not os.path.isfile(file_path):

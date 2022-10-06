@@ -214,5 +214,11 @@ def generate_config(url, name=None):
         client.run(config_name, True, False, True, False, True, False)
 
 
+@cli.command()
+def print_paths():
+    """Print all paths used by the scraper."""
+    client.print_paths()
+
+
 if __name__ == "__main__":
     cli()
