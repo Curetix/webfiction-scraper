@@ -65,6 +65,15 @@ class FictionScraperClient:
             echo("Invalid config file!")
             sys.exit(1)
 
+        if not os.path.isdir(f := config.files.working_folder):
+            os.mkdir(f)
+
+        if not os.path.isdir(f := config.files.cache_folder):
+            os.mkdir(f)
+
+        if not os.path.isdir(f := config.files.book_folder):
+            os.mkdir(f)
+
         if url := config.get("official_book_url"):
             echo("The author %s has published an official book for %s!" % (config.metadata.author, config.metadata.title))
             echo("If you want to support their work, consider purchasing it here:")
@@ -227,15 +236,6 @@ class FictionScraperClient:
         validated.files.epub_file = epub_file
         validated.files.cover_file = cover_file
         validated.files.manifest_file = manifest_file
-
-        if not os.path.isdir(working_folder):
-            os.mkdir(working_folder)
-
-        if not os.path.isdir(cache_folder):
-            os.mkdir(cache_folder)
-
-        if not os.path.isdir(book_folder):
-            os.mkdir(book_folder)
 
         return validated
 
