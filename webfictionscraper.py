@@ -147,7 +147,7 @@ def run(config_name, download, clean_download, convert, clean_convert, bind, ebo
 
 
 @cli.command()
-@click.option("--remote", is_flag=True, help="List all configs in the remote repository")
+@click.option("--remote", "-r", is_flag=True, help="List all configs in the remote repository")
 def list_configs(remote: bool):
     """List all detected configs."""
     configs = client.list_fiction_configs(remote)
@@ -164,8 +164,8 @@ def list_configs(remote: bool):
 
 @cli.command()
 @click.argument("config_name", required=False)
-@click.option("--all", is_flag=True, help="Download all available remote configs")
-@click.option("--overwrite", is_flag=True, help="Overwrite configs when they already exist")
+@click.option("--all", "-a", is_flag=True, help="Download all available remote configs")
+@click.option("--overwrite", "-o", is_flag=True, help="Overwrite configs when they already exist")
 def download_config(config_name: str, all: bool, overwrite: bool, prompt=True):
     """Download a config from the remote repository."""
     if not config_name and not all:
@@ -198,7 +198,7 @@ def download_config(config_name: str, all: bool, overwrite: bool, prompt=True):
 
 @cli.command()
 @click.argument("url")
-@click.option("--name", type=str, help="Name of the config (file)")
+@click.option("--name", "-n", type=str, help="Name of the config (file)")
 def generate_config(url, name=None):
     """Generate a config file for a fiction from a support site.
 
@@ -207,6 +207,7 @@ def generate_config(url, name=None):
     Currently supported sites:
 
     - Royal Road
+    - FictionPress
     """
     config_name = client.generate_fiction_config(url, name)
     if not HEADLESS and questionary.confirm("Do you want to run the config now?", default=False).ask():
