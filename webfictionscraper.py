@@ -220,5 +220,27 @@ def print_paths():
     client.print_paths()
 
 
+@cli.command()
+@click.option("--all-folders", is_flag=True, help="Select all config folder")
+@click.option("--config", "-c", multiple=True, help="Select specific configs folders")
+@click.option("--orphan-folders", is_flag=True, help="Select config folders without a corresponding config file")
+@click.option("--everything", is_flag=True, help="Delete the entire folder")
+@click.option("--downloads", is_flag=True, help="Delete downloaded chapters AND converted chapters!")
+@click.option("--converted", is_flag=True, help="Delete converted chapters")
+@click.option("--books", is_flag=True, help="Delete books")
+@click.option("--misc", is_flag=True, help="Delete files that do not match other filters, e.g. downloaded covers")
+@click.option("--dry-run", is_flag=True, help="Do not perform any file system operations")
+def clean_space(all_folders: bool, orphan_folders: bool, config: [str], everything: bool, downloads: bool, converted: bool, books: bool, misc: bool, dry_run: bool):
+    """Delete files in the data directory to clean up disk space.
+
+    Specify which folders should be affected, either --all-folders, --config [NAME], or --orphan-folders.
+    Specify what should be deleted from these selected folders with -e, -d, -c, -b, or/and -m.
+    If the folders are emtpy afterwards, they will be deleted as well.
+
+    If nothing is selected, nothing will happen.
+    """
+    client.clean_space(all_folders, orphan_folders, config, everything, downloads, converted, books, misc, dry_run)
+
+
 if __name__ == "__main__":
     cli()

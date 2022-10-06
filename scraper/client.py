@@ -1,5 +1,6 @@
 import os
 import sys
+import shutil
 import uuid
 import json
 from urllib.parse import urlparse
@@ -15,6 +16,7 @@ from .crawler import Crawler, WanderingInnPatreonCrawler
 from .generator import RoyalRoadConfigGenerator
 from .const import FICTION_CONFIG_SCHEMA, CLIENT_CONFIG_SCHEMA
 from .utils import BASE_DIR, DATA_DIR, CONFIGS_DIR, normalize_string, lowercase_clean
+from .manifest import Manifest
 
 SEPARATOR = 30 * "-" + "\n"
 
@@ -326,3 +328,61 @@ class FictionScraperClient:
             with open(file_path, "wb") as file:
                 file.write(r.content)
             return file_path
+
+    def clean_space(self, all_folders: bool, orphan_folders: bool, config: [str], everything: bool, downloads: bool, converted: bool, books: bool, misc: bool, dry_run: bool):
+        configs = self.list_fiction_configs()
+        if orphan_folders and configs is None:
+            echo("Could not load fiction configs files, stopping because orphan_folders was passed.")
+            return
+
+        def remove(file_path: str):
+            if not dry_run:
+                echo("Deleting file %s" % file_path)
+                os.remove(file_path)
+            else:
+                echo("Skipped deleting file %s" % file_path)
+
+        def rmtree(dir_path: str):
+            if not dry_run:
+                echo("Deleting folder %s" % dir_path)
+                shutil.rmtree(dir_path)
+            else:
+                echo("Skipped deleting folder %s" % dir_path)
+
+        for f in os.listdir(DATA_DIR):
+            path = os.path.join(DATA_DIR, f)
+            if not os.path.isdir(path):
+                continue
+            if not all_folders and not orphan_folders and f not in config:
+                continue
+            if orphan_folders and f in configs:
+                continue
+
+            if everything:
+                rmtree(path)
+                continue
+
+            for cf in os.listdir(path):
+                if downloads and cf == "cache":
+                    rmtree(os.path.join(path, "cache"))
+                elif (downloads or converted) and cf == "book":
+                    rmtree(os.path.join(path, "book"))
+                elif books and cf.endswith(".epub") or misc and cf != "manifest.json":
+                    p = os.path.join(path, cf)
+                    if os.path.isfile(p):
+                        remove(p)
+                    elif os.path.isdir(p):
+                        rmtree(p)
+                elif cf == "manifest.json":
+                    p = os.path.join(path, cf)
+                    if downloads:
+                        remove(p)
+                    elif converted:
+                        manifest = Manifest(p)
+                        manifest.load()
+                        for i in range(len(manifest)):
+                            manifest[i].update({"converted": False})
+                        manifest.save()
+
+            if len(os.listdir(path)) == 0:
+                rmtree(path)
