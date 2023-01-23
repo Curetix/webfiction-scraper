@@ -329,7 +329,9 @@ class FictionScraperClient:
                 file.write(r.content)
             return file_path
 
-    def clean_space(self, all_folders: bool, orphan_folders: bool, config: [str], everything: bool, downloads: bool, converted: bool, books: bool, misc: bool, dry_run: bool):
+    def clean_space(self, all_folders: bool, orphan_folders: bool, config_folders: [str], everything: bool,
+                    downloads: bool, converted: bool, books: bool, misc: bool,
+                    dry_run: bool):
         configs = self.list_fiction_configs()
         if orphan_folders and configs is None:
             echo("Could not load fiction configs files, stopping because orphan_folders was passed.")
@@ -353,7 +355,7 @@ class FictionScraperClient:
             path = os.path.join(DATA_DIR, f)
             if not os.path.isdir(path):
                 continue
-            if not all_folders and not orphan_folders and f not in config:
+            if not all_folders and not orphan_folders and f not in config_folders:
                 continue
             if orphan_folders and f in configs:
                 continue
