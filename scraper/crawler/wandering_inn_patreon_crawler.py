@@ -11,7 +11,7 @@ from ..exception import ElementNotFoundException
 class WanderingInnPatreonCrawler(Crawler):
     def __init__(self, config: Box, patreon_cookie=None):
         super().__init__(config)
-        echo("Using WanderingInnPatreonCrawler")
+        echo("Using Wandering Inn Crawler")
 
         self.session = Session()
 
@@ -97,12 +97,13 @@ class WanderingInnPatreonCrawler(Crawler):
 
             password = None
 
-            if self.patreon_session and not self.attempted_patreon_password:
-                self.attempted_patreon_password = True
-                password = self.get_patreon_password(title, url)
+            # This doesn't work anymore because of Cloudflare protection, I'll disable it for now. Maybe permanently.
+            # if self.patreon_session and not self.attempted_patreon_password:
+            #     self.attempted_patreon_password = True
+            #     password = self.get_patreon_password(title, url)
 
             if not password:
-                if confirm("Do you have the password?"):
+                if confirm("Do you have the latest Patreon password for this chapter?", default=True):
                     password = prompt("Enter the password")
                 else:
                     return r.url, None, None, None
