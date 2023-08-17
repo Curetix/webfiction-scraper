@@ -1,6 +1,6 @@
 import os
 
-from appdirs import user_data_dir
+from platformdirs import user_data_dir
 
 BASE_DIR = user_data_dir("WebFictionScraper", "Curetix")
 DATA_DIR = os.path.join(BASE_DIR, "data")

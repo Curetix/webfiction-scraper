@@ -1,8 +1,0 @@
-appdirs
-beautifulsoup4
-click
-ebooklib
-python-box[all]
-questionary
-requests
-schema
