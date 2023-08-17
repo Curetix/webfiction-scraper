@@ -60,6 +60,10 @@ FICTION_CONFIG_SCHEMA = {
         "content_element": str,
         "next_chapter_element": str,
         Optional("cut_off_element", default=None): Or(str, [str]),
+        Optional("content_start_element", default=None): {
+            "chapter_url": str,
+            "selector": str,
+        }
     },
     Optional("skip_conversion", default=False): bool,
     Optional("remove_empty_elements", default=True): bool,
@@ -69,6 +73,7 @@ FICTION_CONFIG_SCHEMA = {
             "selector": str,
             Optional("chapter_url", default=""): str,
             Optional("replace_with", default=""): str,
+            Optional("warn", default=True): bool,
         }
     ],
     Optional("style", default=None): str,

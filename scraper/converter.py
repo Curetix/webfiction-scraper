@@ -74,7 +74,7 @@ class Converter:
 
                 els = content_el.select(s.selector)
 
-                if not len(els):
+                if not len(els) and s.warn:
                     echo("Chapter '%s': No matches for selector '%s'. Please check if the config is up-to-date." % (title, s.selector))
                     continue
 
