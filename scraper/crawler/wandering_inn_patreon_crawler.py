@@ -90,9 +90,11 @@ class WanderingInnPatreonCrawler(Crawler):
         title = title_el.get_text().strip()
         title = title.replace(" ", " ")\
             .replace("  ", " ")\
-            .replace("Protected: ", "")
+            .replace("Protected: ", "")\
+            .replace("Patron Early Access: ","")
 
-        if soup.select_one(".post-password-form"):
+        password_form = soup.select_one(".entry-content form[method=post]")
+        if password_form:
             echo("Protected chapter %s reached!" % title)
 
             password = None
@@ -108,9 +110,9 @@ class WanderingInnPatreonCrawler(Crawler):
                 else:
                     return r.url, None, None, None
 
-            self.session.post("https://wanderinginn.com/wp-pass.php", data={
+            self.session.post(password_form.get("action") or "https://wanderinginn.com/wp-login.php?action=postpass", data={
                 'post_password': password,
-                'Submit': 'Enter'
+                'Submit': 'Submit'
             }, headers={
                 'referer': r.url
             })
