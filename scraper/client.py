@@ -164,10 +164,11 @@ class FictionScraperClient:
         :param config_name: path or name of fiction config
         :return: validated config
         """
+        path = None
         if os.path.isfile(config_name):
             path = config_name
             config_name = os.path.basename(config_name).replace(".yaml", "")
-        elif p := self.get_fiction_config_path(config_name):
+        elif os.path.isfile(p := self.get_fiction_config_path(config_name)):
             path = p
         else:
             echo("Couldn't find config file!")
@@ -307,22 +308,19 @@ class FictionScraperClient:
     @staticmethod
     def get_fiction_config_path(config_name) -> str or None:
         file = "%s.yaml" % config_name
-        if os.path.isfile(p := os.path.join(CONFIGS_DIR, file)):
-            return p
-        else:
-            return None
+        return os.path.join(CONFIGS_DIR, file)
 
     def download_fiction_config(self, name: str, overwrite=False) -> str or None:
-        file_name = "%s.yaml" % name
-        file_path = self.get_fiction_config_path(file_name)
+        file_path = self.get_fiction_config_path(name)
+        file_exists = os.path.isfile(file_path)
 
-        if file_path and not overwrite:
+        if file_exists and not overwrite:
             echo("The file %s already exists in the configs folder. Skipping download." % file_name)
             return
-        elif file_path and overwrite:
+        elif file_exists and overwrite:
             echo("The file %s already exists in the configs folder and will be overwritten." % file_name)
 
-        r = get('https://raw.githubusercontent.com/Curetix/webfiction-scraper-configs/main/configs/%s' % file_name)
+        r = get('https://raw.githubusercontent.com/Curetix/webfiction-scraper-configs/main/configs/%s' % ("%s.yaml" % name))
 
         if r.ok:
             with open(file_path, "wb") as file:
