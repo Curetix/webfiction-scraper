@@ -9,7 +9,7 @@ packages = [{include = "webserial_scraper"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-beautifulsoup4 = "^4.12.2"
+beautifulsoup4 = "^4.12.3"
 click = "^8.1.7"
 platformdirs = "^3.11.0"
 EbookLib = "^0.18"
