@@ -18,7 +18,7 @@ setup(
         "requests",
         "beautifulsoup4",
         "lxml",
-        "python-box[all]>=5.0,<6.0",
+        "python-box[all]>=5.0,<8.0",
         "pyinquirer",
         "appdirs"
     ],
