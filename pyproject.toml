@@ -11,7 +11,7 @@ packages = [{include = "webserial_scraper"}]
 python = "^3.10"
 beautifulsoup4 = "^4.12.3"
 click = "^8.1.7"
-platformdirs = "^4.1.0"
+platformdirs = "^4.2.0"
 EbookLib = "^0.18"
 python-box = {extras = ["all"], version = "^7.1.1"}
 questionary = "^2.0.1"
