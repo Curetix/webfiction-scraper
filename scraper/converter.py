@@ -74,9 +74,8 @@ class Converter:
 
                 els = content_el.select(s.selector)
 
-                if not len(els) and s.warn:
+                if len(els) == 0 and s.warn and s.chapter_warn and s:
                     echo("Chapter '%s': No matches for selector '%s'. Please check if the config is up-to-date." % (title, s.selector))
-                    continue
 
                 for el in els:
                     if s.replace_with:
@@ -110,7 +109,7 @@ class Converter:
 
     @staticmethod
     def apply_chapter_fix(chapter, soup, content_el, content_el_selector):
-        if func := CHAPTER_FIXES.get(chapter.get("url")):
+        if func := next(v for k, v in CHAPTER_FIXES.items() if chapter.get("url").startswith(k)):
             func(soup, content_el, content_el_selector)
 
     def convert_file(self, index, chapter):
