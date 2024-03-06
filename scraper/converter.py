@@ -109,8 +109,11 @@ class Converter:
 
     @staticmethod
     def apply_chapter_fix(chapter, soup, content_el, content_el_selector):
-        if func := next(v for k, v in CHAPTER_FIXES.items() if chapter.get("url").startswith(k)):
-            func(soup, content_el, content_el_selector)
+        try:
+            if func := next(v for k, v in CHAPTER_FIXES.items() if chapter.get("url").startswith(k)):
+                func(soup, content_el, content_el_selector)
+        except StopIteration:
+            pass
 
     def convert_file(self, index, chapter):
         in_file = os.path.join(self.files.cache_folder, chapter.get("file"))
