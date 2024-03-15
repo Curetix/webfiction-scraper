@@ -1,11 +1,12 @@
 [tool.poetry]
-name = "webserial-scraper"
-version = "1.0.0"
+name = "WebFictionScraper"
+version = "1.4.0"
 description = ""
-authors = ["Curetix <curetix@pm.me>"]
+authors = ["Curetix <me@curetix.eu>"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "webserial_scraper"}]
+repository = "https://github.com/curetix/webfiction-scraper"
+packages = [{include = "webfictionscraper.py"}, {include = "scraper/**/*.py"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -18,6 +19,9 @@ questionary = "^2.0.1"
 requests = "^2.31.0"
 schema = "^0.7.5"
 
+[tool.poetry.scripts]
+webfictionscraper = "webfictionscraper:cli"
+
 [build-system]
-requires = ["poetry-core"]
+requires = ["setuptools", "poetry-core"]
 build-backend = "poetry.core.masonry.api"
