@@ -24,7 +24,7 @@ Alternatively, you can install and use this project with [Poetry](https://python
 
 ```bash
 poetry install
-poetry run webfictionscraper.py
+poetry run webfictionscraper
 ```
 
 ## Usage
