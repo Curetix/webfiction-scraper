@@ -4,18 +4,27 @@ This project aims to easily and quickly turn any Web Fiction into an eBook for y
 
 ## Installation
 
-You need Python 3.8 or later and [Poetry](https://python-poetry.org).
+You need Python 3.8 or later.
 
-Clone the repository and install:
+Clone the repository and install the package globally:
 
 ```bash
-poetry install
+pip install .
 ```
 
 After installation, you can use the scraper:
 
 ```bash
 webfictionscraper --help
+```
+
+### Install with Poetry
+
+Alternatively, you can install and use this project with [Poetry](https://python-poetry.org):
+
+```bash
+poetry install
+poetry run webfictionscraper.py
 ```
 
 ## Usage
