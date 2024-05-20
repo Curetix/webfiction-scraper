@@ -16,7 +16,7 @@ platformdirs = "^4.2.2"
 EbookLib = "^0.18"
 python-box = {extras = ["all"], version = "^7.1.1"}
 questionary = "^2.0.1"
-requests = "^2.31.0"
+requests = "^2.32.0"
 schema = "^0.7.7"
 
 [tool.poetry.scripts]
