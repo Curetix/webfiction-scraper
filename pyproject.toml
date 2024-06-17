@@ -14,7 +14,7 @@ beautifulsoup4 = "^4.12.3"
 click = "^8.1.7"
 platformdirs = "^4.2.2"
 EbookLib = "^0.18"
-python-box = {extras = ["all"], version = "^7.1.1"}
+python-box = {extras = ["all"], version = "^7.2.0"}
 questionary = "^2.0.1"
 requests = "^2.32.3"
 schema = "^0.7.7"
