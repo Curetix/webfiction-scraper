@@ -1,4 +1,7 @@
+import string
 from schema import And, Or, Optional
+
+VALID_FILENAME_CHARS = "-_ %s%s" % (string.ascii_letters, string.digits)
 
 CLIENT_CONFIG_SCHEMA = {
     Optional("patreon_session_cookie", default=None): str,

@@ -14,7 +14,7 @@ from .converter import Converter
 from .binder import Binder
 from .crawler import Crawler, WanderingInnPatreonCrawler
 from .generator import RoyalRoadConfigGenerator
-from .const import FICTION_CONFIG_SCHEMA, CLIENT_CONFIG_SCHEMA
+from .const import VALID_FILENAME_CHARS, FICTION_CONFIG_SCHEMA, CLIENT_CONFIG_SCHEMA
 from .utils import BASE_DIR, DATA_DIR, CONFIGS_DIR, normalize_string, lowercase_clean
 from .manifest import Manifest
 
@@ -40,7 +40,7 @@ class FictionScraperClient:
         echo("Data (downloads, books): %s" % DATA_DIR)
 
     @staticmethod
-    def get_fiction_config_schema() -> str or None:
+    def get_fiction_config_schema() -> str | None:
         file_path = os.path.join(BASE_DIR, "fiction_config.schema.json")
         if not os.path.isfile(file_path):
             r = get('https://raw.githubusercontent.com/Curetix/webfiction-scraper-configs/main/schema/fiction_config.schema.json')
@@ -158,7 +158,7 @@ class FictionScraperClient:
 
         return Box(config_overrides=Box())
 
-    def load_fiction_config(self, config_name: str) -> Box or None:
+    def load_fiction_config(self, config_name: str) -> Box | None:
         """Load the fiction configuration from the provided config_name, if it exists.
 
         :param config_name: path or name of fiction config
@@ -281,14 +281,14 @@ class FictionScraperClient:
             if not confirm("Couldn't validate newly generated config, save anyways?"):
                 sys.exit()
 
-        config.to_yaml(filename=os.path.join(CONFIGS_DIR, "%s.yaml" % name))
+        config.to_yaml(filename=os.path.join(CONFIGS_DIR, "%s.yaml" % ''.join(c for c in name if c in VALID_FILENAME_CHARS)))
 
         echo("Config for \"%s\" successfully generated, validated and saved!" % config.metadata.title)
 
         return name
 
     @staticmethod
-    def list_fiction_configs(remote=False) -> [str] or None:
+    def list_fiction_configs(remote=False) -> list[str] | None:
         if remote:
             r = get('https://api.github.com/repos/curetix/webfiction-scraper-configs/contents/configs')
 
@@ -306,19 +306,19 @@ class FictionScraperClient:
                 return None
 
     @staticmethod
-    def get_fiction_config_path(config_name) -> str or None:
+    def get_fiction_config_path(config_name) -> str | None:
         file = "%s.yaml" % config_name
         return os.path.join(CONFIGS_DIR, file)
 
-    def download_fiction_config(self, name: str, overwrite=False) -> str or None:
+    def download_fiction_config(self, name: str, overwrite=False) -> str | None:
         file_path = self.get_fiction_config_path(name)
         file_exists = os.path.isfile(file_path)
 
         if file_exists and not overwrite:
-            echo("The file %s already exists in the configs folder. Skipping download." % file_name)
+            echo("The file %s already exists in the configs folder. Skipping download." % file_path)
             return
         elif file_exists and overwrite:
-            echo("The file %s already exists in the configs folder and will be overwritten." % file_name)
+            echo("The file %s already exists in the configs folder and will be overwritten." % file_path)
 
         r = get('https://raw.githubusercontent.com/Curetix/webfiction-scraper-configs/main/configs/%s' % ("%s.yaml" % name))
 
@@ -327,7 +327,7 @@ class FictionScraperClient:
                 file.write(r.content)
             return file_path
 
-    def clean_space(self, all_folders: bool, orphan_folders: bool, config_folders: [str], everything: bool,
+    def clean_space(self, all_folders: bool, orphan_folders: bool, config_folders: list[str], everything: bool,
                     downloads: bool, converted: bool, books: bool, misc: bool,
                     dry_run: bool):
         configs = self.list_fiction_configs()
