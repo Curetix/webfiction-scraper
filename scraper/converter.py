@@ -34,6 +34,11 @@ class Converter:
         if not self.skip_conversion:
             self.apply_chapter_fix(chapter, soup, content_el, self.selectors.content_element)
 
+            if self.selectors.content_start_element and (selector := next((x.selector for x in self.selectors.content_start_element if x.chapter_url == chapter.get("url", "")), None)):
+                content_start_el = content_el.select_one(selector)
+                while content_start_el and (prev := content_start_el.find_previous_sibling()):
+                    prev.decompose()
+
             last_p_el = content_el.select_one(self.selectors.content_element + " > p:last-of-type")
 
             if not last_p_el:

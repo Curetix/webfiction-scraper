@@ -62,11 +62,13 @@ FICTION_CONFIG_SCHEMA = {
         "title_element": str,
         "content_element": str,
         "next_chapter_element": str,
+        Optional("content_start_element", default=None): [
+            {
+                "chapter_url": str,
+                "selector": str,
+            }
+        ],
         Optional("cut_off_element", default=None): Or(str, [str]),
-        Optional("content_start_element", default=None): {
-            "chapter_url": str,
-            "selector": str,
-        }
     },
     Optional("skip_conversion", default=False): bool,
     Optional("remove_empty_elements", default=True): bool,
