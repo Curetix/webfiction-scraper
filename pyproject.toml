@@ -12,7 +12,7 @@ packages = [{include = "webfictionscraper.py"}, {include = "scraper/**/*.py"}]
 python = "^3.10"
 beautifulsoup4 = "^4.12.3"
 click = "^8.1.7"
-platformdirs = "^4.2.2"
+platformdirs = "^4.3.3"
 EbookLib = "^0.18"
 python-box = {extras = ["all"], version = "^7.2.0"}
 questionary = "^2.0.1"
