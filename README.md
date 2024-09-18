@@ -18,13 +18,13 @@ After installation, you can use the scraper:
 webfictionscraper --help
 ```
 
-### Install with Poetry
+### Install with Rye
 
-Alternatively, you can install and use this project with [Poetry](https://python-poetry.org):
+You can install and use this project with [Rye](https://github.com/astral-sh/rye):
 
 ```bash
-poetry install
-poetry run webfictionscraper
+rye sync
+python run webfictionscraper
 ```
 
 ## Usage
