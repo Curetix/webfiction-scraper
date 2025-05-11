@@ -4,27 +4,18 @@ This project aims to easily and quickly turn any Web Fiction into an eBook for y
 
 ## Installation
 
-You need Python 3.8 or later.
+You need Python 3 and [uv](https://github.com/astral-sh/uv).
 
-Clone the repository and install the package globally:
+Clone the repository and install dependencies:
 
 ```bash
-pip install .
+uv sync
 ```
 
 After installation, you can use the scraper:
 
 ```bash
-webfictionscraper --help
-```
-
-### Install with Rye
-
-You can install and use this project with [Rye](https://github.com/astral-sh/rye):
-
-```bash
-rye sync
-python run webfictionscraper
+uv run webfictionscraper.py --help
 ```
 
 ## Usage

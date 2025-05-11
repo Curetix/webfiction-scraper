@@ -3,29 +3,15 @@ name = "webserial-scraper"
 version = "0.1.0"
 description = " Quickly turn any Web Fiction into an eBook for your eReader."
 authors = [{ name = "Curetix", email = "me@curetix.eu" }]
+readme = "README.md"
+requires-python = ">= 3.10"
 dependencies = [
-    "beautifulsoup4>=4.12.3",
-    "click>=8.1.7",
-    "platformdirs>=4.3.6",
-    "ebooklib>=0.18",
-    "python-box[all]>=7.2.0",
-    "questionary>=2.0.1",
+    "beautifulsoup4>=4.13.4",
+    "click>=8.2.0",
+    "platformdirs>=4.3.8",
+    "ebooklib>=0.19",
+    "python-box[all]>=7.3.2",
+    "questionary>=2.1.0",
     "requests>=2.32.3",
     "schema>=0.7.7",
 ]
-readme = "README.md"
-requires-python = ">= 3.8"
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.rye]
-managed = true
-dev-dependencies = []
-
-[tool.hatch.metadata]
-allow-direct-references = true
-
-[tool.hatch.build.targets.wheel]
-packages = ["src/webserial_scraper"]
