@@ -1,5 +1,10 @@
 {
   "name": "webfiction-scraper",
+  "author": {
+    "name": "Curetix",
+    "email": "curetix@proton.me",
+    "url": "https://curetix.de"
+  },
   "module": "src/cli.ts",
   "type": "module",
   "bin": {
@@ -16,7 +21,7 @@
     "@types/uuid": "^11.0.0"
   },
   "peerDependencies": {
-    "typescript": "^5"
+    "typescript": "^5.9.3"
   },
   "dependencies": {
     "@inquirer/prompts": "^8.2.0",
