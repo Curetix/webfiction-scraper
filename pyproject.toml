@@ -6,7 +6,7 @@ authors = [{ name = "Curetix", email = "me@curetix.eu" }]
 readme = "README.md"
 requires-python = ">= 3.10"
 dependencies = [
-    "beautifulsoup4>=4.13.4",
+    "beautifulsoup4>=4.14.3",
     "click>=8.2.0",
     "platformdirs>=4.3.8",
     "ebooklib>=0.19",
