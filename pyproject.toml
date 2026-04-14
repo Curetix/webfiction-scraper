@@ -7,7 +7,7 @@ readme = "README.md"
 requires-python = ">= 3.10"
 dependencies = [
     "beautifulsoup4>=4.13.4",
-    "click>=8.2.0",
+    "click>=8.3.2",
     "platformdirs>=4.3.8",
     "ebooklib>=0.19",
     "python-box[all]>=7.3.2",
